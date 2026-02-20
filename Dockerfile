@@ -1,0 +1,15 @@
+FROM python:3.9.7-slim
+WORKDIR /app
+
+# OpenMP (auton-survival)
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app ./app
+COPY models ./models
+
+ENV OMP_THREAD_LIMIT=2
+EXPOSE 8080
+CMD ["uvicorn", "app.main:app", "--host","0.0.0.0", "--port","8080"]
