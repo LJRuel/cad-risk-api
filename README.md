@@ -280,10 +280,10 @@ docker push <acct>.dkr.ecr.<region>.amazonaws.com/dsm-cad-api:latest
 
 ## References
 
-Mean reduction of LDL is 50% from statin therapies: https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext, figure 4
-Risk reduction of statin intake is 20% per mmol/L of LDL reduction. https://www.sciencedirect.com/science/article/pii/S0140673612603675?via%3Dihub
-Hypertension is considered when systolic blood pressure (SBP) is >= 130 mmHg, but no medication should be given under 120 mmHg as the adverse effects may outweigh the benefits. Adverse effects: https://www.nejm.org/doi/full/10.1056/NEJMoa1511939
-Risk reduction of CAD is 8% per 5 mmHg of systolic BP reduction. https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext
+- Mean reduction of LDL is 50% from statin therapies: https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext, figure 4
+- Risk reduction of statin intake is 20% per mmol/L of LDL reduction. https://www.sciencedirect.com/science/article/pii/S0140673612603675?via%3Dihub
+- Hypertension is considered when systolic blood pressure (SBP) is >= 130 mmHg, but no medication should be given under 120 mmHg as the adverse effects may outweigh the benefits. Adverse effects: https://www.nejm.org/doi/full/10.1056/NEJMoa1511939
+- Risk reduction of CAD is 8% per 5 mmHg of systolic BP reduction. https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext
 
 
 ---
