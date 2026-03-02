@@ -1,4 +1,4 @@
-# CAD Risk Education API (DSM)
+# CAD Risk API
 
 **FastAPI** service that exposes a **Deep Survival Machines (DSM)** model (sex-specific) to:
 
@@ -15,7 +15,7 @@
 
 ## Table of contents
 
-- [CAD Risk Education API (DSM)](#cad-risk-education-api-dsm)
+- [CAD Risk API](#cad-risk-api)
   - [Table of contents](#table-of-contents)
   - [Project structure](#project-structure)
   - [Quick start (local dev)](#quick-start-local-dev)
