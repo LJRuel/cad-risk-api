@@ -214,10 +214,6 @@ __marimo__/
 # OS
 .DS_Store
 
-# Models
-models/*.pkl
-*.joblib
-
 # Docker / build
 dist/
 build/
