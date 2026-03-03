@@ -4,143 +4,268 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CAD Risk Estimator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #f4f6f9;
-      color: #1a1a2e;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #eef2ff;
+      color: #111827;
       min-height: 100vh;
-      padding: 2rem 1rem;
     }
 
-    h1 {
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 55%, #5b21b6 100%);
+      padding: 3rem 5% 2.75rem;
       text-align: center;
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      color: #1a1a2e;
+      position: relative;
+      overflow: hidden;
     }
 
-    .subtitle {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 2rem;
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 75% 40%, rgba(167,139,250,0.25) 0%, transparent 65%),
+                  radial-gradient(ellipse at 20% 80%, rgba(99,102,241,0.2) 0%, transparent 55%);
+      pointer-events: none;
     }
 
-    .layout {
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.75);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 400;
+    }
+
+    /* ── Page content ── */
+    .content { padding: 2rem 5% 3rem; }
+
+    /* ── Side-by-side page layout ── */
+    .page-layout {
       display: grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: 380px 1fr;
       gap: 1.5rem;
-      max-width: 1100px;
-      margin: 0 auto;
       align-items: start;
     }
 
-    @media (max-width: 780px) {
-      .layout { grid-template-columns: 1fr; }
+    .page-layout > .card:last-child {
+      position: sticky;
+      top: 1.5rem;
     }
 
-    /* ── Form card ── */
-    .form-card {
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .page-layout > .card:last-child { position: static; }
+    }
+
+    /* ── Cards ── */
+    .card {
       background: #fff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 32px rgba(79,70,229,0.07);
+      border: 1px solid rgba(99,102,241,0.1);
     }
 
-    fieldset {
-      border: none;
-      margin-bottom: 1.25rem;
+    .form-actions {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
     }
+
+    .form-actions button[type="submit"] {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .btn-example {
+      background: none;
+      border: 1.5px dashed #c7d2fe;
+      border-radius: 10px;
+      color: #6366f1;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.45rem 1.25rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .btn-example:hover {
+      background: #eef2ff;
+      border-color: #6366f1;
+      color: #4f46e5;
+    }
+
+    /* ── Fieldsets & Legends ── */
+    fieldset { border: none; margin-bottom: 1.5rem; }
+    fieldset:last-child { margin-bottom: 0; }
 
     legend {
-      font-size: 0.75rem;
-      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      font-size: 0.68rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6b7280;
-      margin-bottom: 0.75rem;
+      letter-spacing: 0.09em;
+      color: #6366f1;
+      padding-bottom: 0.65rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e0e7ff;
     }
 
-    .field { margin-bottom: 0.75rem; }
+    legend::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 13px;
+      background: linear-gradient(180deg, #6366f1, #a855f7);
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* ── Number inputs ── */
+    .field { margin-bottom: 0.85rem; }
+    .field:last-child { margin-bottom: 0; }
 
     label.field-label {
       display: block;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 500;
-      margin-bottom: 0.25rem;
-      color: #374151;
+      color: #4b5563;
+      margin-bottom: 0.3rem;
     }
 
     input[type="number"] {
       width: 100%;
-      padding: 0.45rem 0.6rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      color: #1a1a2e;
-      background: #f9fafb;
-      transition: border-color 0.15s;
+      padding: 0.55rem 0.75rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: #111827;
+      background: #fafafa;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      -moz-appearance: textfield;
     }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { opacity: 0.4; }
+
+    input[type="number"]:hover { border-color: #c7d2fe; background: #fff; }
 
     input[type="number"]:focus {
       outline: none;
-      border-color: #3b82f6;
+      border-color: #6366f1;
       background: #fff;
+      box-shadow: 0 0 0 3.5px rgba(99,102,241,0.13);
     }
 
-    /* Sex radio */
-    .sex-group {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
+    input[type="number"]::placeholder { color: #d1d5db; }
+
+    /* ── Sex selector ── */
+    .sex-group { display: flex; gap: 0.6rem; }
 
     .sex-group label {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-      padding: 0.5rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
+      gap: 0.45rem;
+      padding: 0.65rem 0.5rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 0.88rem;
       font-weight: 500;
-      transition: border-color 0.15s, background 0.15s;
+      color: #6b7280;
+      background: #fafafa;
+      transition: all 0.18s;
+      user-select: none;
     }
 
-    .sex-group input[type="radio"] { accent-color: #3b82f6; }
+    .sex-group label:hover {
+      border-color: #a5b4fc;
+      color: #4f46e5;
+      background: #f5f3ff;
+    }
+
+    .sex-group input[type="radio"] { display: none; }
 
     .sex-group label:has(input:checked) {
-      border-color: #3b82f6;
-      background: #eff6ff;
-      color: #1d4ed8;
+      border-color: #6366f1;
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      color: #4f46e5;
+      font-weight: 600;
+      box-shadow: 0 0 0 3.5px rgba(99,102,241,0.13);
     }
 
-    /* Checkbox toggle rows */
+    /* ── Toggle rows ── */
     .toggle-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.45rem 0;
-      border-bottom: 1px solid #f3f4f6;
-      font-size: 0.88rem;
-      color: #374151;
+      padding: 0.6rem 0.75rem;
+      margin: 0 -0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #4b5563;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
     }
 
-    .toggle-row:last-child { border-bottom: none; }
+    .toggle-row:hover { background: #f8faff; }
+    .toggle-row:has(input:checked) { color: #1e1b4b; font-weight: 500; }
 
     .toggle {
       position: relative;
-      width: 36px;
-      height: 20px;
+      width: 42px;
+      height: 24px;
       flex-shrink: 0;
+      margin-left: 0.75rem;
     }
 
     .toggle input { opacity: 0; width: 0; height: 0; }
@@ -148,135 +273,257 @@
     .toggle-slider {
       position: absolute;
       inset: 0;
-      background: #d1d5db;
-      border-radius: 20px;
+      background: #e5e7eb;
+      border-radius: 24px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.22s;
     }
 
     .toggle-slider::before {
       content: '';
       position: absolute;
-      width: 14px; height: 14px;
+      width: 18px; height: 18px;
       left: 3px; top: 3px;
       background: #fff;
       border-radius: 50%;
-      transition: transform 0.2s;
+      transition: transform 0.22s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
     }
 
-    .toggle input:checked + .toggle-slider { background: #3b82f6; }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+    .toggle input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+    }
 
-    /* Submit */
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(18px);
+    }
+
+    /* Pack-years indent */
+    #packYearsField {
+      margin: 0.3rem 0.75rem 0.4rem 1.5rem;
+      padding-left: 0.75rem;
+      border-left: 2px solid #e0e7ff;
+    }
+
+    /* ── Submit button ── */
     button[type="submit"] {
-      width: 100%;
-      padding: 0.7rem;
-      background: #1d4ed8;
+      padding: 0.75rem 2.75rem;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 0.95rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.92rem;
       font-weight: 600;
+      letter-spacing: -0.01em;
       cursor: pointer;
-      margin-top: 0.5rem;
-      transition: background 0.15s;
+      transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.38);
+      white-space: nowrap;
     }
 
-    button[type="submit"]:hover { background: #1e40af; }
-    button[type="submit"]:disabled { background: #93c5fd; cursor: not-allowed; }
+    button[type="submit"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99,102,241,0.48);
+    }
+
+    button[type="submit"]:active { transform: translateY(0); }
+
+    button[type="submit"]:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
 
     .error-msg {
-      margin-top: 0.75rem;
-      padding: 0.6rem 0.75rem;
+      padding: 0.55rem 0.85rem;
       background: #fef2f2;
       border: 1px solid #fca5a5;
-      border-radius: 6px;
+      border-radius: 10px;
       color: #b91c1c;
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       display: none;
     }
 
-    /* ── Results card ── */
-    .results-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-
+    /* ── Results placeholder ── */
     .placeholder {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 320px;
-      color: #9ca3af;
-      font-size: 0.9rem;
-      gap: 0.5rem;
+      min-height: 260px;
+      gap: 0.75rem;
     }
 
-    .placeholder svg { opacity: 0.3; }
+    .placeholder-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #e0e7ff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
+    .placeholder-icon svg { opacity: 0.5; color: #6366f1; }
+
+    .placeholder p {
+      font-size: 0.88rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    .placeholder strong { color: #6b7280; font-weight: 600; }
+
+    /* ── Chart ── */
     .chart-wrap { position: relative; width: 100%; }
 
-    /* RR summary */
+    /* ── RR summary ── */
     .rr-summary {
       display: flex;
       gap: 1rem;
-      margin-top: 1.25rem;
+      margin-top: 1.5rem;
       flex-wrap: wrap;
     }
 
     .rr-card {
       flex: 1;
-      min-width: 130px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
+      min-width: 140px;
+      background: #fafafa;
+      border: 1px solid #f1f5f9;
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
       text-align: center;
+      transition: box-shadow 0.18s, transform 0.18s;
+    }
+
+    .rr-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transform: translateY(-1px);
     }
 
     .rr-card .rr-label {
-      font-size: 0.72rem;
-      color: #6b7280;
-      font-weight: 500;
+      font-size: 0.68rem;
+      color: #9ca3af;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.07em;
     }
 
     .rr-card .rr-value {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-top: 0.2rem;
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin-top: 0.3rem;
+      letter-spacing: -0.03em;
     }
 
     .rr-card .rr-sub {
-      font-size: 0.72rem;
-      color: #6b7280;
-      margin-top: 0.1rem;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 0.15rem;
     }
 
-    .disclaimer {
-      margin-top: 1.25rem;
-      font-size: 0.75rem;
-      color: #9ca3af;
-      line-height: 1.5;
+    /* ── Disclaimer ── */
+    /* ── Info tooltip ── */
+    .info-tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+      cursor: default;
     }
+
+    .info-tip-icon {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      color: #6366f1;
+      font-size: 0.65rem;
+      font-weight: 700;
+      font-style: normal;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+
+    .info-tip:hover .info-tip-icon { background: #c7d2fe; }
+
+    .info-tip-bubble {
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1b4b;
+      color: #e0e7ff;
+      font-size: 0.73rem;
+      font-weight: 400;
+      line-height: 1.5;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .info-tip-bubble::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #1e1b4b;
+    }
+
+    .info-tip:hover .info-tip-bubble { opacity: 1; }
+
+    .disclaimer {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      font-size: 0.77rem;
+      color: #78350f;
+      line-height: 1.65;
+    }
+
+    .disclaimer strong { font-weight: 600; color: #92400e; }
+
+    /* ── Disabled fieldset (grayed-out) ── */
+    .fieldset-disabled {
+      opacity: 0.38;
+      pointer-events: none;
+      filter: grayscale(0.2);
+      transition: opacity 0.22s, filter 0.22s;
+    }
+
   </style>
 </head>
 <body>
 
-<h1>CAD Risk Estimator</h1>
-<p class="subtitle">Educational tool — not a clinical decision aid</p>
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-eyebrow">&#9679; Educational Tool</div>
+  <h1>CAD Risk Estimator</h1>
+  <p>Estimate coronary artery disease risk and explore the impact of clinical interventions</p>
+</header>
 
-<div class="layout">
+<div class="content">
 
-  <!-- ── FORM ── -->
-  <div class="form-card">
+  <div class="page-layout">
+
+  <!-- ── FORM CARD ── -->
+  <div class="card">
     <form id="riskForm">
 
-      <!-- Sex -->
       <fieldset>
         <legend>Sex</legend>
         <div class="sex-group">
@@ -285,10 +532,8 @@
         </div>
       </fieldset>
 
-      <!-- Core clinical -->
       <fieldset>
-        <legend>Clinical measurements</legend>
-
+        <legend>Clinical Measurements</legend>
         <div class="field">
           <label class="field-label">Age (years)</label>
           <input type="number" id="age" min="40" max="79" step="1" placeholder="e.g. 55" required>
@@ -305,11 +550,14 @@
           <label class="field-label">LDL cholesterol (mmol/L)</label>
           <input type="number" id="ldl" min="0.1" max="15" step="0.01" placeholder="e.g. 3.4" required>
         </div>
+        <div class="field">
+          <label class="field-label">Waist circumference (cm)</label>
+          <input type="number" id="waist" min="40" max="200" step="0.1" placeholder="Leave blank if N/A">
+        </div>
       </fieldset>
 
-      <!-- Binary risk factors -->
       <fieldset>
-        <legend>Risk factors</legend>
+        <legend>Risk Factors</legend>
         <div class="toggle-row">
           <span>Diabetes</span>
           <label class="toggle"><input type="checkbox" id="diabetes"><span class="toggle-slider"></span></label>
@@ -319,42 +567,30 @@
           <label class="toggle"><input type="checkbox" id="family_history"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
-          <span>Currently on antihypertensive</span>
+          <span>Currently on antihypertensive treatment</span>
           <label class="toggle"><input type="checkbox" id="antiht"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
-          <span>Currently on statin</span>
+          <span>Currently on statin treatment</span>
           <label class="toggle"><input type="checkbox" id="statin"><span class="toggle-slider"></span></label>
         </div>
-      </fieldset>
-
-      <!-- Optional measurements -->
-      <fieldset>
-        <legend>Optional measurements</legend>
         <div class="toggle-row">
           <span>Current smoker</span>
           <label class="toggle"><input type="checkbox" id="smoking_current"><span class="toggle-slider"></span></label>
         </div>
-        <div class="field" style="margin-top:0.6rem">
-          <label class="field-label">Pack-years</label>
+        <div class="field" id="packYearsField" style="display:none">
+          <label class="field-label">
+            Number of cigarette packs smoked per year
+            <span class="info-tip">
+              <i class="info-tip-icon">i</i>
+              <span class="info-tip-bubble">1 pack = 20 cigarettes</span>
+            </span>
+          </label>
           <input type="number" id="pack_years" min="0" step="0.5" placeholder="Leave blank if N/A">
-        </div>
-        <div class="field">
-          <label class="field-label">Waist circumference (cm)</label>
-          <input type="number" id="waist" min="40" max="200" step="0.1" placeholder="Leave blank if N/A">
-        </div>
-        <div class="field">
-          <label class="field-label">Lp(a) (mg/dL)</label>
-          <input type="number" id="lpa" min="0" step="0.1" placeholder="Leave blank if N/A">
-        </div>
-        <div class="field">
-          <label class="field-label">CRP (mg/L)</label>
-          <input type="number" id="crp" min="0" step="0.01" placeholder="Leave blank if N/A">
         </div>
       </fieldset>
 
-      <!-- Female-only -->
-      <fieldset id="femaleFields" style="display:none">
+      <fieldset id="femaleFields" class="fieldset-disabled">
         <legend>Female-specific</legend>
         <div class="toggle-row">
           <span>Gestational hypertension / pre-eclampsia</span>
@@ -370,19 +606,36 @@
         </div>
       </fieldset>
 
-      <button type="submit" id="submitBtn">Estimate risk</button>
-      <div class="error-msg" id="errorMsg"></div>
+      <fieldset>
+        <legend>Optional Measurements</legend>
+        <div class="field">
+          <label class="field-label">Lp(a) (nmol/L)</label>
+          <input type="number" id="lpa" min="0" step="0.1" placeholder="Leave blank if N/A">
+        </div>
+        <div class="field">
+          <label class="field-label">CRP (mg/L)</label>
+          <input type="number" id="crp" min="0" step="0.01" placeholder="Leave blank if N/A">
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" id="submitBtn">Estimate risk</button>
+        <button type="button" class="btn-example" id="exampleBtn">&#9654; Load example values</button>
+        <div class="error-msg" id="errorMsg"></div>
+      </div>
 
     </form>
   </div>
 
-  <!-- ── RESULTS ── -->
-  <div class="results-card">
+  <!-- ── RESULTS CARD ── -->
+  <div class="card">
     <div class="placeholder" id="placeholder">
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 16l4-4 4 4 4-6"/>
-      </svg>
-      <span>Fill in the form and click <strong>Estimate risk</strong></span>
+      <div class="placeholder-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 16l4-4 4 4 4-6"/>
+        </svg>
+      </div>
+      <p>Fill in the form and click <strong>Estimate risk</strong></p>
     </div>
 
     <div id="chartArea" style="display:none">
@@ -392,20 +645,57 @@
 
       <div class="rr-summary" id="rrSummary"></div>
 
-      <p class="disclaimer">
-        <strong>Educational use only.</strong> Intervention overlays (statin: 50% LDL reduction × 20% RR/mmol·L; antihypertensive: 8% RR per 5 mmHg if SBP ≥ 130) are population-level approximations from RCT meta-analyses, not individual causal predictions. This tool does not replace clinical judgment.
-      </p>
+      <div class="disclaimer">
+        <strong>Educational use only.</strong> Intervention overlays (statin: 50% LDL reduction × 20% RR/mmol·L; antihypertensive: 8% RR per 5 mmHg if systolic blood pressure ≥ 130) are population-level approximations from RCT meta-analyses, not individual causal predictions. This tool does not replace clinical judgment.
+      </div>
     </div>
   </div>
 
-</div>
+  </div><!-- /page-layout -->
+
+</div><!-- /content -->
 
 <script>
-  // ── Sex toggle → show/hide female fields ──
+  // ── Example values ──
+  document.getElementById('exampleBtn').addEventListener('click', () => {
+    // Sex: Male
+    document.querySelector('input[name="sex"][value="1"]').checked = true;
+    document.getElementById('femaleFields').classList.add('fieldset-disabled');
+
+    // Clinical measurements
+    document.getElementById('age').value   = 55;
+    document.getElementById('sbp').value   = 148;
+    document.getElementById('hdl').value   = 1.2;
+    document.getElementById('ldl').value   = 3.8;
+    document.getElementById('waist').value = 96;
+
+    // Risk factors
+    document.getElementById('diabetes').checked       = false;
+    document.getElementById('family_history').checked = true;
+    document.getElementById('antiht').checked         = false;
+    document.getElementById('statin').checked         = false;
+    document.getElementById('smoking_current').checked = true;
+    document.getElementById('packYearsField').style.display = '';
+    document.getElementById('pack_years').value = 15;
+
+    // Optional
+    document.getElementById('lpa').value = '';
+    document.getElementById('crp').value = '';
+  });
+
+  // ── Smoking toggle → show/hide pack-years ──
+  document.getElementById('smoking_current').addEventListener('change', function() {
+    const field = document.getElementById('packYearsField');
+    field.style.display = this.checked ? '' : 'none';
+    if (!this.checked) document.getElementById('pack_years').value = '';
+  });
+
+  // ── Sex toggle → enable/gray-out female fields ──
   document.querySelectorAll('input[name="sex"]').forEach(r => {
     r.addEventListener('change', () => {
-      document.getElementById('femaleFields').style.display =
-        r.value === '0' && r.checked ? '' : 'none';
+      const ff = document.getElementById('femaleFields');
+      const isFemale = r.value === '0' && r.checked;
+      ff.classList.toggle('fieldset-disabled', !isFemale);
     });
   });
 
@@ -445,9 +735,9 @@
       waist_circumference: numOrNull('waist'),
       Lpa:             numOrNull('lpa'),
       CRP:             numOrNull('crp'),
-      GestHtPreEcl:    isFemale && document.getElementById('GestHtPreEcl').checked ? 1 : null,
-      menopause:       isFemale && document.getElementById('menopause').checked ? 1 : null,
-      HRT:             isFemale && document.getElementById('HRT').checked ? 1 : null,
+      GestHtPreEcl:    isFemale ? (document.getElementById('GestHtPreEcl').checked ? 1 : 0) : null,
+      menopause:       isFemale ? (document.getElementById('menopause').checked ? 1 : 0) : null,
+      HRT:             isFemale ? (document.getElementById('HRT').checked ? 1 : 0) : null,
     };
 
     try {
@@ -481,10 +771,10 @@
     const pct = arr => arr.map(v => +(v * 100).toFixed(2));
 
     const datasets = [
-      { label: 'Baseline',              data: pct(data.risk_baseline), borderColor: '#1d4ed8', backgroundColor: 'rgba(29,78,216,0.08)', tension: 0.35 },
-      { label: 'With statin',           data: pct(data.risk_ldl),      borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.08)',  tension: 0.35, borderDash: [5,3] },
-      { label: 'With antihypertensive', data: pct(data.risk_sbp),      borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.08)',  tension: 0.35, borderDash: [5,3] },
-      { label: 'Combined',              data: pct(data.risk_combined),  borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.08)', tension: 0.35, borderDash: [2,2] },
+      { label: 'Baseline',              data: pct(data.risk_baseline), borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.07)',  tension: 0.35, borderWidth: 2.5 },
+      { label: 'With statin',           data: pct(data.risk_ldl),      borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.07)',  tension: 0.35, borderWidth: 2, borderDash: [6,3] },
+      { label: 'With antihypertensive', data: pct(data.risk_sbp),      borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.07)',  tension: 0.35, borderWidth: 2, borderDash: [6,3] },
+      { label: 'Combined',              data: pct(data.risk_combined),  borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.07)', tension: 0.35, borderWidth: 2, borderDash: [2,3] },
     ];
 
     if (chartInstance) chartInstance.destroy();
@@ -495,40 +785,50 @@
         responsive: true,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { position: 'top', labels: { font: { size: 12 }, boxWidth: 24 } },
+          legend: { position: 'top', labels: { font: { size: 12, family: 'Inter' }, boxWidth: 28, padding: 16 } },
           tooltip: {
+            backgroundColor: '#1e1b4b',
+            padding: 10,
+            cornerRadius: 10,
             callbacks: {
               label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`,
             }
           }
         },
         scales: {
-          x: { title: { display: true, text: 'Age (years)', font: { size: 12 } } },
-          y: { title: { display: true, text: 'Cumulative CAD risk (%)', font: { size: 12 } },
-               min: 0, ticks: { callback: v => v + '%' } }
+          x: {
+            grid: { color: '#f1f5f9' },
+            title: { display: true, text: 'Age (years)', font: { size: 12, family: 'Inter' }, color: '#6b7280' }
+          },
+          y: {
+            grid: { color: '#f1f5f9' },
+            title: { display: true, text: 'Cumulative CAD risk (%)', font: { size: 12, family: 'Inter' }, color: '#6b7280' },
+            min: 0,
+            ticks: { callback: v => v + '%' }
+          }
         }
       }
     });
 
     // RR summary
     const rr = data.relative_risks;
-    const fmt = v => ((1 - v) * 100).toFixed(0) + '% reduction';
+    const fmt = v => ((1 - v) * 100).toFixed(0) + '%';
     const rrEl = document.getElementById('rrSummary');
     rrEl.innerHTML = `
       <div class="rr-card">
         <div class="rr-label">Statin effect</div>
         <div class="rr-value" style="color:#16a34a">${fmt(rr.ldl_rr)}</div>
-        <div class="rr-sub">relative risk</div>
+        <div class="rr-sub">relative risk reduction</div>
       </div>
       <div class="rr-card">
         <div class="rr-label">Antihypertensive effect</div>
-        <div class="rr-value" style="color:#d97706">${rr.bp_rr < 1 ? fmt(rr.bp_rr) : 'N/A'}</div>
-        <div class="rr-sub">${rr.bp_rr < 1 ? 'relative risk' : 'SBP < 130 mmHg'}</div>
+        <div class="rr-value" style="color:#d97706">${rr.bp_rr < 1 ? fmt(rr.bp_rr) : '—'}</div>
+        <div class="rr-sub">${rr.bp_rr < 1 ? 'relative risk reduction' : 'Systolic blood pressure below 130 mmHg'}</div>
       </div>
       <div class="rr-card">
         <div class="rr-label">Combined effect</div>
-        <div class="rr-value" style="color:#7c3aed">${fmt(rr.combined_rr)}</div>
-        <div class="rr-sub">relative risk</div>
+        <div class="rr-value" style="color:#a855f7">${fmt(rr.combined_rr)}</div>
+        <div class="rr-sub">relative risk reduction</div>
       </div>
     `;
   }

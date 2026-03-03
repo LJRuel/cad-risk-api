@@ -1,8 +1,9 @@
 from typing import List
-import joblib, numpy as np
+import os, joblib, numpy as np
 from pathlib import Path
 
-ARTIF_DIR = Path("/app/models")
+_default = Path(__file__).resolve().parent.parent / "models"
+ARTIF_DIR = Path(os.environ.get("MODEL_DIR", _default))
 
 # Preprocessors
 MEN_PREP = joblib.load(ARTIF_DIR / "scaling_parameters_clinical_men.joblib")
