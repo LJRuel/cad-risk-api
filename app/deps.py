@@ -1,3 +1,4 @@
+from typing import List
 import joblib, numpy as np
 from pathlib import Path
 
@@ -11,7 +12,7 @@ WOMEN_PREP = joblib.load(ARTIF_DIR / "scaling_parameters_clinical_women.joblib")
 MODEL_MEN = joblib.load(ARTIF_DIR / "PRED-CAD_DSM_clinical_model_men.joblib")
 MODEL_WOMEN = joblib.load(ARTIF_DIR / "PRED-CAD_DSM_clinical_model_women.joblib")
 
-def times_from_age_to_80(age_current: float) -> list[int]:
+def times_from_age_to_80(age_current: float) -> List[int]:
     """
     Annual grid (days) from current age (>=40) to 80 years.
     If age_current < 40, we start at 40 (aligned with training data).

@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 
 class Interventions(BaseModel):
@@ -17,13 +18,13 @@ class InputPayload(BaseModel):
     family_history: int
     antiht: int
     statin: int
-    smoking_current: int | None = None
-    pack_years: float | None = 0.0
-    waist_circumference: float | None = None
-    Lpa: float | None = None
-    CRP: float | None = None
-    GestHtPreEcl: int | None = None
-    menopause: int | None = None
-    HRT: int | None = None
+    smoking_current: Optional[int] = None
+    pack_years: Optional[float] = 0.0
+    waist_circumference: Optional[float] = None
+    Lpa: Optional[float] = None
+    CRP: Optional[float] = None
+    GestHtPreEcl: Optional[int] = None
+    menopause: Optional[int] = None
+    HRT: Optional[int] = None
 
     interventions: Interventions = Interventions()
