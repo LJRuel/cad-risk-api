@@ -1,9 +1,14 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from .schemas import InputPayload
 from .deps import MODEL_MEN, MODEL_WOMEN, times_from_age_to_80
 from .prepare import apply_preprocessor_one
 
 app = FastAPI(title="CAD Risk API", version="0.1.0")
+
+@app.get("/")
+def ui():
+    return FileResponse("app/static/index.html")
 
 @app.get("/health")
 def health():
