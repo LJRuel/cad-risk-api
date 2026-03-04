@@ -378,50 +378,114 @@
 
     /* ── Chart ── */
     .chart-wrap { position: relative; width: 100%; }
+    #riskChart { cursor: pointer; }
 
-    /* ── RR summary ── */
-    .rr-summary {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-5px); }
     }
 
-    .rr-card {
-      flex: 1;
-      min-width: 140px;
+    .chart-hint {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.45);
+    }
+
+    .chart-hint-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.5rem;
+      max-height: 3rem;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+    }
+    .chart-hint-wrap.hidden {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      pointer-events: none;
+    }
+
+    .hint-arrow {
+      animation: bounce 1.1s ease-in-out infinite;
+      display: inline-flex;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+
+    @keyframes numIn {
+      from { opacity: 0.15; transform: scale(0.82); }
+      to   { opacity: 1;    transform: scale(1); }
+    }
+
+    /* ── Risk at selected age ── */
+    .risk-at-age {
+      margin-top: 1.25rem;
+    }
+
+    .risk-age-header {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      text-align: center;
+      margin-bottom: 0.65rem;
+    }
+
+    .risk-age-header strong { color: #4b5563; }
+
+    .risk-age-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    .risk-age-card {
+      opacity: 0;
       background: #fafafa;
       border: 1px solid #f1f5f9;
       border-radius: 14px;
-      padding: 1.1rem 1.25rem;
+      padding: 0.85rem 1rem;
       text-align: center;
       transition: box-shadow 0.18s, transform 0.18s;
     }
 
-    .rr-card:hover {
+    .risk-age-card:hover {
       box-shadow: 0 4px 16px rgba(0,0,0,0.06);
       transform: translateY(-1px);
     }
 
-    .rr-card .rr-label {
-      font-size: 0.68rem;
+    .risk-age-card .risk-age-label {
+      font-size: 0.66rem;
       color: #9ca3af;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.07em;
     }
 
-    .rr-card .rr-value {
-      font-size: 1.65rem;
+    .risk-age-card .risk-age-value {
+      font-size: 1.5rem;
       font-weight: 800;
-      margin-top: 0.3rem;
+      margin-top: 0.2rem;
       letter-spacing: -0.03em;
     }
 
-    .rr-card .rr-sub {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      margin-top: 0.15rem;
+    .risk-age-card .risk-age-arr {
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-top: 0.3rem;
+      opacity: 0.85;
     }
 
     /* ── Disclaimer ── */
@@ -497,12 +561,71 @@
 
     .disclaimer strong { font-weight: 600; color: #92400e; }
 
-    /* ── Disabled fieldset (grayed-out) ── */
-    .fieldset-disabled {
-      opacity: 0.38;
-      pointer-events: none;
-      filter: grayscale(0.2);
-      transition: opacity 0.22s, filter 0.22s;
+    .disclaimer ul {
+      margin: 0.6rem 0 0 1rem;
+      padding: 0;
+      list-style: disc;
+    }
+
+    .disclaimer li { margin-bottom: 0.25rem; }
+
+    .disclaimer a {
+      color: #92400e;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .disclaimer a:hover { color: #78350f; }
+
+    .disclaimer details {
+      margin-top: 0.75rem;
+      border: 1px solid #fbbf24;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .disclaimer summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #92400e;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      user-select: none;
+      background: #fef3c7;
+      padding: 0.5rem 0.75rem;
+      transition: background 0.15s;
+    }
+
+    .disclaimer summary:hover { background: #fde68a; }
+
+    .disclaimer summary::-webkit-details-marker { display: none; }
+
+    .disclaimer summary::before {
+      content: '▸';
+      font-size: 0.65rem;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .disclaimer details[open] summary::before { transform: rotate(90deg); }
+
+    .disclaimer details > div { padding: 0.65rem 0.75rem 0.75rem; }
+
+    /* ── Female fieldset slide-in ── */
+    #femaleFieldsWrap {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      margin-bottom: 0;
+      transition: max-height 0.4s ease, opacity 0.3s ease, margin-bottom 0.4s ease;
+    }
+
+    #femaleFieldsWrap.visible {
+      max-height: 400px;
+      opacity: 1;
+      margin-bottom: 1.5rem;
     }
 
   </style>
@@ -536,23 +659,23 @@
         <legend>Clinical Measurements</legend>
         <div class="field">
           <label class="field-label">Age (years)</label>
-          <input type="number" id="age" min="40" max="79" step="1" placeholder="e.g. 55" required>
+          <input type="number" id="age" min="40" max="79" step="1" placeholder="40 to 79" required>
         </div>
         <div class="field">
           <label class="field-label">Systolic BP (mmHg)</label>
-          <input type="number" id="sbp" min="60" max="250" step="1" placeholder="e.g. 130" required>
+          <input type="number" id="sbp" min="60" max="250" step="1" placeholder="60 to 250" required>
         </div>
         <div class="field">
           <label class="field-label">HDL cholesterol (mmol/L)</label>
-          <input type="number" id="hdl" min="0.1" max="5" step="0.01" placeholder="e.g. 1.3" required>
+          <input type="number" id="hdl" min="0.1" max="5" step="0.01" placeholder="0.1 to 5" required>
         </div>
         <div class="field">
           <label class="field-label">LDL cholesterol (mmol/L)</label>
-          <input type="number" id="ldl" min="0.1" max="15" step="0.01" placeholder="e.g. 3.4" required>
+          <input type="number" id="ldl" min="0.1" max="15" step="0.01" placeholder="0.1 to 15" required>
         </div>
         <div class="field">
           <label class="field-label">Waist circumference (cm)</label>
-          <input type="number" id="waist" min="40" max="200" step="0.1" placeholder="Leave blank if N/A">
+          <input type="number" id="waist" min="40" max="150" step="0.1" placeholder="40 to 150">
         </div>
       </fieldset>
 
@@ -590,21 +713,23 @@
         </div>
       </fieldset>
 
-      <fieldset id="femaleFields" class="fieldset-disabled">
-        <legend>Female-specific</legend>
-        <div class="toggle-row">
-          <span>Gestational hypertension / pre-eclampsia</span>
-          <label class="toggle"><input type="checkbox" id="GestHtPreEcl"><span class="toggle-slider"></span></label>
-        </div>
-        <div class="toggle-row">
-          <span>Menopause</span>
-          <label class="toggle"><input type="checkbox" id="menopause"><span class="toggle-slider"></span></label>
-        </div>
-        <div class="toggle-row">
-          <span>Hormone replacement therapy (HRT)</span>
-          <label class="toggle"><input type="checkbox" id="HRT"><span class="toggle-slider"></span></label>
-        </div>
-      </fieldset>
+      <div id="femaleFieldsWrap">
+        <fieldset id="femaleFields">
+          <legend>Female-specific</legend>
+          <div class="toggle-row">
+            <span>Gestational hypertension / pre-eclampsia</span>
+            <label class="toggle"><input type="checkbox" id="GestHtPreEcl"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <span>Menopause</span>
+            <label class="toggle"><input type="checkbox" id="menopause"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <span>Hormone replacement therapy (HRT)</span>
+            <label class="toggle"><input type="checkbox" id="HRT"><span class="toggle-slider"></span></label>
+          </div>
+        </fieldset>
+      </div>
 
       <fieldset>
         <legend>Optional Measurements</legend>
@@ -642,11 +767,35 @@
       <div class="chart-wrap">
         <canvas id="riskChart"></canvas>
       </div>
+      <div class="chart-hint-wrap" id="chartHint">
+        <div class="chart-hint">
+          <span class="hint-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 15 12 9 18 15"/></svg>
+          </span>
+          Click the chart to explore risk at a specific age
+        </div>
+      </div>
 
-      <div class="rr-summary" id="rrSummary"></div>
+      <div class="risk-at-age" id="riskAtAge" style="display:none"></div>
 
       <div class="disclaimer">
-        <strong>Educational use only.</strong> Intervention overlays (statin: 50% LDL reduction × 20% RR/mmol·L; antihypertensive: 8% RR per 5 mmHg if systolic blood pressure ≥ 130) are population-level approximations from RCT meta-analyses, not individual causal predictions. This tool does not replace clinical judgment.
+        <strong>Educational use only.</strong> Intervention effects are population-level approximations from randomized control trial meta-analyses, not individual causal predictions. This tool does not replace clinical judgment.
+        <details>
+          <summary>Effect of interventions &amp; References</summary>
+          <div>
+            <strong>Effect of interventions</strong>
+            <ul>
+              <li>Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> × 20% relative risk reduction/mmol·L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup></li>
+              <li>Antihypertensive: 8% relative risk reduction per 5 mmHg if systolic blood pressure ≥ 130 mmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup></li>
+            </ul>
+            <strong>References</strong>
+            <div style="display:grid; grid-template-columns: 1rem 1fr; gap: 0.5rem 0.25rem; opacity:0.75; margin-top:0.4rem">
+              <sup>1</sup> <a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">McPherson, Ruth et al. "Medications for Lipid Control: Statins vs Newer Drugs." <em>The Canadian Journal of Cardiology</em> (2024).</a>
+              <sup>2</sup> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">Cholesterol Treatment Trialists' Collaborators et al. "The effects of lowering LDL cholesterol with statin therapy in people at low risk of vascular disease: meta-analysis of individual data from 27 randomised trials." <em>Lancet</em> (2012).</a>
+              <sup>3</sup> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">Blood Pressure Lowering Treatment Trialists' Collaboration. "Pharmacological blood pressure lowering for primary and secondary prevention of cardiovascular disease across different levels of blood pressure: an individual participant-level data meta-analysis." <em>Lancet</em> (2021).</a>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   </div>
@@ -660,11 +809,11 @@
   document.getElementById('exampleBtn').addEventListener('click', () => {
     // Sex: Male
     document.querySelector('input[name="sex"][value="1"]').checked = true;
-    document.getElementById('femaleFields').classList.add('fieldset-disabled');
+    document.getElementById('femaleFieldsWrap').classList.remove('visible');
 
     // Clinical measurements
     document.getElementById('age').value   = 55;
-    document.getElementById('sbp').value   = 148;
+    document.getElementById('sbp').value   = 140;
     document.getElementById('hdl').value   = 1.2;
     document.getElementById('ldl').value   = 3.8;
     document.getElementById('waist').value = 96;
@@ -690,12 +839,10 @@
     if (!this.checked) document.getElementById('pack_years').value = '';
   });
 
-  // ── Sex toggle → enable/gray-out female fields ──
+  // ── Sex toggle → show/hide female fields ──
   document.querySelectorAll('input[name="sex"]').forEach(r => {
     r.addEventListener('change', () => {
-      const ff = document.getElementById('femaleFields');
-      const isFemale = r.value === '0' && r.checked;
-      ff.classList.toggle('fieldset-disabled', !isFemale);
+      document.getElementById('femaleFieldsWrap').classList.toggle('visible', r.value === '0' && r.checked);
     });
   });
 
@@ -764,28 +911,115 @@
     }
   });
 
+  // ── Custom plugin: hover ghost line + selected line ──
+  const selectedLinePlugin = {
+    id: 'selectedLine',
+    afterDraw(chart) {
+      const meta = chart.getDatasetMeta(0);
+      const { top, bottom } = chart.scales.y;
+      const ctx = chart.ctx;
+
+      // Ghost line on hover
+      if (chart.hoverIdx != null && chart.hoverIdx !== chart.selectedIdx) {
+        const x = meta.data[chart.hoverIdx]?.x;
+        if (x != null) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(x, top);
+          ctx.lineTo(x, bottom);
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = 'rgba(99,102,241,0.18)';
+          ctx.setLineDash([4, 4]);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      // Selected line
+      if (chart.selectedIdx != null) {
+        const x = meta.data[chart.selectedIdx]?.x;
+        if (x != null) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(x, top);
+          ctx.lineTo(x, bottom);
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = 'rgba(99,102,241,0.45)';
+          ctx.setLineDash([5, 4]);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }
+  };
+
   function renderChart(data) {
     document.getElementById('placeholder').style.display = 'none';
     document.getElementById('chartArea').style.display = '';
+    document.getElementById('riskAtAge').style.display = 'none';
 
     const pct = arr => arr.map(v => +(v * 100).toFixed(2));
 
+    const bpApplicable = data.relative_risks.bp_rr < 1;
+
     const datasets = [
       { label: 'Baseline',              data: pct(data.risk_baseline), borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.07)',  tension: 0.35, borderWidth: 2.5 },
-      { label: 'With statin',           data: pct(data.risk_ldl),      borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.07)',  tension: 0.35, borderWidth: 2, borderDash: [6,3] },
-      { label: 'With antihypertensive', data: pct(data.risk_sbp),      borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.07)',  tension: 0.35, borderWidth: 2, borderDash: [6,3] },
-      { label: 'Combined',              data: pct(data.risk_combined),  borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.07)', tension: 0.35, borderWidth: 2, borderDash: [2,3] },
+      { label: 'With statin',           data: pct(data.risk_ldl),      borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.07)',  tension: 0.35, borderWidth: 2,   borderDash: [6,3] },
+      ...(bpApplicable ? [
+        { label: 'With antihypertensive', data: pct(data.risk_sbp),     borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.07)',  tension: 0.35, borderWidth: 2, borderDash: [6,3] },
+        { label: 'Combined',              data: pct(data.risk_combined), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.07)', tension: 0.35, borderWidth: 2, borderDash: [2,3] },
+      ] : []),
     ];
 
     if (chartInstance) chartInstance.destroy();
     chartInstance = new Chart(document.getElementById('riskChart'), {
       type: 'line',
       data: { labels: data.ages, datasets },
+      plugins: [selectedLinePlugin],
       options: {
         responsive: true,
         interaction: { mode: 'index', intersect: false },
+        onHover: (evt, _elements, chart) => {
+          const pts = chart.getElementsAtEventForMode(evt, 'index', { intersect: false }, true);
+          chart.hoverIdx = pts.length ? pts[0].index : null;
+        },
+        onClick: (evt, _elements, chart) => {
+          const pts = chart.getElementsAtEventForMode(evt, 'index', { intersect: false }, true);
+          if (!pts.length) return;
+          chart.selectedIdx = pts[0].index;
+          chart.draw();
+          document.getElementById('chartHint').classList.add('hidden');
+          showRiskAtAge(pts[0].index, data, bpApplicable, false);
+        },
+        animation: {
+          duration: 600,
+          onComplete: (() => {
+            let fired = false;
+            return () => {
+              if (fired) return;
+              fired = true;
+              const lastIdx = data.ages.length - 1;
+              chartInstance.selectedIdx = lastIdx;
+              chartInstance.draw();
+              showRiskAtAge(lastIdx, data, bpApplicable, true);
+            };
+          })()
+        },
         plugins: {
-          legend: { position: 'top', labels: { font: { size: 12, family: 'Inter' }, boxWidth: 28, padding: 16 } },
+          legend: {
+            position: 'top',
+            labels: {
+              font: { size: 12, family: 'Inter' },
+              padding: 16,
+              usePointStyle: true,
+              pointStyleWidth: 28,
+              generateLabels: (chart) => {
+                const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                labels.forEach(l => { l.pointStyle = 'line'; });
+                return labels;
+              }
+            }
+          },
           tooltip: {
             backgroundColor: '#1e1b4b',
             padding: 10,
@@ -810,27 +1044,54 @@
       }
     });
 
-    // RR summary
-    const rr = data.relative_risks;
-    const fmt = v => ((1 - v) * 100).toFixed(0) + '%';
-    const rrEl = document.getElementById('rrSummary');
-    rrEl.innerHTML = `
-      <div class="rr-card">
-        <div class="rr-label">Statin effect</div>
-        <div class="rr-value" style="color:#16a34a">${fmt(rr.ldl_rr)}</div>
-        <div class="rr-sub">relative risk reduction</div>
-      </div>
-      <div class="rr-card">
-        <div class="rr-label">Antihypertensive effect</div>
-        <div class="rr-value" style="color:#d97706">${rr.bp_rr < 1 ? fmt(rr.bp_rr) : '—'}</div>
-        <div class="rr-sub">${rr.bp_rr < 1 ? 'relative risk reduction' : 'Systolic blood pressure below 130 mmHg'}</div>
-      </div>
-      <div class="rr-card">
-        <div class="rr-label">Combined effect</div>
-        <div class="rr-value" style="color:#a855f7">${fmt(rr.combined_rr)}</div>
-        <div class="rr-sub">relative risk reduction</div>
+  }
+
+  function showRiskAtAge(idx, data, bpApplicable, isFirst = false) {
+    const age = data.ages[idx];
+    const base = data.risk_baseline[idx];
+    const fmtRisk = v => (v * 100).toFixed(1) + '%';
+    const fmtArr  = v => '↓ ' + ((base - v) * 100).toFixed(1) + '% vs baseline';
+
+    const cards = [
+      { label: 'Baseline',              value: data.risk_baseline[idx], color: '#4f46e5', arr: null },
+      { label: 'With statin',           value: data.risk_ldl[idx],      color: '#16a34a', arr: fmtArr(data.risk_ldl[idx]) },
+      ...(bpApplicable ? [
+        { label: 'With antihypertensive', value: data.risk_sbp[idx],    color: '#d97706', arr: fmtArr(data.risk_sbp[idx]) },
+        { label: 'Combined',              value: data.risk_combined[idx],color: '#a855f7', arr: fmtArr(data.risk_combined[idx]) },
+      ] : []),
+    ];
+
+    const colStart = bpApplicable ? [1,2,3,4] : [2,3];
+
+    const riskEl = document.getElementById('riskAtAge');
+    riskEl.innerHTML = `
+      <div class="risk-age-header">CAD risk at age <strong>${age}</strong></div>
+      <div class="risk-age-grid">
+        ${cards.map((c, i) => `
+          <div class="risk-age-card" style="grid-column:${colStart[i]}">
+            <div class="risk-age-label">${c.label}</div>
+            <div class="risk-age-value" style="color:${c.color}">${fmtRisk(c.value)}</div>
+            ${c.arr ? `<div class="risk-age-arr" style="color:${c.color}">${c.arr}</div>` : ''}
+          </div>`).join('')}
       </div>
     `;
+    riskEl.style.display = '';
+
+    requestAnimationFrame(() => {
+      if (isFirst) {
+        document.querySelectorAll('.risk-age-card').forEach((card, i) => {
+          card.style.animation = `cardIn 0.45s cubic-bezier(0.34,1.56,0.64,1) ${i * 70}ms forwards`;
+        });
+      } else {
+        document.querySelectorAll('.risk-age-card').forEach(card => {
+          card.style.opacity = '1';
+          card.style.animation = 'none';
+        });
+        document.querySelectorAll('.risk-age-value, .risk-age-arr').forEach((el, i) => {
+          el.style.animation = `numIn 0.22s ease ${i * 25}ms both`;
+        });
+      }
+    });
   }
 </script>
 </body>

@@ -22,7 +22,7 @@ def predict(payload: InputPayload):
     # Temporal grid: entire life from max(40 years, current age) to 80 years (end of training data)
     times = times_from_age_to_80(raw["age_recruitment"])
     if len(times) == 0:
-        raise HTTPException(400, "Âge ≥ 80 ans : pas d'horizon de projection possible.")
+        raise HTTPException(400, "Age ≥ 80 years: no projection horizon available.")
 
     X = apply_preprocessor_one(sex, raw)
     model = MODEL_MEN if sex==1 else MODEL_WOMEN
