@@ -286,7 +286,7 @@
     }
 
     /* ── Fieldsets & Legends ── */
-    fieldset { border: none; margin-bottom: 1.5rem; }
+    fieldset { border: none; padding: 0; margin-bottom: 1.5rem; }
     fieldset:last-child { margin-bottom: 0; }
 
     legend {
@@ -525,6 +525,34 @@
 
     .placeholder strong { color: #6b7280; font-weight: 600; }
 
+    /* ── Curve toggle pills ── */
+    .curve-toggles {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .curve-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.65rem 0.28rem 0.45rem;
+      border-radius: 20px;
+      border: 1.5px solid;
+      font-size: 0.78rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      background: transparent;
+      transition: background 0.15s, opacity 0.15s;
+      opacity: 0.35;
+    }
+    .curve-toggle-btn.active { opacity: 1; }
+    .curve-toggle-btn:disabled { opacity: 0.15; cursor: not-allowed; pointer-events: none; }
+    #toggleStatin  { color: #007a5e; border-color: #009E73; }
+    #toggleStatin.active  { background: rgba(0,158,115,0.1); }
+    #toggleAntiht  { color: #8a6200; border-color: #E69F00; }
+    #toggleAntiht.active  { background: rgba(230,159,0,0.1); }
+
     /* ── Chart ── */
     .chart-wrap { position: relative; width: 100%; height: 420px; background: #fff; border-radius: 12px; padding: 0.5rem; }
     #riskChart { cursor: pointer; }
@@ -584,6 +612,14 @@
     .risk-at-age {
       margin-top: 1.25rem;
     }
+    .risk-section-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
 
     .risk-age-header {
       font-size: 0.72rem;
@@ -591,24 +627,25 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #6b7280;
-      text-align: center;
-      margin-bottom: 0.65rem;
     }
 
     .risk-age-header strong { color: #1f2937; }
 
     .risk-age-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
       gap: 0.75rem;
     }
 
+    .risk-age-card {
+      flex: 0 0 calc(25% - 0.5625rem);
+      min-width: 90px;
+    }
+
     @media (max-width: 600px) {
-      .risk-age-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
       .risk-age-card {
-        grid-column: auto !important;
+        flex-basis: calc(50% - 0.375rem);
       }
       .risk-age-card .risk-age-value {
         font-size: 1.25rem;
@@ -662,7 +699,7 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      margin-left: 0.3rem;
+      margin-left: 0.1rem;
       vertical-align: middle;
       cursor: default;
     }
@@ -700,7 +737,8 @@
       white-space: nowrap;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.15s;
+      visibility: hidden;
+      transition: opacity 0.15s, visibility 0s 0.15s;
       z-index: 10;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
@@ -716,7 +754,11 @@
     }
 
     .info-tip:hover .info-tip-bubble,
-    .info-tip.open  .info-tip-bubble { opacity: 1; }
+    .info-tip.open  .info-tip-bubble {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.15s, visibility 0s;
+    }
 
     /* ── Waist tip modal ── */
     button.waist-tip-trigger {
@@ -725,7 +767,7 @@
       padding: 6px;
       margin: -6px -6px -6px 0;
       cursor: pointer;
-      margin-left: calc(0.2rem - 6px);
+      margin-left: 0.1rem;
       vertical-align: middle;
     }
     button.waist-tip-trigger:hover { background: #4f46e5; }
@@ -750,8 +792,8 @@
     }
     .waist-modal-box {
       position: relative;
-      max-width: 520px;
-      width: 90%;
+      max-width: 660px;
+      width: 92%;
       border-radius: 16px;
       overflow: hidden;
       transform: scale(0.88);
@@ -759,7 +801,7 @@
       box-shadow: 0 24px 64px rgba(0,0,0,0.45);
     }
     .waist-modal-overlay.open .waist-modal-box { transform: scale(1); }
-    .waist-modal-box img { width: 100%; display: block; }
+    .waist-modal-box img { width: 100%; height: auto; max-height: 90vh; display: block; }
     .waist-modal-close {
       position: absolute;
       top: 0.55rem; right: 0.55rem;
@@ -852,7 +894,8 @@
       overflow: hidden;
       max-height: 0;
       opacity: 0;
-      margin-bottom: 0;
+      margin: 0 -0.75rem;
+      padding: 0 0.75rem;
       transition: max-height 0.4s ease, opacity 0.3s ease, margin-bottom 0.4s ease;
     }
 
@@ -951,15 +994,15 @@
         <fieldset id="femaleFields">
           <legend data-i18n="legend_female">Female-specific</legend>
           <div class="toggle-row">
-            <span data-i18n="label_gest">Gestational hypertension / pre-eclampsia</span>
+            <span data-i18n="label_gest">Have you had gestational hypertension or pre-eclampsia?</span>
             <label class="toggle"><input type="checkbox" id="GestHtPreEcl"><span class="toggle-slider"></span></label>
           </div>
           <div class="toggle-row">
-            <span data-i18n="label_meno">Menopause</span>
+            <span data-i18n="label_meno">Have you reached menopause?</span>
             <label class="toggle"><input type="checkbox" id="menopause"><span class="toggle-slider"></span></label>
           </div>
           <div class="toggle-row">
-            <span data-i18n="label_hrt">Hormone replacement therapy (HRT)</span>
+            <span data-i18n="label_hrt">Are you currently taking hormone replacement therapy (HRT)?</span>
             <label class="toggle"><input type="checkbox" id="HRT"><span class="toggle-slider"></span></label>
           </div>
         </fieldset>
@@ -1042,7 +1085,22 @@
         </div>
       </div>
 
-      <div class="risk-at-age" id="riskAtAge" style="display:none"></div>
+      <div class="risk-at-age" id="riskSection" style="display:none">
+        <div class="risk-section-top">
+          <div id="riskAgeHeader"></div>
+          <div class="curve-toggles" id="curveToggles">
+            <button type="button" class="curve-toggle-btn active" id="toggleStatin">
+              <svg width="22" height="8" viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="#009E73" stroke-width="2" stroke-dasharray="6 3"/></svg>
+              <span data-i18n="chart_statin">With statin</span>
+            </button>
+            <button type="button" class="curve-toggle-btn active" id="toggleAntiht">
+              <svg width="22" height="8" viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="#E69F00" stroke-width="2" stroke-dasharray="6 3"/></svg>
+              <span data-i18n="chart_antiht">With antihypertensive</span>
+            </button>
+          </div>
+        </div>
+        <div class="risk-age-grid" id="riskAtAge"></div>
+      </div>
 
       <details class="disclaimer">
         <summary>
@@ -1142,6 +1200,29 @@
     document.querySelectorAll('.info-tip.open').forEach(t => t.classList.remove('open'));
   });
 
+  // ── Curve visibility toggles ──
+  function applyCurveVisibility() {
+    if (!chartInstance) return;
+    const bp = lastBpApplicable;
+    chartInstance.setDatasetVisibility(1, showStatin);
+    if (bp) {
+      chartInstance.setDatasetVisibility(2, showAntiht);
+      chartInstance.setDatasetVisibility(3, showStatin && showAntiht);
+    }
+    chartInstance.update('none');
+    document.getElementById('toggleStatin').classList.toggle('active', showStatin);
+    document.getElementById('toggleAntiht').classList.toggle('active', showAntiht);
+    if (lastChartData) showRiskAtAge(lastSelectedIdx, lastChartData, bp, false);
+  }
+  document.getElementById('toggleStatin').addEventListener('click', () => {
+    showStatin = !showStatin;
+    applyCurveVisibility();
+  });
+  document.getElementById('toggleAntiht').addEventListener('click', () => {
+    showAntiht = !showAntiht;
+    applyCurveVisibility();
+  });
+
   // ── Waist tip modal ──
   const waistModal = document.getElementById('waistModal');
   const openWaistModal  = () => waistModal.classList.add('open');
@@ -1205,6 +1286,7 @@
   // ── i18n ──
   let currentLang = localStorage.getItem('lang') || 'fr';
   let lastChartData = null, lastBpApplicable = false, lastSelectedIdx = 0;
+  let showStatin = true, showAntiht = true;
 
   const T = {
     en: {
@@ -1229,15 +1311,15 @@
       ph_optional: 'Leave empty if unknown',
       ph_packyears: 'Required',
       legend_female: 'Female-specific',
-      label_gest: 'Gestational hypertension / pre-eclampsia',
-      label_meno: 'Menopause',
-      label_hrt: 'Hormone replacement therapy (HRT)',
+      label_gest: 'Have you had gestational hypertension or pre-eclampsia?',
+      label_meno: 'Have you reached menopause?',
+      label_hrt: 'Are you currently taking hormone replacement therapy (HRT)?',
       legend_optional: 'Optional Measurements',
       btn_submit: 'Estimate risk', btn_calculating: 'Calculating\u2026',
       btn_example: '&#9654; Load example values',
       placeholder_card: 'Fill in the form and click <strong>Estimate risk</strong>',
       guide_title: 'How to read this chart', guide_title_attr: 'How to read this chart',
-      guide_yaxis: 'The <strong>y-axis</strong> shows cumulative coronary artery disease risk (%) from your current age to age 80.',
+      guide_yaxis: 'The <strong>vertical axis</strong> shows cumulative coronary artery disease risk (%) from your current age to age 80.',
       guide_click: '<strong>Click any point</strong> on the chart to see exact risk values and absolute risk reductions at that age.',
       guide_lines: 'Each line represents a scenario:',
       guide_blue: '<strong>Blue</strong> \u2014 baseline risk (no intervention)',
@@ -1285,15 +1367,15 @@
       ph_optional: 'Laisser vide si inconnu',
       ph_packyears: 'Requis',
       legend_female: 'Sp\xe9cifique aux femmes',
-      label_gest: 'Hypertension gestationnelle / pr\xe9-\xe9clampsie',
-      label_meno: 'M\xe9nopause',
-      label_hrt: 'Hormonoth\xe9rapie substitutive (HTS)',
+      label_gest: 'Avez-vous eu une hypertension gestationnelle ou une pr\xe9-\xe9clampsie\u00a0?',
+      label_meno: 'Avez-vous atteint la m\xe9nopause\u00a0?',
+      label_hrt: 'Prenez-vous actuellement une hormonoth\xe9rapie substitutive (HTS)\u00a0?',
       legend_optional: 'Mesures optionnelles',
       btn_submit: 'Estimer le risque', btn_calculating: 'Calcul en cours\u2026',
       btn_example: '&#9654; Charger des valeurs d\u2019exemple',
       placeholder_card: 'Remplissez le formulaire et cliquez sur <strong>Estimer le risque</strong>',
       guide_title: 'Comment lire ce graphique', guide_title_attr: 'Comment lire ce graphique',
-      guide_yaxis: 'L\u2019<strong>axe des ordonn\xe9es</strong> indique le risque cumulatif de maladie coronarienne (%) de votre \xe2ge actuel jusqu\u2019\xe0 80\u202fans.',
+      guide_yaxis: 'L\u2019<strong>axe vertical</strong> indique le risque cumulatif de maladie coronarienne (%) de votre \xe2ge actuel jusqu\u2019\xe0 80\u202fans.',
       guide_click: '<strong>Cliquez sur n\u2019importe quel point</strong> du graphique pour voir les valeurs de risque exactes et les r\xe9ductions absolues du risque \xe0 cet \xe2ge.',
       guide_lines: 'Chaque ligne repr\xe9sente un sc\xe9nario\u00a0:',
       guide_blue: '<strong>Bleu</strong> \u2014 risque de base (sans intervention)',
@@ -1485,7 +1567,7 @@
   function renderChart(data) {
     document.getElementById('placeholder').style.display = 'none';
     document.getElementById('chartArea').style.display = '';
-    document.getElementById('riskAtAge').style.display = 'none';
+    document.getElementById('riskSection').style.display = 'none';
 
     const pct = arr => arr.map(v => +(v * 100).toFixed(2));
 
@@ -1495,12 +1577,18 @@
     const tl = T[currentLang];
     const datasets = [
       { label: tl.chart_baseline,  data: pct(data.risk_baseline), borderColor: '#0072B2', backgroundColor: 'rgba(0,114,178,0.07)',   tension: 0.35, borderWidth: 2.5 },
-      { label: tl.chart_statin,    data: pct(data.risk_ldl),      borderColor: '#009E73', backgroundColor: 'rgba(0,158,115,0.07)',   tension: 0.35, borderWidth: 2,   borderDash: [6,3] },
+      { label: tl.chart_statin,    data: pct(data.risk_ldl),      borderColor: '#009E73', backgroundColor: 'rgba(0,158,115,0.07)',   tension: 0.35, borderWidth: 2,   borderDash: [6,3], hidden: !showStatin },
       ...(bpApplicable ? [
-        { label: tl.chart_antiht,  data: pct(data.risk_sbp),      borderColor: '#E69F00', backgroundColor: 'rgba(230,159,0,0.07)',   tension: 0.35, borderWidth: 2, borderDash: [6,3] },
-        { label: tl.chart_combined,data: pct(data.risk_combined),  borderColor: '#CC79A7', backgroundColor: 'rgba(204,121,167,0.07)', tension: 0.35, borderWidth: 2, borderDash: [2,3] },
+        { label: tl.chart_antiht,  data: pct(data.risk_sbp),      borderColor: '#E69F00', backgroundColor: 'rgba(230,159,0,0.07)',   tension: 0.35, borderWidth: 2, borderDash: [6,3], hidden: !showAntiht },
+        { label: tl.chart_combined,data: pct(data.risk_combined),  borderColor: '#CC79A7', backgroundColor: 'rgba(204,121,167,0.07)', tension: 0.35, borderWidth: 2, borderDash: [2,3], hidden: !(showStatin && showAntiht) },
       ] : []),
     ];
+    // Sync toggle button states
+    const btnStatin = document.getElementById('toggleStatin');
+    const btnAntiht = document.getElementById('toggleAntiht');
+    btnStatin.classList.toggle('active', showStatin);
+    btnAntiht.classList.toggle('active', showAntiht);
+    btnAntiht.disabled = !bpApplicable;
 
     if (chartInstance) chartInstance.destroy();
 
@@ -1541,11 +1629,13 @@
         plugins: {
           legend: {
             position: 'top',
+            onClick: () => {},
             labels: {
               font: { size: 14, family: 'Inter' },
               padding: 16,
               usePointStyle: true,
               pointStyleWidth: 28,
+              filter: (item) => !item.hidden,
               generateLabels: (chart) => {
                 const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
                 labels.forEach(l => {
@@ -1641,28 +1731,21 @@
 
     const cards = [
       { label: tl.card_baseline, value: data.risk_baseline[idx], color: '#0072B2', arr: null },
-      { label: tl.card_statin,   value: data.risk_ldl[idx],      color: '#009E73', arr: fmtArr(data.risk_ldl[idx]) },
-      ...(bpApplicable ? [
-        { label: tl.card_antiht,  value: data.risk_sbp[idx],     color: '#E69F00', arr: fmtArr(data.risk_sbp[idx]) },
-        { label: tl.card_combined,value: data.risk_combined[idx], color: '#CC79A7', arr: fmtArr(data.risk_combined[idx]) },
-      ] : []),
+      ...(showStatin ? [{ label: tl.card_statin, value: data.risk_ldl[idx], color: '#009E73', arr: fmtArr(data.risk_ldl[idx]) }] : []),
+      ...(bpApplicable && showAntiht ? [{ label: tl.card_antiht, value: data.risk_sbp[idx], color: '#E69F00', arr: fmtArr(data.risk_sbp[idx]) }] : []),
+      ...(bpApplicable && showStatin && showAntiht ? [{ label: tl.card_combined, value: data.risk_combined[idx], color: '#CC79A7', arr: fmtArr(data.risk_combined[idx]) }] : []),
     ];
 
-    const colStart = bpApplicable ? [1,2,3,4] : [2,3];
-
+    document.getElementById('riskAgeHeader').innerHTML =
+      `<div class="risk-age-header">${tl.risk_header(age)}</div>`;
     const riskEl = document.getElementById('riskAtAge');
-    riskEl.innerHTML = `
-      <div class="risk-age-header">${tl.risk_header(age)}</div>
-      <div class="risk-age-grid">
-        ${cards.map((c, i) => `
-          <div class="risk-age-card" style="grid-column:${colStart[i]}">
-            <div class="risk-age-label">${c.label}</div>
-            <div class="risk-age-value" style="color:${c.color}">${fmtRisk(c.value)}</div>
-            ${c.arr ? `<div class="risk-age-arr" style="color:${c.color}">${c.arr}</div>` : ''}
-          </div>`).join('')}
-      </div>
-    `;
-    riskEl.style.display = '';
+    riskEl.innerHTML = cards.map(c => `
+      <div class="risk-age-card">
+        <div class="risk-age-label">${c.label}</div>
+        <div class="risk-age-value" style="color:${c.color}">${fmtRisk(c.value)}</div>
+        ${c.arr ? `<div class="risk-age-arr" style="color:${c.color}">${c.arr}</div>` : ''}
+      </div>`).join('');
+    document.getElementById('riskSection').style.display = '';
 
     requestAnimationFrame(() => {
       if (isFirst) {

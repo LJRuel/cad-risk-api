@@ -4,68 +4,64 @@
   <rect width="500" height="520" fill="#0f172a" rx="16"/>
 
   <!-- Header -->
-  <text x="250" y="34" text-anchor="middle" fill="#e0e7ff" font-size="14" font-weight="700" letter-spacing="0.05em">TOUR DE TAILLE</text>
-  <text x="250" y="52" text-anchor="middle" fill="#6366f1" font-size="11" letter-spacing="0.04em">Comment mesurer correctement</text>
+  <text x="250" y="36" text-anchor="middle" fill="#e0e7ff" font-size="17" font-weight="700" letter-spacing="0.05em">TOUR DE TAILLE</text>
+  <text x="250" y="58" text-anchor="middle" fill="#6366f1" font-size="14" letter-spacing="0.04em">Comment mesurer correctement</text>
 
   <!-- ── Body silhouette ── -->
   <!-- Head -->
-  <circle cx="250" cy="87" r="34" fill="#c7d2fe" opacity="0.9"/>
+  <circle cx="250" cy="109" r="34" fill="#c7d2fe" opacity="0.9"/>
   <!-- Ear hints -->
-  <ellipse cx="216" cy="87" rx="6" ry="9" fill="#b8c5fd" opacity="0.7"/>
-  <ellipse cx="284" cy="87" rx="6" ry="9" fill="#b8c5fd" opacity="0.7"/>
-  <!-- Neck -->
-  <rect x="234" y="118" width="32" height="30" fill="#c7d2fe" opacity="0.9"/>
+  <ellipse cx="216" cy="109" rx="6" ry="9" fill="#b8c5fd" opacity="0.7"/>
+  <ellipse cx="284" cy="109" rx="6" ry="9" fill="#b8c5fd" opacity="0.7"/>
+  <!-- Neck (realistic tapered shape) -->
+  <path d="M241,140 C239,150 235,161 234,167 L266,167 C265,161 261,150 259,140 Z" fill="#c7d2fe" opacity="0.9"/>
   <!-- Torso -->
-  <path d="M234,143 C208,150 168,162 165,178 C162,194 178,218 182,232 C184,250 196,262 198,275 C188,298 183,320 183,400 L317,400 C317,320 312,298 302,275 C304,262 316,250 318,232 C322,218 338,194 335,178 C332,162 292,150 266,143 Z" fill="#c7d2fe" opacity="0.85"/>
+  <path d="M234,165 C208,172 168,184 165,200 C162,216 178,240 182,254 C184,272 196,284 198,297 C188,320 183,342 183,422 L317,422 C317,342 312,320 302,297 C304,284 316,272 318,254 C322,240 338,216 335,200 C332,184 292,172 266,165 Z" fill="#c7d2fe" opacity="0.85"/>
   <!-- Shoulder definition lines -->
-  <line x1="234" y1="143" x2="192" y2="162" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
-  <line x1="266" y1="143" x2="308" y2="162" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
+  <line x1="234" y1="165" x2="192" y2="184" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
+  <line x1="266" y1="165" x2="308" y2="184" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
 
   <!-- ── Measuring tape band ── -->
-  <rect x="192" y="265" width="116" height="15" rx="3" fill="#0891b2"/>
+  <rect x="192" y="287" width="116" height="15" rx="3" fill="#0891b2"/>
   <!-- Tick marks -->
-  <line x1="205" y1="265" x2="205" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
-  <line x1="218" y1="265" x2="218" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
-  <line x1="231" y1="265" x2="231" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
-  <line x1="244" y1="265" x2="244" y2="280" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
-  <line x1="250" y1="265" x2="250" y2="280" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
-  <line x1="256" y1="265" x2="256" y2="280" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
-  <line x1="269" y1="265" x2="269" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
-  <line x1="282" y1="265" x2="282" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
-  <line x1="295" y1="265" x2="295" y2="280" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+  <line x1="205" y1="287" x2="205" y2="302" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+  <line x1="218" y1="287" x2="218" y2="302" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+  <line x1="231" y1="287" x2="231" y2="302" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+  <line x1="244" y1="287" x2="244" y2="302" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
+  <line x1="250" y1="287" x2="250" y2="302" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
+  <line x1="256" y1="287" x2="256" y2="302" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
+  <line x1="269" y1="287" x2="269" y2="302" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+  <line x1="282" y1="287" x2="282" y2="302" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+  <line x1="295" y1="287" x2="295" y2="302" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
 
   <!-- ── Left bracket annotation ── -->
-  <line x1="126" y1="232" x2="126" y2="320" stroke="#818cf8" stroke-width="1.5"/>
-  <line x1="120" y1="232" x2="132" y2="232" stroke="#818cf8" stroke-width="1.5"/>
-  <line x1="120" y1="320" x2="132" y2="320" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="126" y1="254" x2="126" y2="342" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="120" y1="254" x2="132" y2="254" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="120" y1="342" x2="132" y2="342" stroke="#818cf8" stroke-width="1.5"/>
   <!-- Midpoint dot on bracket -->
-  <circle cx="126" cy="276" r="4" fill="#7c3aed"/>
-  <!-- Dashed line: lowest rib -->
-  <line x1="126" y1="232" x2="182" y2="232" stroke="#818cf8" stroke-width="1.2" stroke-dasharray="4 3"/>
-  <circle cx="182" cy="232" r="3.5" fill="#818cf8"/>
-  <!-- Dashed line: iliac crest -->
-  <line x1="126" y1="320" x2="186" y2="320" stroke="#818cf8" stroke-width="1.2" stroke-dasharray="4 3"/>
-  <circle cx="186" cy="320" r="3.5" fill="#818cf8"/>
+  <circle cx="126" cy="298" r="4" fill="#7c3aed"/>
+  <!-- Dashed line: dernière côte -->
+  <line x1="126" y1="254" x2="182" y2="254" stroke="#818cf8" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <circle cx="182" cy="254" r="3.5" fill="#818cf8"/>
+  <!-- Dashed line: os de la hanche -->
+  <line x1="126" y1="342" x2="186" y2="342" stroke="#818cf8" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <circle cx="186" cy="342" r="3.5" fill="#818cf8"/>
   <!-- Labels -->
-  <text x="120" y="228" text-anchor="end" fill="#a5b4fc" font-size="11.5" font-weight="500">Dernière côte</text>
-  <text x="120" y="318" text-anchor="end" fill="#a5b4fc" font-size="11.5" font-weight="500">Os iliaque</text>
-  <text x="120" y="332" text-anchor="end" fill="#64748b" font-size="10">(crête iliaque)</text>
-
+  <text x="120" y="250" text-anchor="end" fill="#a5b4fc" font-size="14" font-weight="500">Dernière côte</text>
+  <text x="120" y="340" text-anchor="end" fill="#a5b4fc" font-size="14" font-weight="500">Os de la hanche</text>
   <!-- Midpoint label on bracket -->
-  <text x="118" y="273" text-anchor="end" fill="#7c3aed" font-size="10.5" font-weight="700">mi-distance</text>
+  <text x="118" y="295" text-anchor="end" fill="#7c3aed" font-size="13" font-weight="700">mi-distance</text>
 
   <!-- ── Right annotation: measure here ── -->
-  <line x1="308" y1="272" x2="355" y2="272" stroke="#06b6d4" stroke-width="1.5"/>
-  <polygon points="310,269 310,275 304,272" fill="#06b6d4"/>
-  <text x="359" y="268" fill="#06b6d4" font-size="12" font-weight="700">Mesurer ici</text>
-  <text x="359" y="283" fill="#94a3b8" font-size="10.5">(mi-distance)</text>
+  <line x1="308" y1="294" x2="355" y2="294" stroke="#06b6d4" stroke-width="1.5"/>
+  <polygon points="310,291 310,297 304,294" fill="#06b6d4"/>
+  <text x="359" y="290" fill="#06b6d4" font-size="14" font-weight="700">Mesurer ici</text>
+  <text x="359" y="307" fill="#94a3b8" font-size="13">(mi-distance)</text>
 
   <!-- ── Instructions box ── -->
-  <rect x="18" y="418" width="464" height="90" rx="10" fill="#1e1b4b"/>
-  <text x="34" y="440" fill="#c7d2fe" font-size="11.5">① Se tenir droit, pieds joints — respirer normalement</text>
-  <text x="34" y="459" fill="#c7d2fe" font-size="11.5">② Repérer le milieu entre la dernière côte et l'os iliaque</text>
-  <text x="34" y="478" fill="#c7d2fe" font-size="11.5">③ Enrouler le ruban bien à plat (sans serrer) — lire en fin d'expiration</text>
-  <line x1="34" y1="488" x2="482" y2="488" stroke="#2e3a5a" stroke-width="1"/>
-  <text x="34" y="501" fill="#475569" font-size="10" font-style="italic">Seuil : &lt; 94 cm (hommes)  ·  &lt; 80 cm (femmes)</text>
+  <rect x="18" y="440" width="464" height="70" rx="10" fill="#1e1b4b"/>
+  <text x="34" y="461" fill="#c7d2fe" font-size="13">① Se tenir droit, pieds joints — respirer normalement</text>
+  <text x="34" y="480" fill="#c7d2fe" font-size="13">② Repérer le milieu entre la dernière côte et l'os de la hanche</text>
+  <text x="34" y="499" fill="#c7d2fe" font-size="13">③ Enrouler le ruban bien à plat (sans serrer) — lire en fin d'expiration</text>
 
 </svg>
