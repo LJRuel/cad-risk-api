@@ -1,10 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from .schemas import InputPayload
 from .deps import MODEL_MEN, MODEL_WOMEN, times_from_age_to_80
 from .prepare import apply_preprocessor_one
 
 app = FastAPI(title="CAD Risk API", version="0.1.0")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.get("/")
 def ui():

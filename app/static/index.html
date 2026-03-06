@@ -9,10 +9,17 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; }
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: #eef2ff;
+      background:
+        radial-gradient(ellipse at 8% 10%,  rgba(124,58,237,0.28)  0%, transparent 45%),
+        radial-gradient(ellipse at 92% 85%, rgba(6,182,212,0.26)   0%, transparent 45%),
+        radial-gradient(ellipse at 75% 5%,  rgba(99,102,241,0.18)  0%, transparent 38%),
+        radial-gradient(ellipse at 20% 90%, rgba(14,165,233,0.16)  0%, transparent 38%),
+        linear-gradient(135deg, #ddd6fe 0%, #e0e7ff 40%, #cffafe 100%);
+      background-attachment: fixed;
       color: #111827;
       min-height: 100vh;
       overflow-x: hidden;
@@ -20,7 +27,13 @@
 
     /* ── Hero ── */
     .hero {
-      background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 55%, #5b21b6 100%);
+      background:
+        radial-gradient(ellipse at 15% 55%, #4338ca 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 35%, #0891b2 0%, transparent 52%),
+        radial-gradient(ellipse at 50% 90%, #7c3aed 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 5%,  #06b6d4 0%, transparent 45%),
+        radial-gradient(ellipse at 30% 10%, #6d28d9 0%, transparent 48%),
+        #3730a3;
       padding: 3rem 5% 2.75rem;
       text-align: center;
       position: relative;
@@ -31,8 +44,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at 75% 40%, rgba(167,139,250,0.25) 0%, transparent 65%),
-                  radial-gradient(ellipse at 20% 80%, rgba(99,102,241,0.2) 0%, transparent 55%);
+      background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -101,7 +113,12 @@
     }
 
     /* ── Page content ── */
-    .content { padding: 2rem 5% 3rem; }
+    .content {
+      padding: 2rem 2% 3rem;
+      max-width: 1600px;
+      width: 100%;
+      margin-inline: auto;
+    }
 
     /* ── Side-by-side page layout ── */
     .page-layout {
@@ -161,6 +178,10 @@
     .chart-guide-btn .btn-q,
     .chart-guide-btn .btn-x {
       position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
     .chart-guide-btn .btn-q { opacity: 1;  transform: rotate(0deg)   scale(1); }
@@ -190,7 +211,7 @@
       opacity: 1;
       pointer-events: auto;
       max-height: 600px;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
     }
     .chart-guide-popup ul {
       margin: 0.4rem 0 0;
@@ -212,17 +233,26 @@
 
     /* ── Cards ── */
     .card {
-      background: #fff;
+      background: linear-gradient(145deg, rgba(255,255,255,0.55) 0%, rgba(221,214,254,0.25) 55%, rgba(207,250,254,0.2) 100%);
+      backdrop-filter: blur(20px) saturate(1.6);
+      -webkit-backdrop-filter: blur(20px) saturate(1.6);
       border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 32px rgba(79,70,229,0.07);
-      border: 1px solid rgba(99,102,241,0.1);
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow:
+        0 8px 40px rgba(79,70,229,0.13),
+        0 2px 8px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 1px 0 0 rgba(255,255,255,0.5),
+        inset -1px 0 0 rgba(255,255,255,0.3),
+        inset 0 -1px 0 rgba(255,255,255,0.2);
+      position: relative;
     }
 
     .form-actions {
       margin-top: 1.75rem;
       padding-top: 1.5rem;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid rgba(99,102,241,0.25);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -236,7 +266,7 @@
 
     .btn-example {
       background: none;
-      border: 1.5px dashed #c7d2fe;
+      border: 1.5px dashed rgba(99,102,241,0.5);
       border-radius: 10px;
       color: #6366f1;
       font-family: inherit;
@@ -264,14 +294,14 @@
       align-items: center;
       gap: 0.5rem;
       width: 100%;
-      font-size: 0.68rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.09em;
       color: #6366f1;
       padding-bottom: 0.65rem;
       margin-bottom: 1rem;
-      border-bottom: 1px solid #e0e7ff;
+      border-bottom: 1px solid rgba(99,102,241,0.35);
     }
 
     legend::before {
@@ -303,6 +333,7 @@
       border-radius: 10px;
       font-size: 0.88rem;
       font-family: inherit;
+      font-weight: 500;
       color: #111827;
       background: #fafafa;
       transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
@@ -337,7 +368,7 @@
       border-radius: 10px;
       cursor: pointer;
       font-size: 0.88rem;
-      font-weight: 500;
+      font-weight: 600;
       color: #6b7280;
       background: #fafafa;
       transition: all 0.18s;
@@ -369,6 +400,7 @@
       margin: 0 -0.75rem;
       border-radius: 8px;
       font-size: 0.85rem;
+      font-weight: 500;
       color: #4b5563;
       transition: background 0.15s, color 0.15s;
       cursor: pointer;
@@ -494,7 +526,7 @@
     .placeholder strong { color: #6b7280; font-weight: 600; }
 
     /* ── Chart ── */
-    .chart-wrap { position: relative; width: 100%; height: 350px; }
+    .chart-wrap { position: relative; width: 100%; height: 420px; background: #fff; border-radius: 12px; padding: 0.5rem; }
     #riskChart { cursor: pointer; }
     @media (max-width: 600px) {
       .chart-wrap { height: 300px; }
@@ -558,12 +590,12 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #9ca3af;
+      color: #6b7280;
       text-align: center;
       margin-bottom: 0.65rem;
     }
 
-    .risk-age-header strong { color: #4b5563; }
+    .risk-age-header strong { color: #1f2937; }
 
     .risk-age-grid {
       display: grid;
@@ -599,11 +631,15 @@
     }
 
     .risk-age-card .risk-age-label {
-      font-size: 0.66rem;
+      font-size: 0.72rem;
       color: #9ca3af;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.07em;
+      min-height: 2.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .risk-age-card .risk-age-value {
@@ -614,7 +650,7 @@
     }
 
     .risk-age-card .risk-age-arr {
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       font-weight: 600;
       margin-top: 0.3rem;
       opacity: 0.85;
@@ -634,9 +670,9 @@
     .info-tip-icon {
       width: 14px; height: 14px;
       border-radius: 50%;
-      background: #e0e7ff;
-      color: #6366f1;
-      font-size: 0.65rem;
+      background: #6366f1;
+      color: #e0e7ff;
+      font-size: 0.7rem;
       font-weight: 700;
       font-style: normal;
       display: flex;
@@ -646,7 +682,8 @@
       transition: background 0.15s;
     }
 
-    .info-tip:hover .info-tip-icon { background: #c7d2fe; }
+    .info-tip:hover .info-tip-icon,
+    .info-tip.open  .info-tip-icon { background: #4f46e5; }
 
     .info-tip-bubble {
       position: absolute;
@@ -655,7 +692,7 @@
       transform: translateX(-50%);
       background: #1e1b4b;
       color: #e0e7ff;
-      font-size: 0.73rem;
+      font-size: 0.78rem;
       font-weight: 400;
       line-height: 1.5;
       padding: 0.5rem 0.75rem;
@@ -678,72 +715,137 @@
       border-top-color: #1e1b4b;
     }
 
-    .info-tip:hover .info-tip-bubble { opacity: 1; }
+    .info-tip:hover .info-tip-bubble,
+    .info-tip.open  .info-tip-bubble { opacity: 1; }
+
+    /* ── Waist tip modal ── */
+    button.waist-tip-trigger {
+      display: inline-flex;
+      border: none;
+      padding: 6px;
+      margin: -6px -6px -6px 0;
+      cursor: pointer;
+      margin-left: calc(0.2rem - 6px);
+      vertical-align: middle;
+    }
+    button.waist-tip-trigger:hover { background: #4f46e5; }
+
+    .waist-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.72);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .waist-modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .waist-modal-box {
+      position: relative;
+      max-width: 520px;
+      width: 90%;
+      border-radius: 16px;
+      overflow: hidden;
+      transform: scale(0.88);
+      transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+    }
+    .waist-modal-overlay.open .waist-modal-box { transform: scale(1); }
+    .waist-modal-box img { width: 100%; display: block; }
+    .waist-modal-close {
+      position: absolute;
+      top: 0.55rem; right: 0.55rem;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      z-index: 1;
+    }
+    .waist-modal-close:hover { background: rgba(255,255,255,0.3); }
 
     .disclaimer {
       margin-top: 1.5rem;
-      padding: 1rem 1.25rem;
-      background: #fffbeb;
-      border: 1px solid #fde68a;
+      background: linear-gradient(145deg, rgba(255,255,255,0.5) 0%, rgba(221,214,254,0.2) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.45);
       border-radius: 12px;
-      font-size: 0.77rem;
-      color: #78350f;
+      font-size: 0.72rem;
+      color: #374151;
       line-height: 1.65;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.08),
+                  inset 0 1px 0 rgba(255,255,255,0.8);
     }
 
-    .disclaimer strong { font-weight: 600; color: #92400e; }
+    .disclaimer strong { font-weight: 600; color: #1e1b4b; }
 
     .disclaimer ul {
-      margin: 0.6rem 0 0 1rem;
+      margin: -0.45rem 0 0 1rem;
       padding: 0;
       list-style: disc;
+    }
+
+    .disclaimer p + ul,
+    .disclaimer p + div {
+      margin-top: -0.45rem;
     }
 
     .disclaimer li { margin-bottom: 0.25rem; }
 
     .disclaimer a {
-      color: #92400e;
+      color: #4f46e5;
       text-decoration: underline;
       text-underline-offset: 2px;
     }
 
-    .disclaimer a:hover { color: #78350f; }
-
-    .disclaimer details {
-      margin-top: 0.75rem;
-      border: 1px solid #fbbf24;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+    .disclaimer a:hover { color: #3730a3; }
 
     .disclaimer summary {
       cursor: pointer;
       font-weight: 600;
-      color: #92400e;
+      color: #4338ca;
       list-style: none;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       user-select: none;
-      background: #fef3c7;
-      padding: 0.5rem 0.75rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
       transition: background 0.15s;
     }
 
-    .disclaimer summary:hover { background: #fde68a; }
-
+    .disclaimer summary:hover { background: rgba(99,102,241,0.06); }
     .disclaimer summary::-webkit-details-marker { display: none; }
 
-    .disclaimer summary::before {
-      content: '▸';
-      font-size: 0.65rem;
-      transition: transform 0.2s;
+    .disclaimer-chevron {
+      color: #6366f1;
+      transition: transform 0.25s ease;
       flex-shrink: 0;
     }
 
-    .disclaimer details[open] summary::before { transform: rotate(90deg); }
+    .disclaimer[open] .disclaimer-chevron { transform: rotate(180deg); }
 
-    .disclaimer details > div { padding: 0.65rem 0.75rem 0.75rem; }
+    .disclaimer > div {
+      padding: 0 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
 
     /* ── Female fieldset slide-in ── */
     #femaleFieldsWrap {
@@ -798,7 +900,7 @@
           <input type="number" id="age" min="40" max="79" step="1" placeholder="40 to 79" data-i18n-ph="ph_age" required>
         </div>
         <div class="field">
-          <label class="field-label" data-i18n="label_sbp">Systolic BP (mmHg)</label>
+          <label class="field-label" data-i18n="label_sbp">Systolic blood pressure (mmHg)</label>
           <input type="number" id="sbp" min="60" max="250" step="1" placeholder="60 to 250" data-i18n-ph="ph_sbp" required>
         </div>
         <div class="field">
@@ -809,10 +911,6 @@
           <label class="field-label" data-i18n="label_ldl">LDL cholesterol (mmol/L)</label>
           <input type="number" id="ldl" min="0.1" max="15" step="0.01" placeholder="0.1 to 15" data-i18n-ph="ph_ldl" required>
         </div>
-        <div class="field">
-          <label class="field-label" data-i18n="label_waist">Waist circumference (cm)</label>
-          <input type="number" id="waist" min="40" max="150" step="0.1" placeholder="40 to 150" data-i18n-ph="ph_waist">
-        </div>
       </fieldset>
 
       <fieldset>
@@ -822,19 +920,19 @@
           <label class="toggle"><input type="checkbox" id="diabetes"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
-          <span data-i18n="label_family">Family history of CAD</span>
+          <span data-i18n="label_family">Family history of coronary artery disease</span>
           <label class="toggle"><input type="checkbox" id="family_history"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
-          <span data-i18n="label_antiht">Currently on antihypertensive treatment</span>
+          <span data-i18n="label_antiht">Are you currently taking antihypertensive medication?</span>
           <label class="toggle"><input type="checkbox" id="antiht"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
-          <span data-i18n="label_statin">Currently on statin treatment</span>
+          <span data-i18n="label_statin">Are you currently taking a statin?</span>
           <label class="toggle"><input type="checkbox" id="statin"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
-          <span data-i18n="label_smoking">Current smoker</span>
+          <span data-i18n="label_smoking">Are you currently smoking?</span>
           <label class="toggle"><input type="checkbox" id="smoking_current"><span class="toggle-slider"></span></label>
         </div>
         <div class="field" id="packYearsField" style="display:none">
@@ -845,7 +943,7 @@
               <span class="info-tip-bubble" data-i18n="tip_pack">1 pack = 20 cigarettes</span>
             </span>
           </label>
-          <input type="number" id="pack_years" min="0" step="0.5" placeholder="Leave blank if N/A" data-i18n-ph="ph_optional">
+          <input type="number" id="pack_years" min="1" step="0.5" data-i18n-ph="ph_packyears">
         </div>
       </fieldset>
 
@@ -870,12 +968,19 @@
       <fieldset>
         <legend data-i18n="legend_optional">Optional Measurements</legend>
         <div class="field">
+          <label class="field-label">
+            <span data-i18n="label_waist">Waist circumference (cm)</span>
+            <button type="button" class="info-tip-icon waist-tip-trigger" id="waistTipBtn" aria-haspopup="dialog">i</button>
+          </label>
+          <input type="number" id="waist" min="40" max="150" step="0.1" placeholder="40 to 150" data-i18n-ph="ph_waist">
+        </div>
+        <div class="field">
           <label class="field-label">Lp(a) (nmol/L)</label>
-          <input type="number" id="lpa" min="0" step="0.1" placeholder="Leave blank if N/A" data-i18n-ph="ph_optional">
+          <input type="number" id="lpa" min="0" step="0.1" placeholder="Leave empty if unknown" data-i18n-ph="ph_optional">
         </div>
         <div class="field">
           <label class="field-label">CRP (mg/L)</label>
-          <input type="number" id="crp" min="0" step="0.01" placeholder="Leave blank if N/A" data-i18n-ph="ph_optional">
+          <input type="number" id="crp" min="0" step="0.01" placeholder="Leave empty if unknown" data-i18n-ph="ph_optional">
         </div>
       </fieldset>
 
@@ -939,31 +1044,40 @@
 
       <div class="risk-at-age" id="riskAtAge" style="display:none"></div>
 
-      <div class="disclaimer">
-        <span data-i18n="disclaimer_main"><strong>Educational use only.</strong> Intervention effects are population-level approximations from randomized control trial meta-analyses, not individual causal predictions. This tool does not replace clinical judgment.</span>
-        <details>
-          <summary data-i18n="disclaimer_summary">Effect of interventions &amp; References</summary>
-          <div>
-            <span data-i18n="disclaimer_int_title"><strong>Effect of interventions</strong></span>
-            <ul>
-              <li data-i18n="disclaimer_statin">Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> × 20% relative risk reduction/mmol·L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup></li>
-              <li data-i18n="disclaimer_antiht">Antihypertensive: 8% relative risk reduction per 5 mmHg if systolic blood pressure ≥ 130 mmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup></li>
-            </ul>
-            <span data-i18n="disclaimer_refs"><strong>References</strong></span>
-            <div style="display:grid; grid-template-columns: 1rem 1fr; gap: 0.5rem 0.25rem; opacity:0.75; margin-top:0.4rem">
-              <sup>1</sup> <a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">McPherson, Ruth et al. "Medications for Lipid Control: Statins vs Newer Drugs." <em>The Canadian Journal of Cardiology</em> (2024).</a>
-              <sup>2</sup> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">Cholesterol Treatment Trialists' Collaborators et al. "The effects of lowering LDL cholesterol with statin therapy in people at low risk of vascular disease: meta-analysis of individual data from 27 randomised trials." <em>Lancet</em> (2012).</a>
-              <sup>3</sup> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">Blood Pressure Lowering Treatment Trialists' Collaboration. "Pharmacological blood pressure lowering for primary and secondary prevention of cardiovascular disease across different levels of blood pressure: an individual participant-level data meta-analysis." <em>Lancet</em> (2021).</a>
-            </div>
+      <details class="disclaimer">
+        <summary>
+          <svg class="disclaimer-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <span data-i18n="disclaimer_toggle">About this tool</span>
+        </summary>
+        <div>
+          <p data-i18n="disclaimer_main"><strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.</p>
+          <p data-i18n="disclaimer_int_title"><strong>Effect of interventions</strong></p>
+          <ul>
+            <li data-i18n="disclaimer_statin">Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> × 20% relative risk reduction/mmol·L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup></li>
+            <li data-i18n="disclaimer_antiht">Antihypertensive: 8% relative risk reduction per 5 mmHg if systolic blood pressure ≥ 130 mmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup></li>
+          </ul>
+          <p data-i18n="disclaimer_refs"><strong>References</strong></p>
+          <div style="display:grid; grid-template-columns: 1rem 1fr; gap: 0.5rem 0.25rem; opacity:0.75;">
+            <sup>1</sup> <a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">McPherson, Ruth et al. "Medications for Lipid Control: Statins vs Newer Drugs." <em>The Canadian Journal of Cardiology</em> (2024).</a>
+            <sup>2</sup> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">Cholesterol Treatment Trialists' Collaborators et al. "The effects of lowering LDL cholesterol with statin therapy in people at low risk of vascular disease: meta-analysis of individual data from 27 randomised trials." <em>Lancet</em> (2012).</a>
+            <sup>3</sup> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">Blood Pressure Lowering Treatment Trialists' Collaboration. "Pharmacological blood pressure lowering for primary and secondary prevention of cardiovascular disease across different levels of blood pressure: an individual participant-level data meta-analysis." <em>Lancet</em> (2021).</a>
           </div>
-        </details>
-      </div>
+        </div>
+      </details>
     </div>
   </div>
 
   </div><!-- /page-layout -->
 
-  <footer style="text-align:center;margin-top:2rem;padding-bottom:1.5rem;font-size:0.72rem;color:#9ca3af;">
+  <!-- ── Waist circumference modal ── -->
+  <div class="waist-modal-overlay" id="waistModal" role="dialog" aria-modal="true">
+    <div class="waist-modal-box">
+      <button class="waist-modal-close" id="waistModalClose" aria-label="Close">✕</button>
+      <img id="waistTipImg" src="/static/waist_fr.svg" alt="How to measure waist circumference">
+    </div>
+  </div>
+
+  <footer style="text-align:center;margin-top:2rem;padding-bottom:1.5rem;font-size:0.78rem;color:#9ca3af;">
     &copy; <span id="footerYear"></span> Louis-Jacques Ruel &nbsp;&middot;&nbsp; <span data-i18n="footer_edu">For educational purposes only</span> &nbsp;&middot;&nbsp;
     <a href="https://github.com/LJRuel/cad-risk-api" target="_blank" rel="noopener"
        style="color:#818cf8;text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;vertical-align:middle;">
@@ -1015,6 +1129,28 @@
     }
   });
 
+  // ── Info-tip click toggle (for touch devices) ──
+  document.querySelectorAll('.info-tip').forEach(tip => {
+    tip.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = tip.classList.contains('open');
+      document.querySelectorAll('.info-tip.open').forEach(t => t.classList.remove('open'));
+      if (!isOpen) tip.classList.add('open');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.info-tip.open').forEach(t => t.classList.remove('open'));
+  });
+
+  // ── Waist tip modal ──
+  const waistModal = document.getElementById('waistModal');
+  const openWaistModal  = () => waistModal.classList.add('open');
+  const closeWaistModal = () => waistModal.classList.remove('open');
+  document.getElementById('waistTipBtn').addEventListener('click', openWaistModal);
+  document.getElementById('waistModalClose').addEventListener('click', closeWaistModal);
+  waistModal.addEventListener('click', e => { if (e.target === waistModal) closeWaistModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeWaistModal(); });
+
   // ── Example values ──
   document.getElementById('exampleBtn').addEventListener('click', () => {
     // Sex: Male
@@ -1042,11 +1178,21 @@
     document.getElementById('crp').value = '';
   });
 
+  // ── Toggle rows — full row clickable ──
+  document.querySelectorAll('.toggle-row').forEach(row => {
+    row.addEventListener('click', e => {
+      if (e.target.closest('.toggle')) return;
+      row.querySelector('input[type="checkbox"]').click();
+    });
+  });
+
   // ── Smoking toggle → show/hide pack-years ──
   document.getElementById('smoking_current').addEventListener('change', function() {
-    const field = document.getElementById('packYearsField');
+    const field   = document.getElementById('packYearsField');
+    const input   = document.getElementById('pack_years');
     field.style.display = this.checked ? '' : 'none';
-    if (!this.checked) document.getElementById('pack_years').value = '';
+    input.required = this.checked;
+    if (!this.checked) input.value = '';
   });
 
   // ── Sex toggle → show/hide female fields ──
@@ -1068,19 +1214,20 @@
       legend_sex: 'Biological Sex', label_man: 'Man', label_woman: 'Woman',
       legend_clinical: 'Clinical Measurements',
       label_age: 'Age (years)', ph_age: '40 to 79',
-      label_sbp: 'Systolic BP (mmHg)', ph_sbp: '60 to 250',
+      label_sbp: 'Systolic blood pressure (mmHg)', ph_sbp: '60 to 250',
       label_hdl: 'HDL cholesterol (mmol/L)', ph_hdl: '0.1 to 5',
       label_ldl: 'LDL cholesterol (mmol/L)', ph_ldl: '0.1 to 15',
       label_waist: 'Waist circumference (cm)', ph_waist: '40 to 150',
       legend_risk: 'Risk Factors',
       label_diabetes: 'Diabetes',
-      label_family: 'Family history of CAD',
-      label_antiht: 'Currently on antihypertensive treatment',
-      label_statin: 'Currently on statin treatment',
-      label_smoking: 'Current smoker',
+      label_family: 'Family history of heart disease',
+      label_antiht: 'Are you currently taking antihypertensive medication?',
+      label_statin: 'Are you currently taking a statin?',
+      label_smoking: 'Are you currently smoking?',
       label_packyears: 'Number of cigarette packs smoked per year',
       tip_pack: '1 pack = 20 cigarettes',
-      ph_optional: 'Leave blank if N/A',
+      ph_optional: 'Leave empty if unknown',
+      ph_packyears: 'Required',
       legend_female: 'Female-specific',
       label_gest: 'Gestational hypertension / pre-eclampsia',
       label_meno: 'Menopause',
@@ -1101,18 +1248,19 @@
       hint: 'Click the chart to explore risk at a specific age',
       chart_baseline: 'Baseline', chart_statin: 'With statin',
       chart_antiht: 'With antihypertensive', chart_combined: 'Combined',
-      chart_xaxis: 'Age (years)', chart_yaxis: 'Cumulative CAD risk (%)',
-      risk_header: age => `CAD risk at age <strong>${age}</strong>`,
+      chart_xaxis: 'Age (years)', chart_yaxis: 'Coronary artery disease risk (%)',
+      risk_header: age => `Coronary artery disease risk at age <strong>${age}</strong>`,
       vs_baseline: 'vs baseline',
       card_baseline: 'Baseline', card_statin: 'With statin',
       card_antiht: 'With antihypertensive', card_combined: 'Combined',
-      disclaimer_main: '<strong>Educational use only.</strong> Intervention effects are population-level approximations from randomized control trial meta-analyses, not individual causal predictions. This tool does not replace clinical judgment.',
+      disclaimer_toggle: 'About this tool',
+      disclaimer_main: '<strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.',
       disclaimer_summary: 'Effect of interventions &amp; References',
       disclaimer_int_title: '<strong>Effect of interventions</strong>',
       disclaimer_statin: 'Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 20% relative risk reduction/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
       disclaimer_antiht: 'Antihypertensive: 8% relative risk reduction per 5\u202fmmHg if systolic blood pressure \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>',
       disclaimer_refs: '<strong>References</strong>',
-      footer_edu: 'For educational purposes only',
+      footer_edu: 'For informational purposes only',
       error_prefix: 'Error: ',
     },
     fr: {
@@ -1122,19 +1270,20 @@
       legend_sex: 'Sexe biologique', label_man: 'Homme', label_woman: 'Femme',
       legend_clinical: 'Mesures cliniques',
       label_age: '\xc2ge (ann\xe9es)', ph_age: '40 \xe0 79',
-      label_sbp: 'TA systolique (mmHg)', ph_sbp: '60 \xe0 250',
+      label_sbp: 'Tension artérielle systolique (mmHg)', ph_sbp: '60 \xe0 250',
       label_hdl: 'Cholest\xe9rol HDL (mmol/L)', ph_hdl: '0,1 \xe0 5',
       label_ldl: 'Cholest\xe9rol LDL (mmol/L)', ph_ldl: '0,1 \xe0 15',
       label_waist: 'Tour de taille (cm)', ph_waist: '40 \xe0 150',
       legend_risk: 'Facteurs de risque',
       label_diabetes: 'Diab\xe8te',
-      label_family: 'Ant\xe9c\xe9dents familiaux de maladie coronarienne',
-      label_antiht: 'Traitement antihypertenseur actuel',
-      label_statin: 'Traitement par statine actuel',
-      label_smoking: 'Fumeur actuel',
+      label_family: 'Ant\xe9c\xe9dents familiaux de maladie cardiovasculaire',
+      label_antiht: 'Prenez-vous actuellement un antihypertenseur\u00a0?',
+      label_statin: 'Prenez-vous actuellement une statine\u00a0?',
+      label_smoking: 'Fumez-vous actuellement\u00a0?',
       label_packyears: 'Nombre de paquets de cigarettes fum\xe9s par ann\xe9e',
       tip_pack: '1 paquet\u00a0= 20 cigarettes',
-      ph_optional: 'Laisser vide si N/A',
+      ph_optional: 'Laisser vide si inconnu',
+      ph_packyears: 'Requis',
       legend_female: 'Sp\xe9cifique aux femmes',
       label_gest: 'Hypertension gestationnelle / pr\xe9-\xe9clampsie',
       label_meno: 'M\xe9nopause',
@@ -1155,18 +1304,19 @@
       hint: 'Cliquez sur le graphique pour explorer le risque \xe0 un \xe2ge sp\xe9cifique',
       chart_baseline: 'Risque de base', chart_statin: 'Avec statine',
       chart_antiht: 'Avec antihypertenseur', chart_combined: 'Combin\xe9',
-      chart_xaxis: '\xc2ge (ann\xe9es)', chart_yaxis: 'Risque cumulatif de maladie coronarienne (%)',
+      chart_xaxis: '\xc2ge (ann\xe9es)', chart_yaxis: 'Risque de maladie coronarienne (%)',
       risk_header: age => `Risque de maladie coronarienne \xe0 l\u2019\xe2ge <strong>${age}</strong>`,
       vs_baseline: 'vs risque de base',
       card_baseline: 'Risque de base', card_statin: 'Avec statine',
       card_antiht: 'Avec antihypertenseur', card_combined: 'Combin\xe9',
-      disclaimer_main: '<strong>Usage \xe9ducatif uniquement.</strong> Les effets des interventions sont des approximations \xe0 l\u2019\xe9chelle populationnelle issues de m\xe9ta-analyses d\u2019essais contr\xf4l\xe9s randomis\xe9s, et non des pr\xe9dictions causales individuelles. Cet outil ne remplace pas le jugement clinique.',
+      disclaimer_toggle: '\xc0 propos de cet outil',
+      disclaimer_main: '<strong>\xc0 titre informatif seulement.</strong> Cet outil est con\xe7u pour soutenir les discussions entre les patients et les professionnels de la sant\xe9 concernant la pr\xe9vention du risque cardiovasculaire \u2014 il n\u2019est pas destin\xe9 \xe0 orienter ou remplacer la prise de d\xe9cision clinique. Les effets des interventions sont des approximations \xe0 l\u2019\xe9chelle populationnelle issues de m\xe9ta-analyses d\u2019essais contr\xf4l\xe9s randomis\xe9s, et non des pr\xe9dictions causales individuelles.',
       disclaimer_summary: 'Effet des interventions &amp; R\xe9f\xe9rences',
       disclaimer_int_title: '<strong>Effet des interventions</strong>',
       disclaimer_statin: 'Statine\u00a0: r\xe9duction de 50\u202f% du cholest\xe9rol LDL<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 r\xe9duction du risque relatif de 20\u202f%/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
       disclaimer_antiht: 'Antihypertenseur\u00a0: r\xe9duction du risque relatif de 8\u202f% par 5\u202fmmHg si la pression art\xe9rielle systolique \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>',
       disclaimer_refs: '<strong>R\xe9f\xe9rences</strong>',
-      footer_edu: '\xc0 des fins \xe9ducatives uniquement',
+      footer_edu: '\xc0 titre informatif seulement',
       error_prefix: 'Erreur\u00a0: ',
     }
   };
@@ -1198,6 +1348,8 @@
       chartInstance.update();
     }
     if (lastChartData) showRiskAtAge(lastSelectedIdx, lastChartData, lastBpApplicable, false);
+    const waistImg = document.getElementById('waistTipImg');
+    if (waistImg) waistImg.src = `/static/waist_${lang}.svg`;
     localStorage.setItem('lang', lang);
   }
 
@@ -1390,7 +1542,7 @@
           legend: {
             position: 'top',
             labels: {
-              font: { size: 12, family: 'Inter' },
+              font: { size: 14, family: 'Inter' },
               padding: 16,
               usePointStyle: true,
               pointStyleWidth: 28,
@@ -1407,8 +1559,10 @@
           },
           tooltip: {
             backgroundColor: '#1e1b4b',
-            padding: 10,
+            padding: 12,
             cornerRadius: 10,
+            titleFont: { size: 14, family: 'Inter', weight: '600' },
+            bodyFont: { size: 13, family: 'Inter' },
             usePointStyle: true,
             callbacks: {
               label:            ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`,
@@ -1418,19 +1572,60 @@
         },
         scales: {
           x: {
-            grid: { color: '#f1f5f9' },
-            title: { display: true, text: tl.chart_xaxis, font: { size: 12, family: 'Inter' }, color: '#6b7280' }
+            grid: { color: 'rgba(99,102,241,0.15)' },
+            ticks: { color: '#374151', font: { size: 13, family: 'Inter' } },
+            title: { display: true, text: tl.chart_xaxis, font: { size: 14, family: 'Inter', weight: '600' }, color: '#1f2937' }
           },
           y: {
-            grid: { color: '#f1f5f9' },
-            title: { display: true, text: tl.chart_yaxis, font: { size: 12, family: 'Inter' }, color: '#6b7280' },
+            grid: { color: 'rgba(99,102,241,0.15)' },
+            ticks: { color: '#374151', font: { size: 13, family: 'Inter' }, callback: v => v + '%' },
+            title: { display: true, text: tl.chart_yaxis, font: { size: 14, family: 'Inter', weight: '600' }, color: '#1f2937' },
             min: 0,
-            ticks: { callback: v => v + '%' }
           }
         }
       }
     });
 
+    // ── Mobile swipe-to-select on chart ──
+    if (window.innerWidth <= 900) {
+      const canvas = document.getElementById('riskChart');
+
+      if (!canvas._touchBound) {
+        canvas._touchBound = true;
+
+        const getIdx = (touch) => {
+          const rect = canvas.getBoundingClientRect();
+          const x = touch.clientX - rect.left;
+          const xScale = chartInstance.scales.x;
+          const count = chartInstance.data.labels.length;
+          const idx = Math.round((x - xScale.left) / (xScale.width / (count - 1)));
+          return Math.max(0, Math.min(count - 1, idx));
+        };
+
+        canvas.addEventListener('touchstart', e => {
+          e.preventDefault();
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', e => {
+          e.preventDefault();
+          if (!chartInstance) return;
+          const idx = getIdx(e.touches[0]);
+          chartInstance.hoverIdx = idx;
+          chartInstance.selectedIdx = idx;
+          chartInstance.draw();
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', e => {
+          e.preventDefault();
+          if (!chartInstance) return;
+          const idx = getIdx(e.changedTouches[0]);
+          chartInstance.selectedIdx = idx;
+          chartInstance.draw();
+          document.getElementById('chartHint').classList.add('hidden');
+          showRiskAtAge(idx, lastChartData, lastBpApplicable, false);
+        }, { passive: false });
+      }
+    }
   }
 
   // Apply saved language on load
