@@ -32,6 +32,11 @@ cad-risk-api/
 
 ## Quick start (local development)
 
+**Prerequisites**: Python 3.9, and `libgomp1` installed on your system (`apt-get install libgomp1` on Debian/Ubuntu; included automatically via Homebrew on macOS).
+
+> **Note on model artifacts**
+> The four `.joblib` files required by this service are not included in this repository as they are part of a private research project. The application will not start without them. Contact the repository maintainers to request access.
+
 1. Create and activate a virtual environment:
 ```bash
 python -m venv .venv && source .venv/bin/activate
