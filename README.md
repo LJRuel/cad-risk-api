@@ -1,4 +1,4 @@
-# CAD Risk API
+# CAD Risk Estimator App
 
 <p>
   <img src="https://img.shields.io/badge/Python-3.9-3776AB?logo=python&logoColor=white" alt="Python 3.9"/>
@@ -16,14 +16,24 @@ A stateless REST API serving sex-specific **Deep Survival Machines (DSM)** model
 
 ## Table of contents
 
-- [Project structure](#project-structure)
-- [Quick start](#quick-start-local-development)
-- [API endpoints](#api-endpoints)
-- [Intervention overlays](#intervention-overlays)
-- [Docker](#docker)
-- [Configuration](#configuration)
-- [References](#references)
-- [License](#license)
+- [CAD Risk Estimator App](#cad-risk-estimator-app)
+  - [Table of contents](#table-of-contents)
+  - [Project structure](#project-structure)
+  - [Quick start (local development)](#quick-start-local-development)
+  - [API endpoints](#api-endpoints)
+    - [`GET /health`](#get-health)
+    - [`POST /predict`](#post-predict)
+      - [Request fields](#request-fields)
+      - [Example request](#example-request)
+      - [Response](#response)
+  - [Intervention overlays](#intervention-overlays)
+    - [Statin / LDL](#statin--ldl)
+    - [Antihypertensive / SBP](#antihypertensive--sbp)
+    - [Combined (multiplicative)](#combined-multiplicative)
+  - [Docker](#docker)
+  - [Configuration](#configuration)
+  - [References](#references)
+  - [License](#license)
 
 ---
 
