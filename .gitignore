@@ -218,3 +218,7 @@ __marimo__/
 dist/
 build/
 
+# Claude
+.claude/
+CLAUDE.md
+

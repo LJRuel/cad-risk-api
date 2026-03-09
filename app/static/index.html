@@ -603,6 +603,11 @@
       to   { opacity: 1; transform: translateY(0)   scale(1); }
     }
 
+    @keyframes cardToggleIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+
     @keyframes numIn {
       from { opacity: 0.15; transform: scale(0.82); }
       to   { opacity: 1;    transform: scale(1); }
@@ -635,17 +640,18 @@
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0;
     }
 
     .risk-age-card {
-      flex: 0 0 calc(25% - 0.5625rem);
+      flex: 0 0 calc(25% - 0.75rem);
       min-width: 90px;
+      margin: 0.375rem;
     }
 
     @media (max-width: 600px) {
       .risk-age-card {
-        flex-basis: calc(50% - 0.375rem);
+        flex-basis: calc(50% - 0.75rem);
       }
       .risk-age-card .risk-age-value {
         font-size: 1.25rem;
@@ -691,6 +697,7 @@
       font-weight: 600;
       margin-top: 0.3rem;
       opacity: 0.85;
+      min-height: calc(0.78rem * 1.5 * 2);
     }
 
     /* ── Disclaimer ── */
@@ -705,22 +712,21 @@
     }
 
     .info-tip-icon {
-      width: 14px; height: 14px;
+      width: 17px; height: 17px;
       border-radius: 50%;
-      background: #6366f1;
-      color: #e0e7ff;
-      font-size: 0.7rem;
-      font-weight: 700;
+      background: #6366f1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 10'%3E%3Ccircle cx='3' cy='1.5' r='1.3' fill='%23e0e7ff'/%3E%3Crect x='2' y='4' width='2' height='5.5' rx='1' fill='%23e0e7ff'/%3E%3C/svg%3E") no-repeat center / 7px 11px;
+      font-size: 0;
       font-style: normal;
       display: flex;
       align-items: center;
       justify-content: center;
       line-height: 1;
-      transition: background 0.15s;
+      transition: background-color 0.15s;
+      flex-shrink: 0;
     }
 
     .info-tip:hover .info-tip-icon,
-    .info-tip.open  .info-tip-icon { background: #4f46e5; }
+    .info-tip.open  .info-tip-icon { background: #e0e7ff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 10'%3E%3Ccircle cx='3' cy='1.5' r='1.3' fill='%236366f1'/%3E%3Crect x='2' y='4' width='2' height='5.5' rx='1' fill='%236366f1'/%3E%3C/svg%3E") no-repeat center / 7px 11px; }
 
     .info-tip-bubble {
       position: absolute;
@@ -734,7 +740,10 @@
       line-height: 1.5;
       padding: 0.5rem 0.75rem;
       border-radius: 8px;
-      white-space: nowrap;
+      white-space: normal;
+      width: 230px;
+      text-transform: none;
+      letter-spacing: 0;
       pointer-events: none;
       opacity: 0;
       visibility: hidden;
@@ -770,7 +779,7 @@
       margin-left: 0.1rem;
       vertical-align: middle;
     }
-    button.waist-tip-trigger:hover { background: #4f46e5; }
+    button.waist-tip-trigger:hover { background: #e0e7ff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 10'%3E%3Ccircle cx='3' cy='1.5' r='1.3' fill='%236366f1'/%3E%3Crect x='2' y='4' width='2' height='5.5' rx='1' fill='%236366f1'/%3E%3C/svg%3E") no-repeat center / 7px 11px; }
 
     .waist-modal-overlay {
       position: fixed;
@@ -905,6 +914,52 @@
       margin-bottom: 1.5rem;
     }
 
+
+    /* ── Optional progress indicator ── */
+    .optional-progress {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #9ca3af;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .optional-progress-bar {
+      display: inline-block;
+      width: 2.5rem;
+      height: 3px;
+      border-radius: 100px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .optional-progress-bar-fill {
+      display: block;
+      height: 100%;
+      background: #818cf8;
+      border-radius: 100px;
+      transition: width 0.3s ease;
+    }
+    .optional-progress.complete { color: #6366f1; }
+
+    /* ── Focus styles ── */
+    :focus-visible {
+      outline: 2px solid #818cf8;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+    .toggle input:focus-visible + .toggle-slider {
+      outline: 2px solid #818cf8;
+      outline-offset: 3px;
+      border-radius: 100px;
+    }
+    .info-tip-icon:focus-visible {
+      outline: 2px solid #818cf8;
+      outline-offset: 2px;
+    }
+
   </style>
 </head>
 <body>
@@ -982,7 +1037,7 @@
           <label class="field-label">
             <span data-i18n="label_packyears">Number of cigarette packs smoked per year</span>
             <span class="info-tip">
-              <i class="info-tip-icon">i</i>
+              <i class="info-tip-icon" tabindex="0" role="button" aria-label="More information">i</i>
               <span class="info-tip-bubble" data-i18n="tip_pack">1 pack = 20 cigarettes</span>
             </span>
           </label>
@@ -1009,7 +1064,14 @@
       </div>
 
       <fieldset>
-        <legend data-i18n="legend_optional">Optional Measurements</legend>
+        <legend>
+          <span data-i18n="legend_optional">Optional Measurements</span>
+          <span class="info-tip">
+            <i class="info-tip-icon" tabindex="0" role="button" aria-label="More information">i</i>
+            <span class="info-tip-bubble" data-i18n="tip_optional"></span>
+          </span>
+        </legend>
+        <div id="optionalProgress" class="optional-progress" aria-live="polite"></div>
         <div class="field">
           <label class="field-label">
             <span data-i18n="label_waist">Waist circumference (cm)</span>
@@ -1030,7 +1092,7 @@
       <div class="form-actions">
         <button type="submit" id="submitBtn" data-i18n="btn_submit">Estimate risk</button>
         <button type="button" class="btn-example" id="exampleBtn" data-i18n="btn_example">&#9654; Load example values</button>
-        <div class="error-msg" id="errorMsg"></div>
+        <div class="error-msg" id="errorMsg" role="alert" aria-live="polite"></div>
       </div>
 
     </form>
@@ -1109,6 +1171,7 @@
         </summary>
         <div>
           <p data-i18n="disclaimer_main"><strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.</p>
+          <p data-i18n="disclaimer_imputation"><strong>Missing optional measurements.</strong> When optional fields (waist circumference, Lp(a), CRP, and pack-years) are left blank, the model substitutes the population-average value derived from its training cohort. Risk estimates for individuals who have never had these measurements taken may therefore reflect a population mean rather than their personal profile.</p>
           <p data-i18n="disclaimer_int_title"><strong>Effect of interventions</strong></p>
           <ul>
             <li data-i18n="disclaimer_statin">Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> × 20% relative risk reduction/mmol·L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup></li>
@@ -1212,7 +1275,7 @@
     chartInstance.update('none');
     document.getElementById('toggleStatin').classList.toggle('active', showStatin);
     document.getElementById('toggleAntiht').classList.toggle('active', showAntiht);
-    if (lastChartData) showRiskAtAge(lastSelectedIdx, lastChartData, bp, false);
+    if (lastChartData) showRiskAtAge(lastSelectedIdx, lastChartData, bp, false, true);
   }
   document.getElementById('toggleStatin').addEventListener('click', () => {
     showStatin = !showStatin;
@@ -1257,6 +1320,8 @@
     // Optional
     document.getElementById('lpa').value = '';
     document.getElementById('crp').value = '';
+    saveFormState();
+    updateOptionalProgress();
   });
 
   // ── Toggle rows — full row clickable ──
@@ -1315,6 +1380,7 @@
       label_meno: 'Have you reached menopause?',
       label_hrt: 'Are you currently taking hormone replacement therapy (HRT)?',
       legend_optional: 'Optional Measurements',
+      tip_optional: 'These measurements are optional but improve the model\u2019s prediction accuracy when provided. Fill in as many as you have available.',
       btn_submit: 'Estimate risk', btn_calculating: 'Calculating\u2026',
       btn_example: '&#9654; Load example values',
       placeholder_card: 'Fill in the form and click <strong>Estimate risk</strong>',
@@ -1332,11 +1398,12 @@
       chart_antiht: 'With antihypertensive', chart_combined: 'Combined',
       chart_xaxis: 'Age (years)', chart_yaxis: 'Coronary artery disease risk (%)',
       risk_header: age => `Coronary artery disease risk at age <strong>${age}</strong>`,
-      vs_baseline: 'vs baseline',
+      vs_baseline: 'of baseline risk',
       card_baseline: 'Baseline', card_statin: 'With statin',
       card_antiht: 'With antihypertensive', card_combined: 'Combined',
       disclaimer_toggle: 'About this tool',
       disclaimer_main: '<strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.',
+      disclaimer_imputation: '<strong>Missing optional measurements.</strong> When optional fields (waist circumference, Lp(a), and CRP) are left blank, the model substitutes the population-average value derived from its training data. Risk estimates for individuals who have never had these measurements taken may therefore reflect a population mean rather than their personal profile.',
       disclaimer_summary: 'Effect of interventions &amp; References',
       disclaimer_int_title: '<strong>Effect of interventions</strong>',
       disclaimer_statin: 'Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 20% relative risk reduction/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
@@ -1344,6 +1411,7 @@
       disclaimer_refs: '<strong>References</strong>',
       footer_edu: 'For informational purposes only',
       error_prefix: 'Error: ',
+      optional_filled: (n, t) => `${n} / ${t} optional fields filled`,
     },
     fr: {
       eyebrow: 'Outil \xe9ducatif',
@@ -1371,6 +1439,7 @@
       label_meno: 'Avez-vous atteint la m\xe9nopause\u00a0?',
       label_hrt: 'Prenez-vous actuellement une hormonoth\xe9rapie substitutive (HTS)\u00a0?',
       legend_optional: 'Mesures optionnelles',
+      tip_optional: 'Ces mesures sont optionnelles, mais am\xe9liorent la pr\xe9cision des pr\xe9dictions du mod\xe8le lorsqu\u2019elles sont fournies. Renseignez-en autant que possible.',
       btn_submit: 'Estimer le risque', btn_calculating: 'Calcul en cours\u2026',
       btn_example: '&#9654; Charger des valeurs d\u2019exemple',
       placeholder_card: 'Remplissez le formulaire et cliquez sur <strong>Estimer le risque</strong>',
@@ -1388,11 +1457,12 @@
       chart_antiht: 'Avec antihypertenseur', chart_combined: 'Combin\xe9',
       chart_xaxis: '\xc2ge (ann\xe9es)', chart_yaxis: 'Risque de maladie coronarienne (%)',
       risk_header: age => `Risque de maladie coronarienne \xe0 l\u2019\xe2ge <strong>${age}</strong>`,
-      vs_baseline: 'vs risque de base',
+      vs_baseline: 'du risque de base',
       card_baseline: 'Risque de base', card_statin: 'Avec statine',
       card_antiht: 'Avec antihypertenseur', card_combined: 'Combin\xe9',
       disclaimer_toggle: '\xc0 propos de cet outil',
       disclaimer_main: '<strong>\xc0 titre informatif seulement.</strong> Cet outil est con\xe7u pour soutenir les discussions entre les patients et les professionnels de la sant\xe9 concernant la pr\xe9vention du risque cardiovasculaire \u2014 il n\u2019est pas destin\xe9 \xe0 orienter ou remplacer la prise de d\xe9cision clinique. Les effets des interventions sont des approximations \xe0 l\u2019\xe9chelle populationnelle issues de m\xe9ta-analyses d\u2019essais contr\xf4l\xe9s randomis\xe9s, et non des pr\xe9dictions causales individuelles.',
+      disclaimer_imputation: '<strong>Mesures optionnelles manquantes.</strong> Lorsque des champs optionnels (tour de taille, Lp(a) et CRP) sont laiss\xe9s vides, le mod\xe8le les remplace par des valeurs moyennes issues de ses données d\u2019entra\xeenement. Les estimations de risque pour les personnes n\u2019ayant jamais eu ces mesures effectu\xe9es peuvent donc refl\xe9ter une moyenne populationnelle plut\xf4t que leur profil individuel.',
       disclaimer_summary: 'Effet des interventions &amp; R\xe9f\xe9rences',
       disclaimer_int_title: '<strong>Effet des interventions</strong>',
       disclaimer_statin: 'Statine\u00a0: r\xe9duction de 50\u202f% du cholest\xe9rol LDL<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 r\xe9duction du risque relatif de 20\u202f%/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
@@ -1400,6 +1470,7 @@
       disclaimer_refs: '<strong>R\xe9f\xe9rences</strong>',
       footer_edu: '\xc0 titre informatif seulement',
       error_prefix: 'Erreur\u00a0: ',
+      optional_filled: (n, t) => `${n}\u00a0/\u00a0${t} mesures optionnelles renseign\xe9es`,
     }
   };
 
@@ -1441,6 +1512,97 @@
 
   // ── Chart instance ──
   let chartInstance = null;
+
+  // ── localStorage persistence ──
+  const FORM_KEY = 'cad_form_state';
+
+  function saveFormState() {
+    const sexEl = document.querySelector('input[name="sex"]:checked');
+    localStorage.setItem(FORM_KEY, JSON.stringify({
+      sex:            sexEl ? sexEl.value : null,
+      age:            document.getElementById('age').value,
+      sbp:            document.getElementById('sbp').value,
+      hdl:            document.getElementById('hdl').value,
+      ldl:            document.getElementById('ldl').value,
+      waist:          document.getElementById('waist').value,
+      lpa:            document.getElementById('lpa').value,
+      crp:            document.getElementById('crp').value,
+      pack_years:     document.getElementById('pack_years').value,
+      diabetes:       document.getElementById('diabetes').checked,
+      family_history: document.getElementById('family_history').checked,
+      antiht:         document.getElementById('antiht').checked,
+      statin:         document.getElementById('statin').checked,
+      smoking_current:document.getElementById('smoking_current').checked,
+      GestHtPreEcl:   document.getElementById('GestHtPreEcl').checked,
+      menopause:      document.getElementById('menopause').checked,
+      HRT:            document.getElementById('HRT').checked,
+    }));
+  }
+
+  function loadFormState() {
+    const raw = localStorage.getItem(FORM_KEY);
+    if (!raw) return;
+    try {
+      const s = JSON.parse(raw);
+      if (s.sex != null) {
+        const radio = document.querySelector(`input[name="sex"][value="${s.sex}"]`);
+        if (radio) {
+          radio.checked = true;
+          document.getElementById('femaleFieldsWrap').classList.toggle('visible', s.sex === '0');
+        }
+      }
+      ['age','sbp','hdl','ldl','waist','lpa','crp','pack_years'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && s[id] != null) el.value = s[id];
+      });
+      ['diabetes','family_history','antiht','statin','smoking_current','GestHtPreEcl','menopause','HRT'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && s[id] != null) el.checked = s[id];
+      });
+      if (s.smoking_current) {
+        document.getElementById('packYearsField').style.display = '';
+        document.getElementById('pack_years').required = true;
+      }
+    } catch(e) {}
+    updateOptionalProgress();
+  }
+
+  // ── Optional field completion indicator ──
+  function updateOptionalProgress() {
+    const ids = ['waist', 'lpa', 'crp'];
+    const filled = ids.filter(id => document.getElementById(id).value.trim() !== '').length;
+    const el = document.getElementById('optionalProgress');
+    if (!el) return;
+    const tl = T[currentLang];
+    const pct = Math.round((filled / ids.length) * 100);
+    el.className = 'optional-progress' + (filled === ids.length ? ' complete' : '');
+    el.innerHTML = `<span class="optional-progress-bar"><span class="optional-progress-bar-fill" style="width:${pct}%"></span></span>${tl.optional_filled(filled, ids.length)}`;
+  }
+
+  // Hook up form change listeners for persistence + progress
+  document.getElementById('riskForm').addEventListener('change', () => {
+    saveFormState();
+    updateOptionalProgress();
+  });
+  ['waist','lpa','crp'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      saveFormState();
+      updateOptionalProgress();
+    });
+  });
+  ['age','sbp','hdl','ldl','pack_years'].forEach(id => {
+    document.getElementById(id).addEventListener('input', saveFormState);
+  });
+
+  // ── Keyboard accessibility for info-tips ──
+  document.querySelectorAll('.info-tip-icon[tabindex]').forEach(icon => {
+    icon.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        icon.closest('.info-tip').click();
+      }
+    });
+  });
 
   // ── Form submit ──
   document.getElementById('riskForm').addEventListener('submit', async (e) => {
@@ -1564,6 +1726,23 @@
     }
   };
 
+  // ── Chart draw-from-left animation ──
+  let _drawProgress = 1;
+  let _animating = false;
+  const drawRevealPlugin = {
+    id: 'drawReveal',
+    beforeDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, top, right, bottom } } = chart;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(left, top - 20, (right - left) * _drawProgress, bottom - top + 40);
+      ctx.clip();
+    },
+    afterDatasetsDraw(chart) {
+      chart.ctx.restore();
+    }
+  };
+
   function renderChart(data) {
     document.getElementById('placeholder').style.display = 'none';
     document.getElementById('chartArea').style.display = '';
@@ -1591,11 +1770,13 @@
     btnAntiht.disabled = !bpApplicable;
 
     if (chartInstance) chartInstance.destroy();
+    _drawProgress = 0;
+    _animating = true;
 
     chartInstance = new Chart(document.getElementById('riskChart'), {
       type: 'line',
       data: { labels: data.ages, datasets },
-      plugins: [selectedLinePlugin],
+      plugins: [selectedLinePlugin, drawRevealPlugin],
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -1613,12 +1794,18 @@
           showRiskAtAge(pts[0].index, data, bpApplicable, false);
         },
         animation: {
-          duration: 600,
+          duration: 900,
+          easing: 'easeInOutCubic',
+          onProgress(anim) {
+            if (_animating) _drawProgress = anim.currentStep / anim.numSteps;
+          },
           onComplete: (() => {
             let fired = false;
             return () => {
               if (fired) return;
               fired = true;
+              _animating = false;
+              _drawProgress = 1;
               const lastIdx = data.ages.length - 1;
               chartInstance.selectedIdx = lastIdx;
               chartInstance.draw();
@@ -1720,8 +1907,9 @@
 
   // Apply saved language on load
   applyLang(currentLang);
+  loadFormState();
 
-  function showRiskAtAge(idx, data, bpApplicable, isFirst = false) {
+  function showRiskAtAge(idx, data, bpApplicable, isFirst = false, isToggle = false) {
     lastSelectedIdx = idx;
     const tl = T[currentLang];
     const age = data.ages[idx];
@@ -1743,7 +1931,7 @@
       <div class="risk-age-card">
         <div class="risk-age-label">${c.label}</div>
         <div class="risk-age-value" style="color:${c.color}">${fmtRisk(c.value)}</div>
-        ${c.arr ? `<div class="risk-age-arr" style="color:${c.color}">${c.arr}</div>` : ''}
+        <div class="risk-age-arr" style="color:${c.color}${c.arr ? '' : ';visibility:hidden'}">${c.arr || '\u00a0'}</div>
       </div>`).join('');
     document.getElementById('riskSection').style.display = '';
 
@@ -1751,6 +1939,13 @@
       if (isFirst) {
         document.querySelectorAll('.risk-age-card').forEach((card, i) => {
           card.style.animation = `cardIn 0.45s cubic-bezier(0.34,1.56,0.64,1) ${i * 70}ms forwards`;
+        });
+      } else if (isToggle) {
+        document.querySelectorAll('.risk-age-card').forEach((card, i) => {
+          card.style.animation = `cardToggleIn 0.28s cubic-bezier(0.34,1.56,0.64,1) ${i * 40}ms forwards`;
+        });
+        document.querySelectorAll('.risk-age-value, .risk-age-arr').forEach((el, i) => {
+          el.style.animation = `numIn 0.22s ease ${i * 25}ms both`;
         });
       } else {
         document.querySelectorAll('.risk-age-card').forEach(card => {
