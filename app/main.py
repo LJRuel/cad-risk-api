@@ -20,6 +20,7 @@ def health():
 def predict(payload: InputPayload):
     raw = payload.model_dump()
     sex = raw.pop("sex")
+    raw.pop("smoking_current", None)  # UI-only field, not a model feature
 
     # Temporal grid: entire life from max(40 years, current age) to 80 years (end of training data)
     times = times_from_age_to_80(raw["age_recruitment"])

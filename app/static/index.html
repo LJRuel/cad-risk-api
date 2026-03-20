@@ -465,14 +465,14 @@
       animation: markerVanish 0.45s cubic-bezier(0.4, 0, 0.6, 1) forwards;
     }
 
-    /* Hide required marker permanently after first hover */
+    /* Vanish toggle markers after first hover */
     fieldset:not(#optionalSection) .toggle-row.marker-gone > span:first-child::after {
-      display: none;
+      animation: markerVanish 0.45s cubic-bezier(0.4, 0, 0.6, 1) forwards;
     }
 
-    /* Hide smoking required marker after first selection */
+    /* Vanish smoking marker after first selection */
     .field:has(.smok-group).marker-gone label.field-label::after {
-      display: none;
+      animation: markerVanish 0.45s cubic-bezier(0.4, 0, 0.6, 1) forwards;
     }
 
     /* Required field legend note */
@@ -683,10 +683,15 @@
       transform: translateX(18px);
     }
 
-    /* Smoking status selector: match toggle-row vertical rhythm */
+    /* Smoking status selector: match toggle-row vertical rhythm and label style */
     .field:has(.smok-group) {
       margin-top: 0.6rem;
       margin-bottom: 0.4rem;
+    }
+
+    .field:has(.smok-group) label.field-label {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
     }
 
     /* Smoking detail container — collapsed by default, animated open */
