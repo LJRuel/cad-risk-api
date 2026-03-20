@@ -465,6 +465,16 @@
       animation: markerVanish 0.45s cubic-bezier(0.4, 0, 0.6, 1) forwards;
     }
 
+    /* Hide required marker permanently after first hover */
+    fieldset:not(#optionalSection) .toggle-row.marker-gone > span:first-child::after {
+      display: none;
+    }
+
+    /* Hide smoking required marker after first selection */
+    .field:has(.smok-group).marker-gone label.field-label::after {
+      display: none;
+    }
+
     /* Required field legend note */
     .required-note {
       display: flex;
@@ -1318,8 +1328,8 @@
     /* ── Optional progress indicator ── */
     .optional-progress {
       font-size: 0.68rem;
-      font-weight: 600;
-      color: #9ca3af;
+      font-weight: 700;
+      color: #818cf8;
       letter-spacing: 0.04em;
       margin-bottom: 0.75rem;
       display: flex;
@@ -1846,6 +1856,7 @@
         if (e.target.closest('.toggle')) return;
         row.querySelector('input[type="checkbox"]').click();
       });
+      row.addEventListener('mouseenter', () => row.classList.add('marker-gone'), { once: true });
     });
 
     // ── Smoking status → show/hide detail fields ──
@@ -1900,8 +1911,10 @@
       if (isFormer) syncAgeStopMax();
     }
 
+    const smokingField = document.querySelector('.field:has(.smok-group)');
     document.querySelectorAll('input[name="smoking_status"]').forEach(r => {
       r.addEventListener('change', () => { applySmokingStatus(); saveFormState(); });
+      r.addEventListener('change', () => smokingField.classList.add('marker-gone'), { once: true });
     });
 
     document.getElementById('age').addEventListener('input', syncAgeStopMax);
