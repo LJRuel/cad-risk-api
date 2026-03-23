@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import os, joblib, numpy as np
 from pathlib import Path
 
@@ -9,9 +9,20 @@ ARTIF_DIR = Path(os.environ.get("MODEL_DIR", _default))
 MEN_PREP = joblib.load(ARTIF_DIR / "scaling_parameters_clinical_men.joblib")
 WOMEN_PREP = joblib.load(ARTIF_DIR / "scaling_parameters_clinical_women.joblib")
 
-# DSM models 
+# DSM models
 MODEL_MEN = joblib.load(ARTIF_DIR / "PRED-CAD_DSM_clinical_model_men.joblib")
 MODEL_WOMEN = joblib.load(ARTIF_DIR / "PRED-CAD_DSM_clinical_model_women.joblib")
+
+# Combined (sex-agnostic) model — loaded only if artefacts exist.
+# Train with: make train MODEL=clinical_combined
+def _try_load(path: Path):
+    try:
+        return joblib.load(path)
+    except FileNotFoundError:
+        return None
+
+COMBINED_PREP  = _try_load(ARTIF_DIR / "scaling_parameters_clinical_combined_combined.joblib")
+MODEL_COMBINED = _try_load(ARTIF_DIR / "PRED-CAD_DSM_clinical_combined_model_combined.joblib")
 
 def times_from_age_to_80(age_current: float) -> List[int]:
     """

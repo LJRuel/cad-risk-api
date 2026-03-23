@@ -2,8 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from .schemas import InputPayload
-from .deps import MODEL_MEN, MODEL_WOMEN, times_from_age_to_80
-from .prepare import apply_preprocessor_one
+from .deps import MODEL_MEN, MODEL_WOMEN, MODEL_COMBINED, times_from_age_to_80
+from .prepare import apply_preprocessor_one, apply_preprocessor_combined
 
 app = FastAPI(title="CAD Risk API", version="0.1.0")
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -27,8 +27,14 @@ def predict(payload: InputPayload):
     if len(times) == 0:
         raise HTTPException(400, "Age ≥ 80 years: no projection horizon available.")
 
-    X = apply_preprocessor_one(sex, raw)
-    model = MODEL_MEN if sex==1 else MODEL_WOMEN
+    if sex is None:
+        if MODEL_COMBINED is None:
+            raise HTTPException(503, "Combined-sex model not available. Train it with: make train MODEL=clinical_combined")
+        X = apply_preprocessor_combined(raw)
+        model = MODEL_COMBINED
+    else:
+        X = apply_preprocessor_one(sex, raw)
+        model = MODEL_MEN if sex == 1 else MODEL_WOMEN
 
     # Baseline risk for 1 individual => index 0
     risk_baseline = model.predict_risk(X, times)[0].tolist()

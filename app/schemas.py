@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, model_validator
 
 class InputPayload(BaseModel):
-    sex: int = Field(..., ge=0, le=1) # 1=men, 0=women
+    sex: Optional[int] = Field(None, ge=0, le=1)  # 1=men, 0=women; None = not specified (uses combined model)
     age_recruitment: float
     systolic_BP: float
     HDL: float
