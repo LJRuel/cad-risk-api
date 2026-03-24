@@ -1,74 +1,137 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" width="1200" height="280">
   <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0c1520"/>
-      <stop offset="100%" stop-color="#131d2b"/>
-    </linearGradient>
-    <linearGradient id="accentGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#e11d48"/>
-      <stop offset="100%" stop-color="#f97316"/>
-    </linearGradient>
-    <linearGradient id="ecgGrad" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%"   stop-color="#ef4444" stop-opacity="0"/>
-      <stop offset="8%"   stop-color="#ef4444" stop-opacity="0.80"/>
-      <stop offset="45%"  stop-color="#f97316" stop-opacity="0.90"/>
-      <stop offset="80%"  stop-color="#fb923c" stop-opacity="0.65"/>
-      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="ecgGlow" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%"   stop-color="#ef4444" stop-opacity="0"/>
-      <stop offset="8%"   stop-color="#ef4444" stop-opacity="0.28"/>
-      <stop offset="45%"  stop-color="#f97316" stop-opacity="0.32"/>
-      <stop offset="80%"  stop-color="#fb923c" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="topRightGlow" cx="1" cy="0" r="0.75" gradientUnits="objectBoundingBox">
-      <stop offset="0%"   stop-color="#1e3a5f" stop-opacity="0.40"/>
-      <stop offset="100%" stop-color="#0c1520" stop-opacity="0"/>
+    <!-- Background radial glows — exact colour stops from app .hero CSS -->
+    <radialGradient id="bg1" cx="180" cy="154" r="660" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4338ca"/>
+      <stop offset="55%" stop-color="#4338ca" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="bg2" cx="1020" cy="98" r="624" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0891b2"/>
+      <stop offset="52%" stop-color="#0891b2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg3" cx="600" cy="252" r="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg4" cx="840" cy="14" r="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="45%" stop-color="#06b6d4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg5" cx="360" cy="28" r="576" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6d28d9"/>
+      <stop offset="48%" stop-color="#6d28d9" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Accent bar: matches app fieldset legend bar (#6366f1 → #a855f7) -->
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <!-- Fade mask: curves fade in from left, fade out at right edge -->
+    <linearGradient id="fadeLR" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="white" stop-opacity="0"/>
+      <stop offset="3%"   stop-color="white" stop-opacity="0.8"/>
+      <stop offset="8%"   stop-color="white" stop-opacity="1"/>
+      <stop offset="92%"  stop-color="white" stop-opacity="1"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="curveMask">
+      <rect width="1200" height="280" fill="url(#fadeLR)"/>
+    </mask>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="280" fill="url(#bgGrad)"/>
+  <!-- ── Background ── -->
+  <rect width="1200" height="280" fill="#3730a3"/>
+  <rect width="1200" height="280" fill="url(#bg5)"/>
+  <rect width="1200" height="280" fill="url(#bg4)"/>
+  <rect width="1200" height="280" fill="url(#bg3)"/>
+  <rect width="1200" height="280" fill="url(#bg2)"/>
+  <rect width="1200" height="280" fill="url(#bg1)"/>
 
-  <!-- Subtle top-right glow -->
-  <rect width="1200" height="280" fill="url(#topRightGlow)"/>
+  <!-- ── Decorative risk curves with data-point dots (Chart.js line style) ── -->
+  <!--
+    Four curves matching app chart datasets, age 40→80 mapped to x 0→1200.
+    Dots sit at evenly-spaced age anchors (8 intervals of 150 px ≈ 5 years each).
+    Dot style: filled circle + white stroke, matching Chart.js default point appearance.
+  -->
+  <g mask="url(#curveMask)" opacity="0.88">
 
-  <!-- Left accent bar -->
-  <rect x="72" y="82" width="5" height="116" rx="2.5" fill="url(#accentGrad)"/>
+    <!-- Area fills -->
+    <polygon points="0,280 0,268 150,260 300,248 450,230 600,205 750,172 900,136 1050,97 1200,62 1200,280"
+             fill="white" fill-opacity="0.07"/>
+    <polygon points="0,280 0,272 150,266 300,257 450,244 600,226 750,205 900,181 1050,155 1200,130 1200,280"
+             fill="white" fill-opacity="0.05"/>
+    <polygon points="0,280 0,274 150,269 300,262 450,252 600,238 750,221 900,202 1050,181 1200,160 1200,280"
+             fill="white" fill-opacity="0.04"/>
+    <polygon points="0,280 0,276 150,272 300,266 450,257 600,247 750,233 900,218 1050,201 1200,185 1200,280"
+             fill="white" fill-opacity="0.03"/>
 
-  <!-- Title -->
+    <!-- Baseline — solid, 3px -->
+    <polyline points="0,268 150,260 300,248 450,230 600,205 750,172 900,136 1050,97 1200,62"
+              fill="none" stroke="white" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0"    cy="268" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="150"  cy="260" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="300"  cy="248" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="450"  cy="230" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="600"  cy="205" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="750"  cy="172" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="900"  cy="136" r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="1050" cy="97"  r="5" fill="white" stroke-opacity="0"/>
+    <circle cx="1200" cy="62"  r="5" fill="white" stroke-opacity="0"/>
+
+    <!-- Statin — dashed [6,3], 2.5px -->
+    <polyline points="0,272 150,266 300,257 450,244 600,226 750,205 900,181 1050,155 1200,130"
+              fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="6,3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0"    cy="272" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="150"  cy="266" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="300"  cy="257" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="450"  cy="244" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="600"  cy="226" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="750"  cy="205" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="900"  cy="181" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="1050" cy="155" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="1200" cy="130" r="4.5" fill="white" stroke-opacity="0"/>
+
+    <!-- Antihypertensive — dashed [6,3], 2.5px -->
+    <polyline points="0,274 150,269 300,262 450,252 600,238 750,221 900,202 1050,181 1200,160"
+              fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="6,3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0"    cy="274" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="150"  cy="269" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="300"  cy="262" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="450"  cy="252" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="600"  cy="238" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="750"  cy="221" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="900"  cy="202" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="1050" cy="181" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="1200" cy="160" r="4.5" fill="white" stroke-opacity="0"/>
+
+    <!-- Combined — dotted [2,3], 2.5px -->
+    <polyline points="0,276 150,272 300,266 450,257 600,247 750,233 900,218 1050,201 1200,185"
+              fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="2,3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0"    cy="276" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="150"  cy="272" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="300"  cy="266" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="450"  cy="257" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="600"  cy="247" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="750"  cy="233" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="900"  cy="218" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="1050" cy="201" r="4.5" fill="white" stroke-opacity="0"/>
+    <circle cx="1200" cy="185" r="4.5" fill="white" stroke-opacity="0"/>
+
+  </g>
+
+  <!-- ── Left accent bar (matches app fieldset legend accent) ── -->
+  <rect x="72" y="112" width="5" height="56" rx="2.5" fill="url(#accentGrad)"/>
+
+  <!-- ── Title — no subtitle ── -->
   <text
-    x="97" y="142"
+    x="97" y="150"
     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-    font-size="48" font-weight="700"
-    fill="#ffffff" letter-spacing="-0.5"
+    font-size="48" font-weight="800" letter-spacing="-2"
+    fill="white"
   >CAD Risk Estimator API</text>
 
-  <!-- Subtitle -->
-  <text
-    x="97" y="178"
-    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-    font-size="18" fill="#94a3b8"
-  >Sex-stratified Deep Survival Machines&#160;·&#160;FastAPI&#160;·&#160;UK Biobank</text>
-
-  <!-- ECG decorative — glow layer -->
-  <polyline
-    points="0,235 100,235 108,235 113,227 118,227 123,235 133,235 136,241 141,178 146,246 151,235 165,235 170,223 180,220 190,223 200,235 220,235 263,235 268,227 273,227 278,235 288,235 291,241 296,178 301,246 306,235 320,235 325,223 335,220 345,223 355,235 375,235 418,235 423,227 428,227 433,235 443,235 446,241 451,178 456,246 461,235 475,235 480,223 490,220 500,223 510,235 530,235 573,235 578,227 583,227 588,235 598,235 601,241 606,178 611,246 616,235 630,235 635,223 645,220 655,223 665,235 685,235 728,235 733,227 738,227 743,235 753,235 756,241 761,178 766,246 771,235 785,235 790,223 800,220 810,223 820,235 840,235 883,235 888,227 893,227 898,235 908,235 911,241 916,178 921,246 926,235 940,235 945,223 955,220 965,223 975,235 995,235 1200,235"
-    fill="none"
-    stroke="url(#ecgGlow)"
-    stroke-width="9"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-
-  <!-- ECG decorative — main line -->
-  <polyline
-    points="0,235 100,235 108,235 113,227 118,227 123,235 133,235 136,241 141,178 146,246 151,235 165,235 170,223 180,220 190,223 200,235 220,235 263,235 268,227 273,227 278,235 288,235 291,241 296,178 301,246 306,235 320,235 325,223 335,220 345,223 355,235 375,235 418,235 423,227 428,227 433,235 443,235 446,241 451,178 456,246 461,235 475,235 480,223 490,220 500,223 510,235 530,235 573,235 578,227 583,227 588,235 598,235 601,241 606,178 611,246 616,235 630,235 635,223 645,220 655,223 665,235 685,235 728,235 733,227 738,227 743,235 753,235 756,241 761,178 766,246 771,235 785,235 790,223 800,220 810,223 820,235 840,235 883,235 888,227 893,227 898,235 908,235 911,241 916,178 921,246 926,235 940,235 945,223 955,220 965,223 975,235 995,235 1200,235"
-    fill="none"
-    stroke="url(#ecgGrad)"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
 </svg>
