@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" width="1200" height="280">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1520"/>
+      <stop offset="100%" stop-color="#131d2b"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="ecgGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#ef4444" stop-opacity="0"/>
+      <stop offset="8%"   stop-color="#ef4444" stop-opacity="0.80"/>
+      <stop offset="45%"  stop-color="#f97316" stop-opacity="0.90"/>
+      <stop offset="80%"  stop-color="#fb923c" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ecgGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#ef4444" stop-opacity="0"/>
+      <stop offset="8%"   stop-color="#ef4444" stop-opacity="0.28"/>
+      <stop offset="45%"  stop-color="#f97316" stop-opacity="0.32"/>
+      <stop offset="80%"  stop-color="#fb923c" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="topRightGlow" cx="1" cy="0" r="0.75" gradientUnits="objectBoundingBox">
+      <stop offset="0%"   stop-color="#1e3a5f" stop-opacity="0.40"/>
+      <stop offset="100%" stop-color="#0c1520" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="280" fill="url(#bgGrad)"/>
+
+  <!-- Subtle top-right glow -->
+  <rect width="1200" height="280" fill="url(#topRightGlow)"/>
+
+  <!-- Left accent bar -->
+  <rect x="72" y="82" width="5" height="116" rx="2.5" fill="url(#accentGrad)"/>
+
+  <!-- Title -->
+  <text
+    x="97" y="142"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+    font-size="48" font-weight="700"
+    fill="#ffffff" letter-spacing="-0.5"
+  >CAD Risk Estimator API</text>
+
+  <!-- Subtitle -->
+  <text
+    x="97" y="178"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+    font-size="18" fill="#94a3b8"
+  >Sex-stratified Deep Survival Machines&#160;·&#160;FastAPI&#160;·&#160;UK Biobank</text>
+
+  <!-- ECG decorative — glow layer -->
+  <polyline
+    points="0,235 100,235 108,235 113,227 118,227 123,235 133,235 136,241 141,178 146,246 151,235 165,235 170,223 180,220 190,223 200,235 220,235 263,235 268,227 273,227 278,235 288,235 291,241 296,178 301,246 306,235 320,235 325,223 335,220 345,223 355,235 375,235 418,235 423,227 428,227 433,235 443,235 446,241 451,178 456,246 461,235 475,235 480,223 490,220 500,223 510,235 530,235 573,235 578,227 583,227 588,235 598,235 601,241 606,178 611,246 616,235 630,235 635,223 645,220 655,223 665,235 685,235 728,235 733,227 738,227 743,235 753,235 756,241 761,178 766,246 771,235 785,235 790,223 800,220 810,223 820,235 840,235 883,235 888,227 893,227 898,235 908,235 911,241 916,178 921,246 926,235 940,235 945,223 955,220 965,223 975,235 995,235 1200,235"
+    fill="none"
+    stroke="url(#ecgGlow)"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- ECG decorative — main line -->
+  <polyline
+    points="0,235 100,235 108,235 113,227 118,227 123,235 133,235 136,241 141,178 146,246 151,235 165,235 170,223 180,220 190,223 200,235 220,235 263,235 268,227 273,227 278,235 288,235 291,241 296,178 301,246 306,235 320,235 325,223 335,220 345,223 355,235 375,235 418,235 423,227 428,227 433,235 443,235 446,241 451,178 456,246 461,235 475,235 480,223 490,220 500,223 510,235 530,235 573,235 578,227 583,227 588,235 598,235 601,241 606,178 611,246 616,235 630,235 635,223 645,220 655,223 665,235 685,235 728,235 733,227 738,227 743,235 753,235 756,241 761,178 766,246 771,235 785,235 790,223 800,220 810,223 820,235 840,235 883,235 888,227 893,227 898,235 908,235 911,241 916,178 921,246 926,235 940,235 945,223 955,220 965,223 975,235 995,235 1200,235"
+    fill="none"
+    stroke="url(#ecgGrad)"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

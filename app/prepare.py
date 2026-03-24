@@ -1,28 +1,31 @@
 import pandas as pd
-from .deps import MEN_PREP, WOMEN_PREP, COMBINED_PREP
+from .deps import CLINICAL_PREPS, COMBINED_PREPS
 
-REQ_NUM = [
-    'age_recruitment', 'systolic_BP', 'pack_years', 'waist_circumference',
-    'HDL', 'LDL', 'Lpa', 'CRP'
-]
 REQ_CAT_MEN      = ['diabetes', 'family_history', 'statin', 'antiht']
 REQ_CAT_WOM      = ['diabetes', 'family_history', 'statin', 'antiht', 'GestHtPreEcl', 'menopause', 'HRT']
 REQ_CAT_COMBINED = ['diabetes', 'family_history', 'statin', 'antiht']  # no sex-specific features
-
-# Fallback optional feature list used when the saved preprocessor predates the
-# masking architecture (no "optional_features" key in the payload).
-_OPTIONAL_FALLBACK = ['waist_circumference', 'Lpa', 'CRP']
 
 
 def _apply_prep(prep: dict, cat: list, raw: dict) -> pd.DataFrame:
     """
     Shared preprocessing logic: apply fitted scaler/imputers to one observation.
-    Handles optional feature masking (zero-fill + indicator columns).
+
+    The numeric feature list is read from prep["numeric_features"] so that the
+    correct columns are used for each variant (absent optional features are simply
+    not present in the preprocessor and not passed here).
+
+    Args:
+        prep: Preprocessor dict saved by data_preparation.py.
+        cat:  List of categorical feature names relevant for this sex/context.
+        raw:  Dict of raw feature values from the request payload.
+
+    Returns:
+        1-row DataFrame ready for model.predict_risk().
     """
     df = pd.DataFrame([raw])
-    num      = [n for n in REQ_NUM if n in df.columns]
-    cat      = [c for c in cat if c in df.columns]
-    optional = prep.get("optional_features", _OPTIONAL_FALLBACK)
+
+    num     = prep.get("numeric_features", [])
+    cat     = [c for c in cat if c in df.columns]
 
     num_imp = prep.get("numeric_imputer")
     scaler  = prep.get("scaler")
@@ -30,31 +33,22 @@ def _apply_prep(prep: dict, cat: list, raw: dict) -> pd.DataFrame:
     ohe     = prep.get("onehot_encoder")
     one_hot = prep.get("one_hot_encode", False)
 
-    absent_optional = []
-    if scaler is not None:
-        scaler_means = dict(zip(num, scaler.mean_))
-        for feat in optional:
-            if feat in num and raw.get(feat) is None:
-                df[feat] = scaler_means.get(feat, 0.0)
-                absent_optional.append(feat)
-
     if num:
+        df_num = df[[c for c in num if c in df.columns]].copy()
         if num_imp is not None:
-            Xn_imp = pd.DataFrame(num_imp.transform(df[num]), columns=num)
+            Xn_imp = pd.DataFrame(num_imp.transform(df_num), columns=df_num.columns)
         else:
-            Xn_imp = df[num].copy()
-        Xn = pd.DataFrame(scaler.transform(Xn_imp), columns=num) if scaler is not None else Xn_imp
-        for feat in absent_optional:
-            if feat in Xn.columns:
-                Xn[feat] = 0.0
+            Xn_imp = df_num.copy()
+        Xn = pd.DataFrame(scaler.transform(Xn_imp), columns=df_num.columns) if scaler is not None else Xn_imp
     else:
         Xn = pd.DataFrame()
 
     if cat:
+        df_cat = df[[c for c in cat if c in df.columns]].copy()
         if cat_imp is not None:
-            Xc_imp = pd.DataFrame(cat_imp.transform(df[cat]), columns=cat)
+            Xc_imp = pd.DataFrame(cat_imp.transform(df_cat), columns=df_cat.columns)
         else:
-            Xc_imp = df[cat].copy()
+            Xc_imp = df_cat.copy()
         if one_hot and ohe is not None:
             Xc = pd.DataFrame(ohe.transform(Xc_imp), columns=list(ohe.get_feature_names_out(cat)))
         else:
@@ -62,43 +56,50 @@ def _apply_prep(prep: dict, cat: list, raw: dict) -> pd.DataFrame:
     else:
         Xc = pd.DataFrame()
 
-    Xi_data = {}
-    for feat in optional:
-        if feat in num:
-            Xi_data[f"{feat}_missing"] = [1.0 if feat in absent_optional else 0.0]
-    Xi = pd.DataFrame(Xi_data)
-
     return pd.concat(
-        [Xn.reset_index(drop=True), Xc.reset_index(drop=True), Xi.reset_index(drop=True)],
+        [Xn.reset_index(drop=True), Xc.reset_index(drop=True)],
         axis=1,
     )
 
 
-def apply_preprocessor_one(sex: int, raw: dict) -> pd.DataFrame:
+def apply_preprocessor_one(variant: str, sex: int, raw: dict) -> pd.DataFrame:
     """
-    Apply the serialized preprocessors to one observation and return a 1×N
-    DataFrame ready for MODEL.predict_risk.
+    Apply the serialized clinical preprocessor for one sex and variant to a
+    single observation and return a 1×N DataFrame ready for model.predict_risk.
 
-    Optional features (waist_circumference, Lpa, CRP) that are None in `raw`
-    are handled without imputation:
-      - Their value is set to 0.0 in scaled space (= training mean).
-      - A binary indicator column ({feature}_missing = 1.0) is appended.
-    Present optional features pass through the imputer and scaler normally,
-    with their indicator set to 0.0.
+    The preprocessor's "numeric_features" key determines which numeric columns
+    are used, so absent optional features are handled automatically — each
+    variant's preprocessor was trained only on the features included in that
+    variant.
 
-    This mirrors the masking architecture used during model training.
+    Args:
+        variant: One of "full", "lpa", "crp", "base".
+        sex:     1 for men, 0 for women.
+        raw:     Dict of raw feature values from the request payload
+                 (smoking_current already removed).
+
+    Returns:
+        1-row DataFrame.
     """
-    prep = MEN_PREP if sex == 1 else WOMEN_PREP
+    prep = CLINICAL_PREPS.get((variant, sex))
     cat  = REQ_CAT_MEN if sex == 1 else REQ_CAT_WOM
     return _apply_prep(prep, cat, raw)
 
 
-def apply_preprocessor_combined(raw: dict) -> pd.DataFrame:
+def apply_preprocessor_combined(variant: str, raw: dict) -> pd.DataFrame:
     """
-    Apply the combined-sex preprocessor to one observation.
+    Apply the combined-sex preprocessor for the given variant to one observation.
 
     Used when the patient has not reported biological sex. Does not include
     sex-specific features (GestHtPreEcl, menopause, HRT).
-    Optional feature masking follows the same convention as apply_preprocessor_one.
+
+    Args:
+        variant: One of "full", "lpa", "crp", "base".
+        raw:     Dict of raw feature values from the request payload
+                 (smoking_current already removed).
+
+    Returns:
+        1-row DataFrame.
     """
-    return _apply_prep(COMBINED_PREP, REQ_CAT_COMBINED, raw)
+    prep = COMBINED_PREPS.get(variant)
+    return _apply_prep(prep, REQ_CAT_COMBINED, raw)

@@ -13,7 +13,7 @@ class InputPayload(BaseModel):
     statin: int
     smoking_current: Optional[int] = None  # 0=never, 1=current, 2=former (UI only, not a model feature)
     pack_years: Optional[float] = None
-    waist_circumference: Optional[float] = None
+    waist_circumference: float
     Lpa: Optional[float] = None
     CRP: Optional[float] = None
     GestHtPreEcl: Optional[int] = None

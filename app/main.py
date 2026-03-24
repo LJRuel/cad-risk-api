@@ -2,7 +2,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from .schemas import InputPayload
-from .deps import MODEL_MEN, MODEL_WOMEN, MODEL_COMBINED, times_from_age_to_80
+from .deps import (
+    CLINICAL_MODELS, CLINICAL_PREPS,
+    COMBINED_MODELS, COMBINED_PREPS,
+    select_variant, times_from_age_to_80,
+)
 from .prepare import apply_preprocessor_one, apply_preprocessor_combined
 
 app = FastAPI(title="CAD Risk API", version="0.1.0")
@@ -22,19 +26,33 @@ def predict(payload: InputPayload):
     sex = raw.pop("sex")
     raw.pop("smoking_current", None)  # UI-only field, not a model feature
 
+    # Determine which variant to use based on available optional features
+    variant = select_variant(raw.get("Lpa"), raw.get("CRP"))
+
     # Temporal grid: entire life from max(40 years, current age) to 80 years (end of training data)
     times = times_from_age_to_80(raw["age_recruitment"])
     if len(times) == 0:
-        raise HTTPException(400, "Age ≥ 80 years: no projection horizon available.")
+        raise HTTPException(400, "Age >= 80 years: no projection horizon available.")
 
     if sex is None:
-        if MODEL_COMBINED is None:
-            raise HTTPException(503, "Combined-sex model not available. Train it with: make train MODEL=clinical_combined")
-        X = apply_preprocessor_combined(raw)
-        model = MODEL_COMBINED
+        model = COMBINED_MODELS.get(variant)
+        if model is None:
+            raise HTTPException(
+                503,
+                f"Combined-sex model for variant '{variant}' not available. "
+                f"Train it with: make train MODEL=clinical_sex_combined VARIANT={variant}"
+            )
+        X = apply_preprocessor_combined(variant, raw)
     else:
-        X = apply_preprocessor_one(sex, raw)
-        model = MODEL_MEN if sex == 1 else MODEL_WOMEN
+        model = CLINICAL_MODELS.get((variant, sex))
+        if model is None:
+            sex_label = "men" if sex == 1 else "women"
+            raise HTTPException(
+                503,
+                f"Clinical model for variant '{variant}', sex='{sex_label}' not available. "
+                f"Train it with: make train MODEL=clinical VARIANT={variant}"
+            )
+        X = apply_preprocessor_one(variant, sex, raw)
 
     # Baseline risk for 1 individual => index 0
     risk_baseline = model.predict_risk(X, times)[0].tolist()
@@ -65,7 +83,7 @@ def predict(payload: InputPayload):
         "ages": ages,                      # Input age
         "risk_baseline": risk_baseline,    # Baseline risk without intervention
         "risk_ldl": risk_ldl,              # Baseline risk × (1 - LDL*0.5*0.2)
-        "risk_sbp": risk_bp,               # Baseline risk × (1 - ((SBP-129)/5)*0.08) if SBP≥130
+        "risk_sbp": risk_bp,               # Baseline risk × (1 - ((SBP-129)/5)*0.08) if SBP>=130
         "risk_combined": risk_combined,    # Baseline risk × (ldl_rr * bp_rr) combined relative risk
         "relative_risks": {
             "ldl_rr": ldl_relative_risk,
