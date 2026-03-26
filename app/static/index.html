@@ -2301,7 +2301,7 @@
         family_history: document.getElementById('family_history').checked ? 1 : 0,
         antiht: document.getElementById('antiht').checked ? 1 : 0,
         statin: document.getElementById('statin').checked ? 1 : 0,
-        smoking_current: smokStatus === 'current' ? 1 : 0,
+        smoking_current: smokStatus === 'current' ? 1 : smokStatus === 'former' ? 2 : 0,
         pack_years: calcPackYears(smokStatus),
         waist_circumference: parseFloat(document.getElementById('waist').value),
         Lpa: numOrNull('lpa'),
