@@ -891,6 +891,15 @@
       background: rgba(230, 159, 0, 0.1);
     }
 
+    #toggleCessation {
+      color: #a03e00;
+      border-color: #D55E00;
+    }
+
+    #toggleCessation.active {
+      background: rgba(213, 94, 0, 0.1);
+    }
+
     /* ── Chart ── */
     .chart-wrap {
       position: relative;
@@ -1396,6 +1405,164 @@
       outline: 2px solid #818cf8;
       outline-offset: 2px;
     }
+
+    /* ── Comparison panel ── */
+    #comparisonToggleBtn {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      width: 100%;
+      background: #1e1b4b;
+      color: #a5b4fc;
+      border: none;
+      border-left: 3px solid #4f46e5;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', system-ui, sans-serif;
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 2px 10px rgba(30, 27, 75, 0.22);
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    #comparisonToggleBtn:hover {
+      background: #2d2a6e;
+      box-shadow: 0 4px 16px rgba(30, 27, 75, 0.35);
+    }
+
+    #comparisonToggleBtn .comp-chevron {
+      display: inline-block;
+      font-style: normal;
+      transition: transform 0.2s ease;
+      line-height: 1;
+    }
+
+    #comparisonToggleBtn.open .comp-chevron {
+      transform: rotate(90deg);
+    }
+
+    #comparisonPanel {
+      background: #1e1b4b;
+      color: #e0e7ff;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.85rem;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 8px 40px rgba(30, 27, 75, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .comparison-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #a5b4fc;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(165, 180, 252, 0.2);
+    }
+
+    .comparison-shortcut {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: rgba(165, 180, 252, 0.6);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    #comparisonCharts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      #comparisonCharts { grid-template-columns: 1fr; }
+    }
+
+    .comparison-col {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(165, 180, 252, 0.15);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+    }
+
+    .comparison-col-header {
+      margin-bottom: 0.75rem;
+    }
+
+    .comparison-col-header strong {
+      display: block;
+      font-size: 0.88rem;
+      color: #e0e7ff;
+      margin-bottom: 0.2rem;
+    }
+
+    .comparison-col-header span {
+      font-size: 0.72rem;
+      color: rgba(165, 180, 252, 0.7);
+      font-family: monospace;
+    }
+
+    .comparison-metrics {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .comparison-metric {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.78rem;
+    }
+
+    .comparison-metric .metric-label {
+      color: rgba(165, 180, 252, 0.7);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.15rem;
+    }
+
+    .comparison-metric .metric-value {
+      color: #e0e7ff;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .comparison-metric .metric-value.highlight {
+      color: #6ee7b7;
+    }
+
+    .comparison-placeholder {
+      text-align: center;
+      padding: 2rem;
+      color: rgba(165, 180, 252, 0.6);
+      font-size: 0.88rem;
+    }
+
+    .comparison-delta {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(165, 180, 252, 0.15);
+      font-size: 0.8rem;
+      color: rgba(165, 180, 252, 0.8);
+      min-height: 1.5rem;
+    }
   </style>
 </head>
 
@@ -1413,6 +1580,60 @@
   </header>
 
   <div class="content">
+
+    <button type="button" id="comparisonToggleBtn" aria-expanded="false" aria-controls="comparisonPanel">
+      <span class="comp-chevron">&#9654;</span>
+      Floor comparison &#8212; methodology validation
+    </button>
+    <div id="comparisonPanel" style="display:none" aria-hidden="true">
+      <div class="comparison-header">
+        <span>Smoking cessation &#8212; floor methodology comparison</span>
+        <span class="comparison-shortcut">
+          Model-derived floor (Floor A) vs Literature-derived floor (Floor B)
+        </span>
+      </div>
+
+      <div id="comparisonContent">
+        <div class="comparison-placeholder" id="comparisonPlaceholder">
+          Submit a <strong>current smoker</strong> profile above to compare the
+          two floor methodologies.
+        </div>
+
+        <div id="comparisonCharts" style="display:none">
+
+          <div class="comparison-col">
+            <div class="comparison-col-header">
+              <strong>Floor A &#8212; model derived</strong>
+              <span>Never-smoker floor = second API call (smoking_current=0, pack_years=0)</span>
+            </div>
+            <div class="comparison-metrics" id="metricsModel"></div>
+            <div style="position:relative; height:320px;">
+              <canvas id="chartCompModel"
+                role="img"
+                aria-label="Cessation comparison chart using model-derived floor">
+              </canvas>
+            </div>
+          </div>
+
+          <div class="comparison-col">
+            <div class="comparison-col-header">
+              <strong>Floor B &#8212; literature derived</strong>
+              <span>Never-smoker floor = baseline / RR_SMOKING_LIT (RR = 1.98, Mons 2015)</span>
+            </div>
+            <div class="comparison-metrics" id="metricsLit"></div>
+            <div style="position:relative; height:320px;">
+              <canvas id="chartCompLit"
+                role="img"
+                aria-label="Cessation comparison chart using literature-derived floor">
+              </canvas>
+            </div>
+          </div>
+
+        </div><!-- /comparisonCharts -->
+      </div><!-- /comparisonContent -->
+
+      <div class="comparison-delta" id="comparisonDelta"></div>
+    </div><!-- /comparisonPanel -->
 
     <div class="page-layout">
 
@@ -1609,6 +1830,17 @@
                           <line x1="0" y1="3" x2="24" y2="3" stroke="#CC79A7" stroke-width="2" stroke-dasharray="2 3" />
                         </svg><span data-i18n="guide_purple"><strong>Purple dotted</strong> — baseline risk reduced by
                           combined statin + antihypertensive therapies (if applicable)</span></li>
+                      <li>
+                        <svg width="24" height="6" viewBox="0 0 24 6"
+                             style="vertical-align:middle;margin-right:4px">
+                          <line x1="0" y1="3" x2="24" y2="3"
+                                stroke="#D55E00" stroke-width="2" stroke-dasharray="6 3"/>
+                        </svg>
+                        <span data-i18n="guide_red">
+                          <strong>Vermilion dashed</strong> &#8212; projected risk if you quit smoking today
+                          (current smokers only)
+                        </span>
+                      </li>
                     </ul>
                   </li>
                   <li data-i18n="guide_boxes">The <strong>boxes below</strong> the chart show absolute risk reduction
@@ -1649,6 +1881,14 @@
                   </svg>
                   <span data-i18n="chart_antiht">With antihypertensive</span>
                 </button>
+                <button type="button" class="curve-toggle-btn active" id="toggleCessation"
+                        style="display:none">
+                  <svg width="22" height="8" viewBox="0 0 22 8">
+                    <line x1="0" y1="4" x2="22" y2="4"
+                          stroke="#D55E00" stroke-width="2" stroke-dasharray="6 3"/>
+                  </svg>
+                  <span data-i18n="chart_cessation">If quit smoking today</span>
+                </button>
               </div>
             </div>
             <div class="risk-age-grid" id="riskAtAge"></div>
@@ -1684,23 +1924,31 @@
                   blood pressure ≥ 130 mmHg<sup><a
                       href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext"
                       target="_blank" rel="noopener">3</a></sup></li>
+                <li data-i18n="disclaimer_cessation">Smoking cessation: time-varying relative risk reduction applied as a multiplicative correction to baseline risk. Current smokers only.</li>
               </ul>
               <p data-i18n="disclaimer_refs"><strong>References</strong></p>
               <div style="display:grid; grid-template-columns: 1rem 1fr; gap: 0.5rem 0.25rem; opacity:0.75;">
                 <sup>1</sup> <a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank"
-                  rel="noopener">McPherson, Ruth et al. "Medications for Lipid Control: Statins vs Newer Drugs." <em>The
+                  rel="noopener">McPherson, Ruth et al. "Medications for Lipid Control: Statins vs Newer Drugs". <em>The
                     Canadian Journal of Cardiology</em> (2024).</a>
                 <sup>2</sup> <a
                   href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext"
                   target="_blank" rel="noopener">Cholesterol Treatment Trialists' Collaborators et al. "The effects of
                   lowering LDL cholesterol with statin therapy in people at low risk of vascular disease: meta-analysis
-                  of individual data from 27 randomised trials." <em>Lancet</em> (2012).</a>
+                  of individual data from 27 randomised trials". <em>Lancet</em> (2012).</a>
                 <sup>3</sup> <a
                   href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext"
                   target="_blank" rel="noopener">Blood Pressure Lowering Treatment Trialists' Collaboration.
                   "Pharmacological blood pressure lowering for primary and secondary prevention of cardiovascular
                   disease across different levels of blood pressure: an individual participant-level data
-                  meta-analysis." <em>Lancet</em> (2021).</a>
+                  meta-analysis". <em>Lancet</em> (2021).</a>
+                <sup>4</sup>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/25940085/"
+                   target="_blank" rel="noopener">
+                  Mons et al. "Impact of smoking and smoking cessation on cardiovascular events
+                  and mortality among older adults: the CHANCES Collaborative Research."
+                  <em>European Heart Journal</em> (2015).
+                </a>
               </div>
             </div>
           </details>
@@ -1789,16 +2037,50 @@
     // ── Curve visibility toggles ──
     function applyCurveVisibility() {
       if (!chartInstance) return;
-      const bp = lastBpApplicable;
-      chartInstance.setDatasetVisibility(1, showStatin && !alreadyOnStatin);
-      if (bp) {
-        chartInstance.setDatasetVisibility(2, showAntiht && !alreadyOnAntiht);
-        chartInstance.setDatasetVisibility(3, showStatin && showAntiht && !alreadyOnStatin && !alreadyOnAntiht);
+
+      // Statin
+      if (dsIdx.statin !== undefined)
+        chartInstance.setDatasetVisibility(dsIdx.statin,
+          showStatin && !alreadyOnStatin);
+
+      // Antiht
+      if (dsIdx.antiht !== undefined)
+        chartInstance.setDatasetVisibility(dsIdx.antiht,
+          showAntiht && !alreadyOnAntiht);
+
+      // Cessation alone
+      if (dsIdx.cessation !== undefined)
+        chartInstance.setDatasetVisibility(dsIdx.cessation, showCessation);
+
+      // Combined — recompute data array since active toggles may have changed
+      if (dsIdx.combined !== undefined) {
+        const combinedData = isCessationApplicable
+          ? computeCombinedRisk(lastChartData)
+          : (showStatin && showAntiht && !alreadyOnStatin && !alreadyOnAntiht
+              ? lastChartData.risk_combined
+              : null);
+
+        const ds = chartInstance.data.datasets[dsIdx.combined];
+        if (combinedData) {
+          ds.data = pct(combinedData);
+          chartInstance.setDatasetVisibility(dsIdx.combined, true);
+        } else {
+          chartInstance.setDatasetVisibility(dsIdx.combined, false);
+        }
       }
+
       chartInstance.update('none');
-      document.getElementById('toggleStatin').classList.toggle('active', showStatin && !alreadyOnStatin);
-      document.getElementById('toggleAntiht').classList.toggle('active', showAntiht && !alreadyOnAntiht);
-      if (lastChartData) showRiskAtAge(lastSelectedIdx, lastChartData, bp, false, true);
+
+      // Sync toggle button states
+      document.getElementById('toggleStatin').classList.toggle('active',
+        showStatin && !alreadyOnStatin);
+      document.getElementById('toggleAntiht').classList.toggle('active',
+        showAntiht && !alreadyOnAntiht);
+      document.getElementById('toggleCessation').classList.toggle('active',
+        showCessation && isCessationApplicable);
+
+      if (lastChartData)
+        showRiskAtAge(lastSelectedIdx, lastChartData, lastBpApplicable, false, true);
     }
     document.getElementById('toggleStatin').addEventListener('click', () => {
       showStatin = !showStatin;
@@ -1807,6 +2089,20 @@
     document.getElementById('toggleAntiht').addEventListener('click', () => {
       showAntiht = !showAntiht;
       applyCurveVisibility();
+    });
+    document.getElementById('toggleCessation').addEventListener('click', () => {
+      showCessation = !showCessation;
+      applyCurveVisibility();
+    });
+    // ── Comparison panel toggle ──
+    document.getElementById('comparisonToggleBtn').addEventListener('click', () => {
+      const panel = document.getElementById('comparisonPanel');
+      const btn   = document.getElementById('comparisonToggleBtn');
+      const opening = panel.style.display === 'none';
+      panel.style.display = opening ? '' : 'none';
+      panel.setAttribute('aria-hidden', String(!opening));
+      btn.setAttribute('aria-expanded', String(opening));
+      btn.classList.toggle('open', opening);
     });
 
     // ── Waist tip modal ──
@@ -1952,6 +2248,19 @@
     let lastChartData = null, lastBpApplicable = false, lastSelectedIdx = 0;
     let showStatin = true, showAntiht = true;
     let alreadyOnStatin = false, alreadyOnAntiht = false;
+    let showCessation = true;
+    let isCessationApplicable = false;
+    let lastNsData = null; // model-based never-smoker response, for comparison tab
+    let dsIdx = {};
+    const pct = arr => arr.map(v => +(v * 100).toFixed(2));
+
+    // Mons et al. 2015 — pooled individual-level meta-analysis, 19 cohorts,
+    // n = 64,221, ≥60y, Europe. RR of current vs never smokers for acute
+    // coronary events. Used for the literature-derived floor.
+    const RR_SMOKING_LIT = 1.98;
+
+    let compChartModel = null;
+    let compChartLit   = null;
 
     const T = {
       en: {
@@ -2001,19 +2310,31 @@
         hint: 'Click the chart to explore risk at a specific age',
         chart_baseline: 'Baseline', chart_statin: 'With statin',
         chart_antiht: 'With antihypertensive', chart_combined: 'Combined',
+        chart_cessation: 'If quit smoking today',
         chart_xaxis: 'Age (years)', chart_yaxis: 'Coronary artery disease risk (%)',
         risk_header: age => `Coronary artery disease risk at age <strong>${age}</strong>`,
         vs_baseline: 'of baseline risk',
         card_baseline: 'Baseline', card_statin: 'With statin',
         card_antiht: 'With antihypertensive', card_combined: 'Combined',
+        card_cessation: 'If quit smoking',
         disclaimer_toggle: 'About this tool',
         disclaimer_main: '<strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.',
         disclaimer_imputation: '<strong>Missing optional measurements.</strong> When optional fields (waist circumference, Lp(a), and CRP) are left blank, the model substitutes the population-average value derived from its training data. Risk estimates for individuals who have never had these measurements taken may therefore reflect a population mean rather than their personal profile.',
         disclaimer_summary: 'Effect of interventions &amp; References',
         disclaimer_int_title: '<strong>Effect of interventions</strong>',
-        disclaimer_statin: 'Statin: 50% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 20% relative risk reduction/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
-        disclaimer_antiht: 'Antihypertensive: 8% relative risk reduction per 5\u202fmmHg if systolic blood pressure \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>',
+        disclaimer_statin: 'Statin: 50\u202f% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 20% relative risk reduction/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
+        disclaimer_antiht: 'Antihypertensive: 8\u202f% relative risk reduction per 5\u202fmmHg if systolic blood pressure \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>',
+        disclaimer_cessation: 'Smoking cessation: time-varying relative risk reduction applied as a '
+          + 'multiplicative correction to baseline risk. Cessation trajectory derived '
+          + 'from Mons et al. 2015 (pooled individual-level meta-analysis, 19 cohorts, '
+          + 'n\u202f=\u202f64,221, \u226560\u202fy, Europe; RR anchors vs current '
+          + 'smokers: \u221216\u202f% at 5\u202fy, \u221231\u202f% at 10\u202fy, '
+          + '\u221242\u202f% at \u226520\u202fy). Never-smoker floor derived from the '
+          + 'same study (RR current vs never smokers\u202f=\u202f1.98), consistent '
+          + 'with the literature-based methodology used for statin and '
+          + 'antihypertensive interventions. Current smokers only.',
         disclaimer_refs: '<strong>References</strong>',
+        guide_red: '<strong>Vermilion dashed</strong> \u2014 projected risk if you quit smoking today (current smokers only)',
         footer_edu: 'For informational purposes only',
         error_prefix: 'Error: ',
         optional_filled: (n, t) => `${n} / ${t} optional fields filled`,
@@ -2065,19 +2386,32 @@
         hint: 'Cliquez sur le graphique pour explorer le risque \xe0 un \xe2ge sp\xe9cifique',
         chart_baseline: 'Risque de base', chart_statin: 'Avec statine',
         chart_antiht: 'Avec antihypertenseur', chart_combined: 'Combin\xe9',
+        chart_cessation: 'Si arr\xeat tabac aujourd\u2019hui',
         chart_xaxis: '\xc2ge (ann\xe9es)', chart_yaxis: 'Risque de maladie coronarienne (%)',
         risk_header: age => `Risque de maladie coronarienne \xe0 l\u2019\xe2ge <strong>${age}</strong>`,
         vs_baseline: 'du risque de base',
         card_baseline: 'Risque de base', card_statin: 'Avec statine',
         card_antiht: 'Avec antihypertenseur', card_combined: 'Combin\xe9',
+        card_cessation: 'Si arr\xeat tabac',
         disclaimer_toggle: '\xc0 propos de cet outil',
         disclaimer_main: '<strong>\xc0 titre informatif seulement.</strong> Cet outil est con\xe7u pour soutenir les discussions entre les patients et les professionnels de la sant\xe9 concernant la pr\xe9vention du risque cardiovasculaire \u2014 il n\u2019est pas destin\xe9 \xe0 orienter ou remplacer la prise de d\xe9cision clinique. Les effets des interventions sont des approximations \xe0 l\u2019\xe9chelle populationnelle issues de m\xe9ta-analyses d\u2019essais contr\xf4l\xe9s randomis\xe9s, et non des pr\xe9dictions causales individuelles.',
-        disclaimer_imputation: '<strong>Mesures optionnelles manquantes.</strong> Lorsque des champs optionnels (tour de taille, Lp(a) et CRP) sont laiss\xe9s vides, le mod\xe8le les remplace par des valeurs moyennes issues de ses données d\u2019entra\xeenement. Les estimations de risque pour les personnes n\u2019ayant jamais eu ces mesures effectu\xe9es peuvent donc refl\xe9ter une moyenne populationnelle plut\xf4t que leur profil individuel.',
+        disclaimer_imputation: '<strong>Mesures optionnelles manquantes.</strong> Lorsque des champs optionnels (tour de taille, Lp(a) et CRP) sont laiss\xe9s vides, le mod\xe8le les remplace par des valeurs moyennes issues de ses donn\xe9es d\u2019entra\xeenement. Les estimations de risque pour les personnes n\u2019ayant jamais eu ces mesures effectu\xe9es peuvent donc refl\xe9ter une moyenne populationnelle plut\xf4t que leur profil individuel.',
         disclaimer_summary: 'Effet des interventions &amp; R\xe9f\xe9rences',
         disclaimer_int_title: '<strong>Effet des interventions</strong>',
-        disclaimer_statin: 'Statine\u00a0: r\xe9duction de 50\u202f% du cholest\xe9rol LDL<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 r\xe9duction du risque relatif de 20\u202f%/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
-        disclaimer_antiht: 'Antihypertenseur\u00a0: r\xe9duction du risque relatif de 8\u202f% par 5\u202fmmHg si la pression art\xe9rielle systolique \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>',
+        disclaimer_statin: 'Statine\u00a0: r\xe9duction de 50\u202f% du cholest\xe9rol LDL<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 r\xe9duction du risque de 20\u202f%/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>',
+        disclaimer_antiht: 'Antihypertenseur\u00a0: r\xe9duction du risque de 8\u202f% par 5\u202fmmHg si la pression art\xe9rielle systolique \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>',
+        disclaimer_cessation: 'Arr\xeat tabac\u00a0: r\xe9duction du risque relatif variable dans le temps '
+          + 'appliqu\xe9e comme correction multiplicative au risque de base. Trajectoire '
+          + 'de cessation d\xe9riv\xe9e de Mons et coll.\u00a02015 (m\xe9ta-analyse '
+          + 'individuelle de 19 cohortes, n\u202f=\u202f64\u202f221, \u226560\u202fans, '
+          + 'Europe\u00a0; valeurs ancres vs fumeurs actuels\u00a0: \u221216\u202f% \xe0 '
+          + '5\u202fans, \u221231\u202f% \xe0 10\u202fans, \u221242\u202f% \xe0 '
+          + '\u226520\u202fans). Plancher du jamais-fumeur d\xe9riv\xe9 de la m\xeame '
+          + '\xe9tude (RR fumeurs actuels vs jamais-fumeurs\u202f=\u202f1,98), coh\xe9rent '
+          + 'avec la m\xe9thodologie bas\xe9e sur la litt\xe9rature utilis\xe9e pour les '
+          + 'interventions statine et antihypertenseur. Fumeurs actuels seulement.',
         disclaimer_refs: '<strong>R\xe9f\xe9rences</strong>',
+        guide_red: '<strong>Vermillon tir\xe9t\xe9</strong> \u2014 risque projet\xe9 si vous arr\xeatez de fumer aujourd\u2019hui (fumeurs actuels seulement)',
         footer_edu: '\xc0 titre informatif seulement',
         error_prefix: 'Erreur\u00a0: ',
         optional_filled: (n, t) => `${n}\u00a0/\u00a0${t} mesures optionnelles remplies`,
@@ -2102,15 +2436,7 @@
       document.querySelectorAll('.lang-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.lang === lang);
       });
-      if (chartInstance) {
-        const ds = chartInstance.data.datasets;
-        const keys = ['chart_baseline', 'chart_statin', 'chart_antiht', 'chart_combined'];
-        ds.forEach((d, i) => { if (keys[i]) d.label = T[lang][keys[i]]; });
-        chartInstance.options.scales.x.title.text = T[lang].chart_xaxis;
-        chartInstance.options.scales.y.title.text = T[lang].chart_yaxis;
-        chartInstance.update();
-      }
-      if (lastChartData) showRiskAtAge(lastSelectedIdx, lastChartData, lastBpApplicable, false);
+      if (lastChartData) renderChart(lastChartData, false);
       const waistImg = document.getElementById('waistTipImg');
       if (waistImg) waistImg.src = `/static/waist_${lang}.svg`;
       localStorage.setItem('lang', lang);
@@ -2312,21 +2638,37 @@
       };
 
       try {
-        const res = await fetch('/predict', {
+        const isSmoker = smokStatus === 'current';
+
+        const primaryFetch = fetch('/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
 
-        if (!res.ok) {
-          const detail = await res.json().catch(() => ({}));
-          throw new Error(detail.detail || `HTTP ${res.status}`);
+        const nsFetch = isSmoker
+          ? fetch('/predict', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...payload, smoking_current: 0, pack_years: 0.0 }),
+            })
+          : Promise.resolve(null);
+
+        const [primaryRes, nsRes] = await Promise.all([primaryFetch, nsFetch]);
+
+        if (!primaryRes.ok) {
+          const detail = await primaryRes.json().catch(() => ({}));
+          throw new Error(detail.detail || `HTTP ${primaryRes.status}`);
         }
 
-        const data = await res.json();
+        const data   = await primaryRes.json();
+        const dataNS = nsRes ? await nsRes.json() : null;
+        lastNsData   = dataNS;
+
         const firstRender = !hasRendered;
         hasRendered = true;
         renderChart(data, firstRender);
+        renderComparisonCharts(data, lastNsData);
 
         if (firstRender && window.innerWidth <= 900) {
           setTimeout(() => {
@@ -2425,12 +2767,51 @@
       }
     };
 
+    function cessationRR(t) {
+      // t = years since quitting
+      // RR anchors (vs current smokers): <5y → 0.84, 10-19y → 0.69, ≥20y → 0.58
+      if (t <= 0)  return 1.00;
+      if (t < 5)   return 1.00 - 0.16 * (t / 5);
+      if (t < 10)  return 0.84 - 0.15 * ((t - 5) / 5);
+      if (t < 20)  return 0.69 - 0.11 * ((t - 10) / 10);
+      return 0.58;
+    }
+
+    // Φ(t): multiplier applied to any base risk array to produce the cessation curve.
+    // At t=0: Φ=1.0 (no benefit yet). Plateau Φ≈0.792 at t≥20y.
+    // Floor = base / RR_SMOKING_LIT (implied never-smoker risk).
+    function cessationMultiplier(t) {
+      const invRR = 1 / RR_SMOKING_LIT;
+      return invRR + (1 - invRR) * cessationRR(t);
+    }
+
+    function computeCombinedRisk(data) {
+      const useStatin    = showStatin && !alreadyOnStatin;
+      const useAntiht    = showAntiht && !alreadyOnAntiht && lastBpApplicable;
+      const useCessation = showCessation && isCessationApplicable;
+
+      const nActive = (useStatin ? 1 : 0) + (useAntiht ? 1 : 0) + (useCessation ? 1 : 0);
+      if (nActive < 2) return null;
+
+      // Select pharmacological base array
+      let pharmaBase;
+      if (useStatin && useAntiht)   pharmaBase = data.risk_combined;
+      else if (useStatin)           pharmaBase = data.risk_ldl;
+      else if (useAntiht)           pharmaBase = data.risk_sbp;
+      else return null; // only cessation active — not a combined curve
+
+      const baseAge = data.ages[0];
+
+      return pharmaBase.map((r, i) => {
+        if (!useCessation) return r;
+        return r * cessationMultiplier(data.ages[i] - baseAge);
+      });
+    }
+
     function renderChart(data, firstRender = false) {
       document.getElementById('placeholder').style.display = 'none';
       document.getElementById('chartArea').style.display = '';
       if (firstRender) document.getElementById('riskSection').style.display = 'none';
-
-      const pct = arr => arr.map(v => +(v * 100).toFixed(2));
 
       const bpApplicable = data.relative_risks.bp_rr < 1;
 
@@ -2438,23 +2819,88 @@
       alreadyOnAntiht = document.getElementById('antiht').checked;
 
       lastChartData = data; lastBpApplicable = bpApplicable;
+
       const tl = T[currentLang];
-      const datasets = [
-        { label: tl.chart_baseline, data: pct(data.risk_baseline), borderColor: '#0072B2', backgroundColor: 'rgba(0,114,178,0.07)', tension: 0.35, borderWidth: 2.5 },
-        { label: tl.chart_statin, data: pct(data.risk_ldl), borderColor: '#009E73', backgroundColor: 'rgba(0,158,115,0.07)', tension: 0.35, borderWidth: 2, borderDash: [6, 3], hidden: !showStatin || alreadyOnStatin },
-        ...(bpApplicable ? [
-          { label: tl.chart_antiht, data: pct(data.risk_sbp), borderColor: '#E69F00', backgroundColor: 'rgba(230,159,0,0.07)', tension: 0.35, borderWidth: 2, borderDash: [6, 3], hidden: !showAntiht || alreadyOnAntiht },
-          { label: tl.chart_combined, data: pct(data.risk_combined), borderColor: '#CC79A7', backgroundColor: 'rgba(204,121,167,0.07)', tension: 0.35, borderWidth: 2, borderDash: [2, 3], hidden: !(showStatin && showAntiht) || alreadyOnStatin || alreadyOnAntiht },
-        ] : []),
-      ];
+
+      isCessationApplicable = (document.querySelector('input[name="smoking_status"]:checked').value === 'current');
+      const baseAge = data.ages[0];
+
+      const risk_cessation = isCessationApplicable
+        ? data.risk_baseline.map((r, i) =>
+            r * cessationMultiplier(data.ages[i] - baseAge))
+        : null;
+
+      data._risk_cessation        = risk_cessation;
+      data._isCessationApplicable = isCessationApplicable;
+
+      dsIdx = {};
+      let _idx = 0;
+      const datasets = [];
+
+      // 0 — baseline (always)
+      datasets.push({ label: tl.chart_baseline, data: pct(data.risk_baseline),
+        borderColor: '#0072B2', backgroundColor: 'rgba(0,114,178,0.07)',
+        tension: 0.35, borderWidth: 2.5 });
+      dsIdx.baseline = _idx++;
+
+      // 1 — statin (always present, hidden if not applicable)
+      datasets.push({ label: tl.chart_statin, data: pct(data.risk_ldl),
+        borderColor: '#009E73', backgroundColor: 'rgba(0,158,115,0.07)',
+        tension: 0.35, borderWidth: 2, borderDash: [6, 3],
+        hidden: !showStatin || alreadyOnStatin });
+      dsIdx.statin = _idx++;
+
+      // 2 — antiht (only when bpApplicable)
+      if (bpApplicable) {
+        datasets.push({ label: tl.chart_antiht, data: pct(data.risk_sbp),
+          borderColor: '#E69F00', backgroundColor: 'rgba(230,159,0,0.07)',
+          tension: 0.35, borderWidth: 2, borderDash: [6, 3],
+          hidden: !showAntiht || alreadyOnAntiht });
+        dsIdx.antiht = _idx++;
+      }
+
+      if (isCessationApplicable) {
+        // cessation alone
+        datasets.push({ label: tl.chart_cessation, data: pct(risk_cessation),
+          borderColor: '#D55E00', backgroundColor: 'rgba(213,94,0,0.07)',
+          tension: 0.35, borderWidth: 2, borderDash: [6, 3],
+          hidden: !showCessation });
+        dsIdx.cessation = _idx++;
+
+        // combined (purple — content is dynamic, recomputed on toggle)
+        const combinedData = computeCombinedRisk(data);
+        datasets.push({ label: tl.chart_combined,
+          data: combinedData ? pct(combinedData) : pct(data.risk_baseline),
+          borderColor: '#CC79A7', backgroundColor: 'rgba(204,121,167,0.07)',
+          tension: 0.35, borderWidth: 2, borderDash: [2, 3],
+          hidden: combinedData === null });
+        dsIdx.combined = _idx++;
+
+      } else {
+        // Original non-smoker combined (statin + antiht only)
+        if (bpApplicable) {
+          datasets.push({ label: tl.chart_combined, data: pct(data.risk_combined),
+            borderColor: '#CC79A7', backgroundColor: 'rgba(204,121,167,0.07)',
+            tension: 0.35, borderWidth: 2, borderDash: [2, 3],
+            hidden: !(showStatin && showAntiht) || alreadyOnStatin || alreadyOnAntiht });
+          dsIdx.combined = _idx++;
+        }
+      }
+
       // Sync toggle button states
-      const btnStatin = document.getElementById('toggleStatin');
-      const btnAntiht = document.getElementById('toggleAntiht');
+      const btnStatin    = document.getElementById('toggleStatin');
+      const btnAntiht    = document.getElementById('toggleAntiht');
+      const btnCessation = document.getElementById('toggleCessation');
+
       btnStatin.style.display = alreadyOnStatin ? 'none' : '';
       btnStatin.classList.toggle('active', showStatin && !alreadyOnStatin);
+
       btnAntiht.style.display = alreadyOnAntiht ? 'none' : '';
       btnAntiht.classList.toggle('active', showAntiht && !alreadyOnAntiht);
       btnAntiht.disabled = !bpApplicable || alreadyOnAntiht;
+
+      btnCessation.style.display = isCessationApplicable ? '' : 'none';
+      btnCessation.classList.toggle('active', showCessation && isCessationApplicable);
 
       if (chartInstance) chartInstance.destroy();
       _drawProgress = 0;
@@ -2609,7 +3055,23 @@
         { label: tl.card_baseline, value: data.risk_baseline[idx], color: '#0072B2', arr: null },
         ...(showStatin && !alreadyOnStatin ? [{ label: tl.card_statin, value: data.risk_ldl[idx], color: '#009E73', arr: fmtArr(data.risk_ldl[idx]) }] : []),
         ...(bpApplicable && showAntiht && !alreadyOnAntiht ? [{ label: tl.card_antiht, value: data.risk_sbp[idx], color: '#E69F00', arr: fmtArr(data.risk_sbp[idx]) }] : []),
-        ...(bpApplicable && showStatin && showAntiht && !alreadyOnStatin && !alreadyOnAntiht ? [{ label: tl.card_combined, value: data.risk_combined[idx], color: '#CC79A7', arr: fmtArr(data.risk_combined[idx]) }] : []),
+        ...(data._isCessationApplicable && showCessation && data._risk_cessation
+          ? [{ label: tl.card_cessation,
+               value: data._risk_cessation[idx],
+               color: '#D55E00',
+               arr: fmtArr(data._risk_cessation[idx]) }]
+          : []),
+        ...((() => {
+          const combinedData = isCessationApplicable
+            ? computeCombinedRisk(data)
+            : (bpApplicable && showStatin && showAntiht && !alreadyOnStatin && !alreadyOnAntiht
+                ? data.risk_combined : null);
+          if (!combinedData) return [];
+          return [{ label: tl.card_combined,
+                    value: combinedData[idx],
+                    color: '#CC79A7',
+                    arr: fmtArr(combinedData[idx]) }];
+        })()),
       ];
 
       document.getElementById('riskAgeHeader').innerHTML =
@@ -2665,6 +3127,169 @@
           });
         }
       });
+    }
+
+    function renderComparisonCharts(data, dataNS) {
+      if (!data || !isCessationApplicable) {
+        document.getElementById('comparisonPlaceholder').style.display = '';
+        document.getElementById('comparisonCharts').style.display = 'none';
+        document.getElementById('comparisonDelta').textContent = '';
+        return;
+      }
+
+      document.getElementById('comparisonPlaceholder').style.display = 'none';
+      document.getElementById('comparisonCharts').style.display = '';
+
+      const baseAge = data.ages[0];
+      const ages    = data.ages;
+      const pctLocal = arr => arr.map(v => +(v * 100).toFixed(2));
+
+      // ── Floor A: model-derived (additive decomposition) ──
+      const risk_cess_model = dataNS
+        ? data.risk_baseline.map((r, i) => {
+            const floor  = dataNS.risk_baseline[i];
+            const excess = r - floor;
+            return floor + excess * cessationRR(ages[i] - baseAge);
+          })
+        : null;
+
+      // ── Floor B: literature-derived (production formula) ──
+      const risk_cess_lit = data.risk_baseline.map((r, i) =>
+        r * cessationMultiplier(ages[i] - baseAge));
+
+      // ── Implied never-smoker arrays for reference lines ──
+      const risk_ns_lit   = data.risk_baseline.map(r => r / RR_SMOKING_LIT);
+      const risk_ns_model = dataNS ? dataNS.risk_baseline : null;
+
+      // ── Metric cards ──
+      const lastIdx = ages.length - 1;
+      const age80   = ages[lastIdx];
+
+      function buildMetrics(el, cessData, nsData) {
+        const base      = data.risk_baseline[lastIdx] * 100;
+        const cess      = cessData ? cessData[lastIdx] * 100 : null;
+        const ns        = nsData   ? nsData[lastIdx]   * 100 : null;
+        const reduction = cess !== null ? (base - cess).toFixed(1) : '\u2014';
+        const floor_val = ns   !== null ? ns.toFixed(1) + '%'      : '\u2014';
+
+        el.innerHTML = [
+          { label: 'Baseline at ' + age80, value: base.toFixed(1) + '%' },
+          { label: 'Cessation at ' + age80,
+            value: cess !== null ? cess.toFixed(1) + '%' : '\u2014',
+            highlight: true },
+          { label: 'Reduction',
+            value: cess !== null ? '\u2212' + reduction + 'pp' : '\u2014',
+            highlight: true },
+          { label: 'Never-smoker floor',
+            value: floor_val },
+        ].map(m => `
+          <div class="comparison-metric">
+            <div class="metric-label">${m.label}</div>
+            <div class="metric-value ${m.highlight ? 'highlight' : ''}">${m.value}</div>
+          </div>`).join('');
+      }
+
+      buildMetrics(document.getElementById('metricsModel'), risk_cess_model, risk_ns_model);
+      buildMetrics(document.getElementById('metricsLit'),   risk_cess_lit,   risk_ns_lit);
+
+      // ── Chart options (shared) ──
+      const sharedOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: { font: { size: 12, family: 'Inter' }, color: '#c7d2fe',
+              usePointStyle: true, pointStyleWidth: 22 }
+          },
+          tooltip: {
+            backgroundColor: '#0f0e2e',
+            titleFont: { size: 12, family: 'Inter' },
+            bodyFont:  { size: 11, family: 'Inter' },
+            callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` }
+          }
+        },
+        scales: {
+          x: { ticks: { color: '#a5b4fc', font: { size: 11 } },
+               grid:  { color: 'rgba(165,180,252,0.1)' },
+               title: { display: true, text: 'Age (years)',
+                        color: '#a5b4fc', font: { size: 11 } } },
+          y: { min: 0,
+               ticks: { color: '#a5b4fc', font: { size: 11 },
+                        callback: v => v + '%' },
+               grid:  { color: 'rgba(165,180,252,0.1)' },
+               title: { display: true, text: 'CAD risk (%)',
+                        color: '#a5b4fc', font: { size: 11 } } }
+        }
+      };
+
+      // ── Chart A: model floor ──
+      if (compChartModel) compChartModel.destroy();
+      const datasetsModel = [
+        { label: 'Baseline (current smoker)',
+          data: pctLocal(data.risk_baseline),
+          borderColor: '#0072B2', borderWidth: 2, tension: 0.35, pointRadius: 0 },
+        ...(risk_cess_model ? [{
+          label: 'Cessation (model floor)',
+          data: pctLocal(risk_cess_model),
+          borderColor: '#D55E00', borderWidth: 2, borderDash: [6, 3],
+          tension: 0.35, pointRadius: 0
+        }] : [{
+          label: 'Cessation (model floor \u2014 unavailable)',
+          data: pctLocal(data.risk_baseline),
+          borderColor: '#666', borderWidth: 1, borderDash: [2, 4],
+          tension: 0.35, pointRadius: 0
+        }]),
+        ...(risk_ns_model ? [{
+          label: 'Never-smoker floor (model)',
+          data: pctLocal(risk_ns_model),
+          borderColor: 'rgba(165,180,252,0.45)', borderWidth: 1.5,
+          borderDash: [3, 3], tension: 0.35, pointRadius: 0
+        }] : []),
+      ];
+      compChartModel = new Chart(
+        document.getElementById('chartCompModel'),
+        { type: 'line', data: { labels: ages, datasets: datasetsModel }, options: sharedOptions });
+
+      // ── Chart B: literature floor ──
+      if (compChartLit) compChartLit.destroy();
+      const datasetsLit = [
+        { label: 'Baseline (current smoker)',
+          data: pctLocal(data.risk_baseline),
+          borderColor: '#0072B2', borderWidth: 2, tension: 0.35, pointRadius: 0 },
+        { label: 'Cessation (literature floor)',
+          data: pctLocal(risk_cess_lit),
+          borderColor: '#D55E00', borderWidth: 2, borderDash: [6, 3],
+          tension: 0.35, pointRadius: 0 },
+        { label: 'Never-smoker floor (lit, RR=1.98)',
+          data: pctLocal(risk_ns_lit),
+          borderColor: 'rgba(165,180,252,0.45)', borderWidth: 1.5,
+          borderDash: [3, 3], tension: 0.35, pointRadius: 0 },
+      ];
+      compChartLit = new Chart(
+        document.getElementById('chartCompLit'),
+        { type: 'line', data: { labels: ages, datasets: datasetsLit }, options: sharedOptions });
+
+      // ── Delta summary ──
+      const deltaEl = document.getElementById('comparisonDelta');
+      if (risk_cess_model) {
+        const cessModel = risk_cess_model[lastIdx] * 100;
+        const cessLit   = risk_cess_lit[lastIdx]   * 100;
+        const diff      = Math.abs(cessLit - cessModel).toFixed(1);
+        const direction = cessLit < cessModel ? 'larger' : 'smaller';
+        const baseVal   = data.risk_baseline[lastIdx] * 100;
+        const redModel  = (baseVal - cessModel).toFixed(1);
+        const redLit    = (baseVal - cessLit).toFixed(1);
+        deltaEl.innerHTML =
+          `At age ${age80}: Model floor \u2192 ${cessModel.toFixed(1)}% `
+          + `(\u2212${redModel}pp) &nbsp;|&nbsp; `
+          + `Literature floor \u2192 ${cessLit.toFixed(1)}% `
+          + `(\u2212${redLit}pp) &nbsp;|&nbsp; `
+          + `<strong>Difference: ${diff}pp (literature gives ${direction} reduction)</strong>`;
+      } else {
+        deltaEl.innerHTML = 'Model floor unavailable \u2014 second API call failed or returned no data.';
+      }
     }
   </script>
 </body>
