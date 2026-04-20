@@ -7,10 +7,10 @@
   <img src="https://img.shields.io/badge/Use-Research%20only-f97316" alt="Research only"/>
 </p>
 
-A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** models to estimate cumulative coronary artery disease (CAD) risk from the current age to 80, alongside educational overlays for two common interventions: statin therapy and antihypertensive treatment. A bilingual (EN/FR) single-page web application is served at `/`.
+A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** models to estimate cumulative coronary artery disease (CAD) risk from the current age to 80, alongside educational overlays for three common interventions: statin therapy, antihypertensive treatment, and smoking cessation. A bilingual (EN/FR) single-page web application is served at `/`.
 
 > **Important**
-> Intervention overlays apply fixed coefficients derived from RCT meta-analyses on top of the model's predicted absolute baseline risk. They are intended for educational and population-level illustration — not individual causal inference or clinical prescription.
+> Intervention overlays apply fixed coefficients derived from published meta-analyses on top of the model's predicted absolute baseline risk. Statin and antihypertensive coefficients are from RCT meta-analyses; the smoking cessation overlay is derived from a prospective cohort meta-analysis. All overlays are intended for educational and population-level illustration — not individual causal inference or clinical prescription.
 
 ---
 
@@ -23,6 +23,10 @@ A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** mod
   - [`GET /health`](#get-health)
   - [`POST /predict`](#post-predict)
 - [Intervention overlays](#intervention-overlays)
+  - [Statin / LDL](#statin--ldl)
+  - [Antihypertensive / SBP](#antihypertensive--sbp)
+  - [Combined (multiplicative)](#combined-multiplicative)
+  - [Smoking cessation (client-side only)](#smoking-cessation-client-side-only)
 - [Docker](#docker)
 - [Configuration](#configuration)
 - [References](#references)
@@ -119,7 +123,7 @@ Basic liveness probe.
 
 ### `POST /predict`
 
-Computes the baseline cumulative CAD risk curve from the current age (minimum 40) to age 80 and returns three educational intervention overlays.
+Computes the baseline cumulative CAD risk curve from the current age (minimum 40) to age 80 and returns statin and antihypertensive intervention overlays. A smoking cessation overlay is applied client-side in the web application and is not part of this response.
 
 #### Request fields
 
@@ -214,7 +218,7 @@ All risk arrays contain one value per year from `max(40, age_recruitment)` to `8
 
 ## Intervention overlays
 
-Overlays are multiplicative reductions applied to the baseline risk curve. They are derived from published RCT meta-analyses and fixed at the values shown.
+Overlays are multiplicative reductions applied to the baseline risk curve, with coefficients fixed at the values shown. Statin and antihypertensive overlays are computed by the API and derived from RCT meta-analyses. The smoking cessation overlay is computed client-side and derived from a prospective cohort meta-analysis.
 
 ### Statin / LDL
 
@@ -242,6 +246,24 @@ risk_sbp(age)  = risk_baseline(age) × bp_rr
 ```
 combined_rr         = ldl_rr × bp_rr
 risk_combined(age)  = risk_baseline(age) × combined_rr
+```
+
+### Smoking cessation (client-side only)
+
+The smoking cessation overlay is **not computed by the API**. It is applied entirely in the web application and is only shown when the patient is a current smoker (`smoking_current = 1`).
+
+The method applies a time-varying relative risk multiplier derived from Mons et al. (BMJ, 2015)<sup>5</sup>, which reports RR of cardiovascular events in ex-smokers relative to current smokers at increasing years since quitting. A baseline current-smoker RR of 1.98 vs never-smokers is used to anchor the floor.
+
+```
+RR(t) — ex-smoker vs current smoker, at t years after quitting:
+  t = 0       → 1.00  (no benefit yet)
+  t ∈ [0, 5)  → linear interpolation to 0.84
+  t ∈ [5, 10) → linear interpolation to 0.69
+  t ∈ [10, 20)→ linear interpolation to 0.58
+  t ≥ 20      → 0.58  (plateau)
+
+cessation_multiplier(t) = 1/1.98 + (1 − 1/1.98) × RR(t)
+risk_cessation(age)     = risk_baseline(age) × cessation_multiplier(age − age_at_estimation)
 ```
 
 ---
@@ -283,6 +305,9 @@ Inputs are processed in memory and not persisted.
 
 4. 8% CAD risk reduction per 5 mmHg SBP reduction — *The Lancet*, 2021.
    https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext
+
+5. Mons et al. "Impact of smoking and smoking cessation on cardiovascular events and mortality among older adults: meta-analysis of individual participant data from prospective cohort studies of the CHANCES consortium" — *BMJ*, 2015.
+   https://www.bmj.com/content/350/bmj.h1551
 
 ---
 
