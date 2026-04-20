@@ -3,6 +3,9 @@ name: Build & Deploy to App Runner
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
 
 env:
   AWS_REGION: ca-central-1
