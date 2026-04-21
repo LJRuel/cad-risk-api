@@ -854,9 +854,34 @@
       cursor: pointer;
     }
 
+    .chart-dismiss {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(30, 27, 75, 0.72);
+      color: #fff;
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .chart-dismiss:not(.hidden) {
+        display: flex;
+      }
+    }
+
     @media (max-width: 600px) {
       .chart-wrap {
-        height: 300px;
+        height: 380px;
       }
     }
 
@@ -1627,7 +1652,7 @@
                           antihypertensive therapy (if applicable)</span></li>
                       <li><svg width="24" height="6" viewBox="0 0 24 6" style="vertical-align:middle;margin-right:4px">
                           <line x1="0" y1="3" x2="24" y2="3" stroke="#F43F5E" stroke-width="2" stroke-dasharray="2 3" />
-                        </svg><span data-i18n="guide_purple"><strong>Purple dotted</strong> — baseline risk reduced by
+                        </svg><span data-i18n="guide_purple"><strong>Rose dotted</strong> — baseline risk reduced by
                           combined statin + antihypertensive therapies (if applicable)</span></li>
                       <li>
                         <svg width="24" height="6" viewBox="0 0 24 6"
@@ -1636,7 +1661,7 @@
                                 stroke="#8B5CF6" stroke-width="2" stroke-dasharray="6 3"/>
                         </svg>
                         <span data-i18n="guide_red">
-                          <strong>Orange dashed</strong> &#8212; projected risk if you quit smoking today
+                          <strong>Violet dashed</strong> &#8212; projected risk if you quit smoking today
                           (current smokers only)
                         </span>
                       </li>
@@ -1649,6 +1674,7 @@
             </div>
             <div class="chart-wrap">
               <canvas id="riskChart"></canvas>
+              <button id="chartDismiss" class="chart-dismiss hidden" aria-label="Close">&#x2715;</button>
             </div>
           </div><!-- /chart-area-wrap -->
 
@@ -2053,10 +2079,10 @@
         guide_yaxis: 'The <strong>vertical axis</strong> shows cumulative coronary artery disease risk (%) from your current age to age 80.',
         guide_click: '<strong>Click any point</strong> on the chart to see exact risk values and absolute risk reductions at that age.',
         guide_lines: 'Each line represents a scenario:',
-        guide_blue: '<strong>Blue</strong> \u2014 baseline risk (no intervention)',
+        guide_blue: '<strong>Teal</strong> \u2014 baseline risk (no intervention)',
         guide_green: '<strong>Green dashed</strong> \u2014 baseline risk reduced by taking medication to lower cholesterol (statin)',
         guide_yellow: '<strong>Yellow dashed</strong> \u2014 baseline risk reduced by taking medication to lower blood pressure (antihypertensive), if applicable',
-        guide_purple: '<strong>Purple dotted</strong> \u2014 baseline risk reduced by combined statin + antihypertensive therapies (if applicable)',
+        guide_purple: '<strong>Rose dotted</strong> \u2014 baseline risk reduced by combined statin + antihypertensive therapies (if applicable)',
         guide_boxes: 'The <strong>boxes below</strong> the chart show absolute risk reduction compared to baseline at the selected age.',
         hint: 'Click the chart to explore risk at a specific age',
         chart_baseline: 'Baseline', chart_statin: 'With statin',
@@ -2078,7 +2104,7 @@
         disclaimer_antiht: 'Antihypertensive: 8\u202f% relative risk reduction per 5\u202fmmHg if systolic blood pressure \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>.',
         disclaimer_cessation: 'Smoking cessation: \u221216\u202f% risk reduction at 5\u202fy, \u221231\u202f% at 10\u202fy, \u221242\u202f% at \u226520\u202fy (plateau)<sup><a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">4</a></sup>. Applied to current smokers only.',
         disclaimer_refs: '<strong>References</strong>',
-        guide_red: '<strong>Orange dashed</strong> \u2014 projected risk if you quit smoking today (current smokers only)',
+        guide_red: '<strong>Violet dashed</strong> \u2014 projected risk if you quit smoking today (current smokers only)',
         footer_edu: 'For informational purposes only',
         error_prefix: 'Error: ',
         optional_filled: (n, t) => `${n} / ${t} optional fields filled`,
@@ -2122,10 +2148,10 @@
         guide_yaxis: 'L\u2019<strong>axe vertical</strong> indique le risque cumulatif de maladie coronarienne (%) de votre \xe2ge actuel jusqu\u2019\xe0 80\u202fans.',
         guide_click: '<strong>Cliquez sur n\u2019importe quel point</strong> du graphique pour voir les valeurs de risque exactes et les r\xe9ductions absolues du risque \xe0 cet \xe2ge.',
         guide_lines: 'Chaque ligne repr\xe9sente un sc\xe9nario\u00a0:',
-        guide_blue: '<strong>Bleu</strong> \u2014 risque de base (sans intervention)',
+        guide_blue: '<strong>Bleu-vert</strong> \u2014 risque de base (sans intervention)',
         guide_green: '<strong>Vert tir\xe9t\xe9</strong> \u2014 risque de base r\xe9duit par la prise de m\xe9dicament pour diminuer le cholest\xe9rol (statine)',
         guide_yellow: '<strong>Jaune tir\xe9t\xe9</strong> \u2014 risque de base r\xe9duit par la prise de m\xe9dicament pour diminuer la pression art\xe9rielle (antihypertenseur), si applicable',
-        guide_purple: '<strong>Violet pointill\xe9</strong> \u2014 risque de base r\xe9duit par la combinaison statine\u00a0+ antihypertenseur, si applicable',
+        guide_purple: '<strong>Rose pointill\xe9</strong> \u2014 risque de base r\xe9duit par la combinaison statine\u00a0+ antihypertenseur, si applicable',
         guide_boxes: 'Les <strong>cases sous</strong> le graphique indiquent la r\xe9duction absolue du risque par rapport au niveau de base \xe0 l\u2019\xe2ge s\xe9lectionn\xe9.',
         hint: 'Cliquez sur le graphique pour explorer le risque \xe0 un \xe2ge sp\xe9cifique',
         chart_baseline: 'Risque de base', chart_statin: 'Avec statine',
@@ -2147,7 +2173,7 @@
         disclaimer_antiht: 'Antihypertenseur\u00a0: r\xe9duction du risque de 8\u202f% par 5\u202fmmHg si la pression art\xe9rielle systolique \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>.',
         disclaimer_cessation: 'Cessation tabagique\u00a0: \u221216\u202f% de r\xe9duction du risque \xe0 5\u202fans, \u221231\u202f% \xe0 10\u202fans, \u221242\u202f% \xe0 \u226520\u202fans (plateau)<sup><a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">4</a></sup>. Appliqué aux fumeurs actuels seulement.',
         disclaimer_refs: '<strong>R\xe9f\xe9rences</strong>',
-        guide_red: '<strong>Orange tir\xe9t\xe9</strong> \u2014 risque projet\xe9 si vous arr\xeatez de fumer aujourd\u2019hui (fumeurs actuels seulement)',
+        guide_red: '<strong>Violet tir\xe9t\xe9</strong> \u2014 risque projet\xe9 si vous arr\xeatez de fumer aujourd\u2019hui (fumeurs actuels seulement)',
         footer_edu: '\xc0 titre informatif seulement',
         error_prefix: 'Erreur\u00a0: ',
         optional_filled: (n, t) => `${n}\u00a0/\u00a0${t} mesures optionnelles remplies`,
@@ -2637,6 +2663,8 @@
       datasets.forEach((_, i) => { _dsProgress[i] = 0; });
       _animating = true;
 
+      const _mob = window.innerWidth <= 600;
+
       chartInstance = new Chart(document.getElementById('riskChart'), {
         type: 'line',
         data: { labels: data.ages, datasets },
@@ -2675,6 +2703,7 @@
                 const lastIdx = data.ages.length - 1;
                 chartInstance.selectedIdx = lastIdx;
                 chartInstance.draw();
+                document.getElementById('chartDismiss').classList.add('hidden');
                 showRiskAtAge(lastIdx, data, bpApplicable, firstRender);
               };
             })()
@@ -2684,10 +2713,10 @@
               position: 'top',
               onClick: () => { },
               labels: {
-                font: { size: 14, family: 'Inter' },
-                padding: 16,
+                font: { size: _mob ? 11 : 14, family: 'Inter' },
+                padding: _mob ? 8 : 16,
                 usePointStyle: true,
-                pointStyleWidth: 28,
+                pointStyleWidth: _mob ? 16 : 28,
                 filter: (item) => !item.hidden,
                 generateLabels: (chart) => {
                   const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
@@ -2716,13 +2745,13 @@
           scales: {
             x: {
               grid: { color: 'rgba(99,102,241,0.15)' },
-              ticks: { color: '#374151', font: { size: 13, family: 'Inter' } },
-              title: { display: true, text: tl.chart_xaxis, font: { size: 14, family: 'Inter', weight: '600' }, color: '#1f2937' }
+              ticks: { color: '#374151', font: { size: _mob ? 11 : 13, family: 'Inter' } },
+              title: { display: true, text: tl.chart_xaxis, font: { size: _mob ? 12 : 14, family: 'Inter', weight: '600' }, color: '#1f2937' }
             },
             y: {
               grid: { color: 'rgba(99,102,241,0.15)' },
-              ticks: { color: '#374151', font: { size: 13, family: 'Inter' }, callback: v => v + '%' },
-              title: { display: true, text: tl.chart_yaxis, font: { size: 14, family: 'Inter', weight: '600' }, color: '#1f2937' },
+              ticks: { color: '#374151', font: { size: _mob ? 11 : 13, family: 'Inter' }, callback: v => v + '%' },
+              title: { display: true, text: tl.chart_yaxis, font: { size: _mob ? 12 : 14, family: 'Inter', weight: '600' }, color: '#1f2937' },
               min: 0,
             }
           }
@@ -2745,8 +2774,11 @@
             return Math.max(0, Math.min(count - 1, idx));
           };
 
+          let _touchStartX = null;
+
           canvas.addEventListener('touchstart', e => {
             e.preventDefault();
+            _touchStartX = e.touches[0].clientX;
           }, { passive: false });
 
           canvas.addEventListener('touchmove', e => {
@@ -2761,15 +2793,40 @@
           canvas.addEventListener('touchend', e => {
             e.preventDefault();
             if (!chartInstance) return;
-            const idx = getIdx(e.changedTouches[0]);
+            const touch = e.changedTouches[0];
+            const idx = getIdx(touch);
+            const dx = Math.abs(touch.clientX - (_touchStartX ?? touch.clientX));
+            const isTap = dx < 10;
+            const dismissBtn = document.getElementById('chartDismiss');
+            // Second tap on the same point dismisses the indicator (resets to last point)
+            if (isTap && chartInstance.selectedIdx === idx) {
+              const lastIdx = (lastChartData?.ages?.length ?? 1) - 1;
+              chartInstance.selectedIdx = lastIdx;
+              chartInstance.hoverIdx = null;
+              chartInstance.draw();
+              dismissBtn.classList.add('hidden');
+              showRiskAtAge(lastIdx, lastChartData, lastBpApplicable, false);
+              return;
+            }
             chartInstance.selectedIdx = idx;
             chartInstance.draw();
             document.getElementById('chartHint').classList.add('hidden');
+            dismissBtn.classList.remove('hidden');
             showRiskAtAge(idx, lastChartData, lastBpApplicable, false);
           }, { passive: false });
         }
       }
     }
+
+    document.getElementById('chartDismiss').addEventListener('click', () => {
+      if (!chartInstance || !lastChartData) return;
+      const lastIdx = lastChartData.ages.length - 1;
+      chartInstance.selectedIdx = lastIdx;
+      chartInstance.hoverIdx = null;
+      chartInstance.draw();
+      document.getElementById('chartDismiss').classList.add('hidden');
+      showRiskAtAge(lastIdx, lastChartData, lastBpApplicable, false);
+    });
 
     // Apply saved language on load
     applyLang(currentLang);
@@ -2823,7 +2880,23 @@
         // Update text/color in-place, animate only the numbers
         requestAnimationFrame(() => {
           existingCards.forEach((cardEl, i) => {
-            if (cards[i].key && !cards[i].active) return; // off — invite text stays, nothing to update
+            // Always update label text (handles language switches)
+            const labelEl = cardEl.querySelector('.risk-age-label');
+            if (cards[i].sources && cards[i].sources.length) {
+              const rHtml = `<div class="card-recipe">${cards[i].sources.map((s, j) =>
+                (j > 0 ? '<span class="recipe-plus">+</span>' : '') +
+                `<span class="recipe-item"><span class="recipe-dot" style="background:${s.color}"></span>${s.label}</span>`
+              ).join('')}</div>`;
+              labelEl.innerHTML = cards[i].label + rHtml;
+            } else {
+              labelEl.textContent = cards[i].label;
+            }
+
+            if (cards[i].key && !cards[i].active) {
+              const inviteEl = cardEl.querySelector('.risk-age-invite');
+              if (inviteEl) inviteEl.textContent = tl.card_click_to_show;
+              return;
+            }
             const valEl = cardEl.querySelector('.risk-age-value');
             const arrEl = cardEl.querySelector('.risk-age-arr');
             valEl.classList.remove('value-loading');
