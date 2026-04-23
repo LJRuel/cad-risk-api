@@ -1837,9 +1837,14 @@
         </svg>
         GitHub
       </a>
+      &nbsp;&middot;&nbsp;
+      <span id="appVersion" style="font-family:monospace;font-size:0.72rem;background:#1e293b;color:#64748b;border:1px solid #334155;border-radius:4px;padding:1px 6px;letter-spacing:0.02em;"></span>
     </footer>
     <script>
       document.getElementById('footerYear').textContent = new Date().getFullYear();
+      fetch('/version').then(r => r.json()).then(d => {
+        document.getElementById('appVersion').textContent = d.version;
+      }).catch(() => {});
       // Set html lang attribute on load from saved preference (before main script runs)
       const _savedLang = localStorage.getItem('lang');
       if (_savedLang) document.documentElement.lang = _savedLang;

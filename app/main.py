@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -19,6 +20,10 @@ def ui():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/version")
+def version():
+    return {"version": os.environ.get("APP_VERSION", "dev")}
 
 @app.post("/predict")
 def predict(payload: InputPayload):
