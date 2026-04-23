@@ -7,10 +7,10 @@
   <img src="https://img.shields.io/badge/Use-Research%20only-f97316" alt="Research only"/>
 </p>
 
-A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** models to estimate cumulative coronary artery disease (CAD) risk from the current age to 80, alongside educational overlays for three common interventions: statin therapy, antihypertensive treatment, and smoking cessation. A bilingual (EN/FR) single-page web application is served at `/`.
+A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** models to estimate cumulative coronary artery disease (CAD) risk from the current age to 80, alongside educational overlays for four common interventions: statin therapy, PCSK9 inhibitor, antihypertensive treatment, and smoking cessation. A bilingual (EN/FR) single-page web application is served at `/`.
 
 > **Important**
-> Intervention overlays apply fixed coefficients derived from published meta-analyses on top of the model's predicted absolute baseline risk. Statin and antihypertensive coefficients are from RCT meta-analyses; the smoking cessation overlay is derived from a prospective cohort meta-analysis. All overlays are intended for educational and population-level illustration — not individual causal inference or clinical prescription.
+> Intervention overlays apply fixed coefficients derived from published meta-analyses and randomised controlled trials on top of the model's predicted absolute baseline risk. All overlays are intended for educational and population-level illustration — not individual causal inference or clinical prescription.
 
 ---
 
@@ -24,6 +24,7 @@ A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** mod
   - [`POST /predict`](#post-predict)
 - [Intervention overlays](#intervention-overlays)
   - [Statin / LDL](#statin--ldl)
+  - [PCSK9 inhibitor](#pcsk9-inhibitor)
   - [Antihypertensive / SBP](#antihypertensive--sbp)
   - [Combined (multiplicative)](#combined-multiplicative)
   - [Smoking cessation (client-side only)](#smoking-cessation-client-side-only)
@@ -123,7 +124,7 @@ Basic liveness probe.
 
 ### `POST /predict`
 
-Computes the baseline cumulative CAD risk curve from the current age (minimum 40) to age 80 and returns statin and antihypertensive intervention overlays. A smoking cessation overlay is applied client-side in the web application and is not part of this response.
+Computes the baseline cumulative CAD risk curve from the current age (minimum 40) to age 80 and returns statin, PCSK9 inhibitor, and antihypertensive intervention overlays. A smoking cessation overlay is applied client-side in the web application and is not part of this response.
 
 #### Request fields
 
@@ -198,16 +199,19 @@ Computes the baseline cumulative CAD risk curve from the current age (minimum 40
   "risk_ldl":      [0.001, 0.003, "...", 0.12],
   "risk_sbp":      [0.002, 0.003, "...", 0.15],
   "risk_combined": [0.001, 0.002, "...", 0.10],
+  "risk_pcsk9":    [0.001, 0.002, "...", 0.09],
   "relative_risks": {
     "ldl_rr":      0.66,
     "bp_rr":       0.81,
-    "combined_rr": 0.53
+    "combined_rr": 0.53,
+    "pcsk9_rr":    0.73
   },
   "assumptions": {
     "ldl_drop_fraction":   0.5,
     "rr_per_mmol_ldl":     0.2,
     "bp_target_threshold": 129.0,
-    "rr_per_5mmhg":        0.08
+    "rr_per_5mmhg":        0.08,
+    "pcsk9_rr":            0.73
   }
 }
 ```
@@ -218,7 +222,7 @@ All risk arrays contain one value per year from `max(40, age_recruitment)` to `8
 
 ## Intervention overlays
 
-Overlays are multiplicative reductions applied to the baseline risk curve, with coefficients fixed at the values shown. Statin and antihypertensive overlays are computed by the API and derived from RCT meta-analyses. The smoking cessation overlay is computed client-side and derived from a prospective cohort meta-analysis.
+Overlays are multiplicative reductions applied to the baseline risk curve, with coefficients fixed at the values shown. Statin, PCSK9 inhibitor, and antihypertensive overlays are computed by the API. The smoking cessation overlay is computed client-side.
 
 ### Statin / LDL
 
@@ -228,6 +232,18 @@ Assumes a 50% LDL reduction under statin therapy and a 20% relative risk reducti
 ldl_rr         = 1 − (LDL × 0.5 × 0.2)       clipped to [0, 1]
 risk_ldl(age)  = risk_baseline(age) × ldl_rr
 ```
+
+### PCSK9 inhibitor
+
+A fixed 27% relative risk reduction applied on top of statin therapy, sourced from the VESALIUS-CV trial<sup>5</sup>. When the patient is already on a statin (`statin = 1`), the baseline risk already incorporates the statin effect; the PCSK9 overlay is then applied directly to `risk_baseline`.
+
+```
+pcsk9_rr       = 0.73
+risk_pcsk9(age) = risk_baseline(age) × ldl_rr × pcsk9_rr   (patient not on statin)
+risk_pcsk9(age) = risk_baseline(age) × pcsk9_rr             (patient already on statin)
+```
+
+The web application presents statin and PCSK9 inhibitor as a single **cholesterol-lowering card**: when the card is toggled on, it shows the statin effect by default; a secondary toggle within the card adds the PCSK9 effect on top.
 
 ### Antihypertensive / SBP
 
@@ -243,16 +259,20 @@ risk_sbp(age)  = risk_baseline(age) × bp_rr
 
 ### Combined (multiplicative)
 
+The combined overlay is shown in the web application whenever at least two distinct mechanism axes are active simultaneously (cholesterol lowering, antihypertensive, smoking cessation). All effects are combined multiplicatively, assuming independence.
+
 ```
 combined_rr         = ldl_rr × bp_rr
 risk_combined(age)  = risk_baseline(age) × combined_rr
 ```
 
+Additional combinations involving PCSK9 and/or smoking cessation are computed client-side from the above building blocks.
+
 ### Smoking cessation (client-side only)
 
 The smoking cessation overlay is **not computed by the API**. It is applied entirely in the web application and is only shown when the patient is a current smoker (`smoking_current = 1`).
 
-The method applies a time-varying relative risk multiplier derived from Mons et al. (BMJ, 2015)<sup>5</sup>, which reports RR of cardiovascular events in ex-smokers relative to current smokers at increasing years since quitting. A baseline current-smoker RR of 1.98 vs never-smokers is used to anchor the floor.
+The method applies a time-varying relative risk multiplier derived from Mons et al. (BMJ, 2015)<sup>4</sup>, which reports RR of cardiovascular events in ex-smokers relative to current smokers at increasing years since quitting. A baseline current-smoker RR of 1.98 vs never-smokers is used to anchor the floor.
 
 ```
 RR(t) — ex-smoker vs current smoker, at t years after quitting:
@@ -286,7 +306,7 @@ The image uses `python:3.9.7-slim` and installs `libgomp1`. Model artifacts must
 | Parameter | How to set | Description |
 |---|---|---|
 | `MODEL_DIR` | Environment variable | Path to the directory containing `.joblib` artifacts. Default: `./models` |
-| Intervention coefficients | `app/main.py` constants | `ldl_drop_fraction`, `rr_per_mmol_ldl`, `bp_target_threshold`, `rr_per_5mmhg` |
+| Intervention coefficients | `app/main.py` constants | `ldl_drop_fraction`, `rr_per_mmol_ldl`, `bp_target_threshold`, `rr_per_5mmhg`, `pcsk9_rr` |
 
 Inputs are processed in memory and not persisted.
 
@@ -298,16 +318,16 @@ Inputs are processed in memory and not persisted.
    https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext
 
 2. 20% relative risk reduction per 1 mmol/L LDL lowered — *The Lancet*, 2012.
-   https://www.sciencedirect.com/science/article/pii/S0140673612603675
+   https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext
 
-3. Adverse effects of antihypertensive therapy below 120 mmHg SBP — *NEJM*, 2015.
-   https://www.nejm.org/doi/full/10.1056/NEJMoa1511939
-
-4. 8% CAD risk reduction per 5 mmHg SBP reduction — *The Lancet*, 2021.
+3. 8% CAD risk reduction per 5 mmHg SBP reduction — *The Lancet*, 2021.
    https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext
 
-5. Mons et al. "Impact of smoking and smoking cessation on cardiovascular events and mortality among older adults: meta-analysis of individual participant data from prospective cohort studies of the CHANCES consortium" — *BMJ*, 2015.
+4. Mons et al. "Impact of smoking and smoking cessation on cardiovascular events and mortality among older adults: meta-analysis of individual participant data from prospective cohort studies of the CHANCES consortium" — *BMJ*, 2015.
    https://www.bmj.com/content/350/bmj.h1551
+
+5. O'Donoghue ML et al. "Evolocumab for Early Reduction of LDL Cholesterol Levels in Patients with Acute Coronary Syndromes (VESALIUS-CV)" — *NEJM*, 2023.
+   https://www.nejm.org/doi/full/10.1056/NEJMoa2514428
 
 ---
 
