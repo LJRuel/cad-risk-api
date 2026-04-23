@@ -16,12 +16,17 @@ A stateless REST API serving sex-stratified **Deep Survival Machines (DSM)** mod
 
 ## Table of contents
 
+- [Table of contents](#table-of-contents)
 - [Project structure](#project-structure)
 - [Quick start](#quick-start)
 - [Variant model selection](#variant-model-selection)
 - [API endpoints](#api-endpoints)
   - [`GET /health`](#get-health)
   - [`POST /predict`](#post-predict)
+    - [Request fields](#request-fields)
+    - [Example request — male, all features provided](#example-request--male-all-features-provided)
+    - [Example request — female, no Lp(a) or CRP (routes to `base` variant)](#example-request--female-no-lpa-or-crp-routes-to-base-variant)
+    - [Response](#response)
 - [Intervention overlays](#intervention-overlays)
   - [Statin / LDL](#statin--ldl)
   - [PCSK9 inhibitor](#pcsk9-inhibitor)
@@ -326,7 +331,7 @@ Inputs are processed in memory and not persisted.
 4. Mons et al. "Impact of smoking and smoking cessation on cardiovascular events and mortality among older adults: meta-analysis of individual participant data from prospective cohort studies of the CHANCES consortium" — *BMJ*, 2015.
    https://www.bmj.com/content/350/bmj.h1551
 
-5. O'Donoghue ML et al. "Evolocumab for Early Reduction of LDL Cholesterol Levels in Patients with Acute Coronary Syndromes (VESALIUS-CV)" — *NEJM*, 2023.
+5. Bohula et al. "Evolocumab in Patients without a Previous Myocardial Infarction or Stroke (VESALIUS-CV)" — *NEJM*, 2025.
    https://www.nejm.org/doi/full/10.1056/NEJMoa2514428
 
 ---
