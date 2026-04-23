@@ -440,7 +440,7 @@
     /* Shared marker shape — applied to all required fields */
     .field:has(input[required]) label.field-label::after,
     .field:has(.smok-group) label.field-label::after,
-    fieldset:not(#optionalSection) .toggle-row > span:first-child::after,
+    fieldset:not(#optionalSection) .toggle-row>span:first-child::after,
     fieldset:has(.sex-group) legend::after {
       content: '';
       display: inline-block;
@@ -466,7 +466,7 @@
     }
 
     /* Vanish toggle markers after first hover */
-    fieldset:not(#optionalSection) .toggle-row.marker-gone > span:first-child::after {
+    fieldset:not(#optionalSection) .toggle-row.marker-gone>span:first-child::after {
       animation: markerVanish 0.45s cubic-bezier(0.4, 0, 0.6, 1) forwards;
     }
 
@@ -970,8 +970,15 @@
     }
 
     @keyframes valuePulse {
-      0%, 100% { opacity: 0.25; }
-      50%       { opacity: 0.6;  }
+
+      0%,
+      100% {
+        opacity: 0.25;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
     }
 
     .value-loading {
@@ -1135,6 +1142,46 @@
       color: #374151;
       font-weight: 500;
       line-height: 1;
+    }
+
+    .card-sublabel {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 0.2rem;
+    }
+
+    .pcsk9-addon-btn {
+      margin-top: 0.45rem;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.62rem;
+      font-weight: 600;
+      border: 1.5px solid #6366F1;
+      border-radius: 999px;
+      background: transparent;
+      color: #6366F1;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pcsk9-addon-btn:hover {
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .pcsk9-addon-btn.active {
+      background: #6366F1;
+      color: #fff;
+      border-color: #6366F1;
+    }
+
+    .pcsk9-addon-btn.active:hover {
+      background: #4f46e5;
     }
 
     /* ── Disclaimer ── */
@@ -1440,7 +1487,6 @@
       outline: 2px solid #818cf8;
       outline-offset: 2px;
     }
-
   </style>
 </head>
 
@@ -1475,7 +1521,8 @@
             <div class="sex-group">
               <label><input type="radio" name="sex" value="1" required> <span data-i18n="label_man">Man</span></label>
               <label><input type="radio" name="sex" value="0"> <span data-i18n="label_woman">Woman</span></label>
-              <label class="sex-prefer"><input type="radio" name="sex" value="prefer"> <span data-i18n="label_sex_prefer">Prefer not to answer</span></label>
+              <label class="sex-prefer"><input type="radio" name="sex" value="prefer"> <span
+                  data-i18n="label_sex_prefer">Prefer not to answer</span></label>
             </div>
           </fieldset>
 
@@ -1602,7 +1649,8 @@
             <button type="submit" id="submitBtn" data-i18n="btn_submit">Estimate risk</button>
             <button type="button" class="btn-example" id="exampleBtn" data-i18n="btn_example">&#9654; Load example
               values</button>
-            <button type="button" class="btn-clear" id="clearBtn" data-i18n="btn_clear">&#x2715; Clear all values</button>
+            <button type="button" class="btn-clear" id="clearBtn" data-i18n="btn_clear">&#x2715; Clear all
+              values</button>
             <div class="error-msg" id="errorMsg" role="alert" aria-live="polite"></div>
           </div>
 
@@ -1644,21 +1692,19 @@
                           intervention)</span></li>
                       <li><svg width="24" height="6" viewBox="0 0 24 6" style="vertical-align:middle;margin-right:4px">
                           <line x1="0" y1="3" x2="24" y2="3" stroke="#10B981" stroke-width="2" stroke-dasharray="6 3" />
-                        </svg><span data-i18n="guide_green"><strong>Green dashed</strong> — baseline risk reduced by
-                          statin therapy</span></li>
+                        </svg><span data-i18n="guide_green"><strong>Green dashed</strong> — baseline risk with
+                          cholesterol-lowering therapy (statin &#177; PCSK9 inhibitor)</span></li>
                       <li><svg width="24" height="6" viewBox="0 0 24 6" style="vertical-align:middle;margin-right:4px">
                           <line x1="0" y1="3" x2="24" y2="3" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6 3" />
                         </svg><span data-i18n="guide_yellow"><strong>Yellow dashed</strong> — baseline risk reduced by
                           antihypertensive therapy (if applicable)</span></li>
                       <li><svg width="24" height="6" viewBox="0 0 24 6" style="vertical-align:middle;margin-right:4px">
                           <line x1="0" y1="3" x2="24" y2="3" stroke="#F43F5E" stroke-width="2" stroke-dasharray="2 3" />
-                        </svg><span data-i18n="guide_purple"><strong>Rose dotted</strong> — baseline risk reduced by
-                          combined statin + antihypertensive therapies (if applicable)</span></li>
+                        </svg><span data-i18n="guide_purple"><strong>Rose dotted</strong> — combined risk reduction from
+                          all active pharmacological and/or smoking cessation interventions</span></li>
                       <li>
-                        <svg width="24" height="6" viewBox="0 0 24 6"
-                             style="vertical-align:middle;margin-right:4px">
-                          <line x1="0" y1="3" x2="24" y2="3"
-                                stroke="#8B5CF6" stroke-width="2" stroke-dasharray="6 3"/>
+                        <svg width="24" height="6" viewBox="0 0 24 6" style="vertical-align:middle;margin-right:4px">
+                          <line x1="0" y1="3" x2="24" y2="3" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="6 3" />
                         </svg>
                         <span data-i18n="guide_red">
                           <strong>Violet dashed</strong> &#8212; projected risk if you quit smoking today
@@ -1727,12 +1773,18 @@
                   blood pressure ≥ 130 mmHg<sup><a
                       href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext"
                       target="_blank" rel="noopener">3</a></sup>.</li>
-                <li data-i18n="disclaimer_cessation">Smoking cessation: &#x2212;16&#x202F;% risk reduction at 5&#x202Fy, &#x2212;31&#x202F;% at 10&#x202Fy, &#x2212;42&#x202F;% at &#x2265;20&#x202Fy (plateau)<sup><a href="https://pubmed.ncbi.nlm.nih.gov/25940085/" target="_blank" rel="noopener">4</a></sup>. Current smokers only.</li>
+                <li data-i18n="disclaimer_cessation">Smoking cessation: &#x2212;16&#x202F;% risk reduction at
+                  5&#x202F;y, &#x2212;31&#x202F;% at 10&#x202F;y, &#x2212;42&#x202F;% at &#x2265;20&#x202F;y
+                  (plateau)<sup><a href="https://pubmed.ncbi.nlm.nih.gov/25940085/" target="_blank"
+                      rel="noopener">4</a></sup>. Current smokers only.</li>
+                <li data-i18n="disclaimer_pcsk9">PCSK9 inhibitor: 27&#x202F;% relative risk reduction on top of statin
+                  therapy (VESALIUS-CV trial)<sup><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2514428"
+                      target="_blank" rel="noopener">5</a></sup>.</li>
               </ul>
               <p data-i18n="disclaimer_refs"><strong>References</strong></p>
               <div style="display:grid; grid-template-columns: 1rem 1fr; gap: 0.5rem 0.25rem; opacity:0.75;">
                 <sup>1</sup> <a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank"
-                  rel="noopener">McPherson, Ruth et al. "Medications for Lipid Control: Statins vs Newer Drugs". <em>The
+                  rel="noopener">McPherson et al. "Medications for Lipid Control: Statins vs Newer Drugs". <em>The
                     Canadian Journal of Cardiology</em> (2024).</a>
                 <sup>2</sup> <a
                   href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext"
@@ -1746,12 +1798,17 @@
                   disease across different levels of blood pressure: an individual participant-level data
                   meta-analysis". <em>Lancet</em> (2021).</a>
                 <sup>4</sup>
-                <a href="https://www.bmj.com/content/350/bmj.h1551"
-                   target="_blank" rel="noopener">
+                <a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">
                   Mons et al. "Research
-                  Impact of smoking and smoking cessation on cardiovascular events and mortality among older adults: meta-analysis of
+                  Impact of smoking and smoking cessation on cardiovascular events and mortality among older adults:
+                  meta-analysis of
                   individual participant data from prospective cohort studies of the CHANCES consortium".
                   <em>BMJ</em> (2015).
+                </a>
+                <sup>5</sup>
+                <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2514428" target="_blank" rel="noopener">
+                  Bohula et al. "Evolocumab in Patients without a Previous Myocardial Infarction or Stroke".
+                  <em>NEJM</em> (2025).
                 </a>
               </div>
             </div>
@@ -1849,20 +1906,28 @@
         if (show && !wasVisible) animateDataset(idx, 900);
       }
 
-      setVisible(dsIdx.statin,    showStatin && !alreadyOnStatin);
-      setVisible(dsIdx.antiht,    showAntiht && !alreadyOnAntiht);
+      // Cholesterol — recompute data and animate when data changes
+      if (dsIdx.cholesterol !== undefined && lastChartData) {
+        const ds = chartInstance.data.datasets[dsIdx.cholesterol];
+        const newData = pct(getCholesterolRisk(lastChartData));
+        const wasVisible = chartInstance.isDatasetVisible(dsIdx.cholesterol);
+        const last = newData.length - 1;
+        const dataChanged = !ds.data.length || ds.data[last] !== newData[last];
+        ds.data = newData;
+        if (showCholesterol) {
+          chartInstance.setDatasetVisibility(dsIdx.cholesterol, true);
+          if (dataChanged || !wasVisible) animateDataset(dsIdx.cholesterol, 900);
+        } else {
+          chartInstance.setDatasetVisibility(dsIdx.cholesterol, false);
+        }
+      }
+      setVisible(dsIdx.antiht, showAntiht && !alreadyOnAntiht);
       setVisible(dsIdx.cessation, showCessation);
 
       // Combined — recompute data array since active toggles may have changed
       if (dsIdx.combined !== undefined) {
-        const combinedData = isCessationApplicable
-          ? computeCombinedRisk(lastChartData)
-          : (showStatin && showAntiht && !alreadyOnStatin && !alreadyOnAntiht
-              ? lastChartData.risk_combined
-              : null);
-
+        const combinedData = computeCombinedRisk(lastChartData);
         const ds = chartInstance.data.datasets[dsIdx.combined];
-        const wasVisible = chartInstance.isDatasetVisible(dsIdx.combined);
         if (combinedData) {
           ds.data = pct(combinedData);
           chartInstance.setDatasetVisibility(dsIdx.combined, true);
@@ -1879,12 +1944,27 @@
     }
     // ── Intervention card click-to-toggle (delegated) ──
     document.getElementById('riskAtAge').addEventListener('click', e => {
+      if (e.target.closest('.pcsk9-addon-btn')) {
+        showPcsk9Addon = !showPcsk9Addon;
+        applyCurveVisibility();
+        return;
+      }
       const card = e.target.closest('.risk-age-card[data-key]');
       if (!card) return;
       const key = card.dataset.key;
-      if      (key === 'statin')    { showStatin    = !showStatin;    applyCurveVisibility(); }
-      else if (key === 'antiht')    { showAntiht    = !showAntiht;    applyCurveVisibility(); }
-      else if (key === 'cessation') { showCessation = !showCessation; applyCurveVisibility(); }
+      if      (key === 'cholesterol') { showCholesterol = !showCholesterol; applyCurveVisibility(); }
+      else if (key === 'antiht')      { showAntiht      = !showAntiht;      applyCurveVisibility(); }
+      else if (key === 'cessation')   { showCessation   = !showCessation;   applyCurveVisibility(); }
+    });
+    // ── Immediate card/chart refresh when “already on statin/antiht” changes ──
+    document.getElementById('statin').addEventListener('change', () => {
+      alreadyOnStatin = document.getElementById('statin').checked;
+      if (alreadyOnStatin) showPcsk9Addon = false;
+      if (lastChartData) applyCurveVisibility();
+    });
+    document.getElementById('antiht').addEventListener('change', () => {
+      alreadyOnAntiht = document.getElementById('antiht').checked;
+      if (lastChartData) applyCurveVisibility();
     });
     // ── Waist tip modal ──
     const waistModal = document.getElementById('waistModal');
@@ -2027,7 +2107,8 @@
     // ── i18n ──
     let currentLang = localStorage.getItem('lang') || 'fr';
     let lastChartData = null, lastBpApplicable = false, lastSelectedIdx = 0;
-    let showStatin = false, showAntiht = false;
+    let showCholesterol = false, showAntiht = false;
+    let showPcsk9Addon = false;
     let alreadyOnStatin = false, alreadyOnAntiht = false;
     let showCessation = false;
     let isCessationApplicable = false;
@@ -2080,21 +2161,22 @@
         guide_click: '<strong>Click any point</strong> on the chart to see exact risk values and absolute risk reductions at that age.',
         guide_lines: 'Each line represents a scenario:',
         guide_blue: '<strong>Teal</strong> \u2014 baseline risk (no intervention)',
-        guide_green: '<strong>Green dashed</strong> \u2014 baseline risk reduced by taking medication to lower cholesterol (statin)',
+        guide_green: '<strong>Green dashed</strong> \u2014 baseline risk with cholesterol-lowering therapy (statin \xb1 PCSK9 inhibitor)',
         guide_yellow: '<strong>Yellow dashed</strong> \u2014 baseline risk reduced by taking medication to lower blood pressure (antihypertensive), if applicable',
-        guide_purple: '<strong>Rose dotted</strong> \u2014 baseline risk reduced by combined statin + antihypertensive therapies (if applicable)',
+        guide_purple: '<strong>Rose dotted</strong> \u2014 combined risk reduction from all active pharmacological and/or smoking cessation interventions',
         guide_boxes: 'The <strong>boxes below</strong> the chart show absolute risk reduction compared to baseline at the selected age.',
         hint: 'Click the chart to explore risk at a specific age',
-        chart_baseline: 'Baseline', chart_statin: 'With statin',
+        chart_baseline: 'Baseline', chart_cholesterol: 'With cholesterol lowering',
         chart_antiht: 'With antihypertensive', chart_combined: 'Combined',
         chart_cessation: 'With smoking cessation',
         chart_xaxis: 'Age (years)', chart_yaxis: 'Coronary artery disease risk (%)',
         risk_header: age => `Coronary artery disease risk at age <strong>${age}</strong>`,
         vs_baseline: 'of baseline risk',
-        card_baseline: 'Baseline', card_statin: 'With statin',
+        card_baseline: 'Baseline', card_cholesterol: 'With cholesterol lowering',
         card_antiht: 'With antihypertensive', card_combined: 'Combined',
         card_cessation: 'With smoking cessation', card_click_to_show: 'Click to show',
-        chip_statin: 'Statin', chip_antiht: 'Antihypertensive', chip_cessation: 'Smoking cessation',
+        chip_statin: 'Statin', chip_statin_pcsk9: 'Statin + PCSK9', chip_antiht: 'Antihypertensive', chip_cessation: 'Smoking cessation', chip_pcsk9: 'PCSK9 inhibitor',
+        card_pcsk9_addon: '+ Add PCSK9 inhibitor', card_pcsk9_addon_on: '\u2713 PCSK9 included',
         disclaimer_toggle: 'About this tool',
         disclaimer_main: '<strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.',
         disclaimer_imputation: '<strong>Missing optional measurements.</strong> When optional fields (waist circumference, Lp(a), and CRP) are left blank, the model substitutes the population-average value derived from its training data. Risk estimates for individuals who have never had these measurements taken may therefore reflect a population mean rather than their personal profile.',
@@ -2102,7 +2184,8 @@
         disclaimer_int_title: '<strong>Effect of interventions</strong>',
         disclaimer_statin: 'Statin: 50\u202f% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 20% relative risk reduction/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>.',
         disclaimer_antiht: 'Antihypertensive: 8\u202f% relative risk reduction per 5\u202fmmHg if systolic blood pressure \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>.',
-        disclaimer_cessation: 'Smoking cessation: \u221216\u202f% risk reduction at 5\u202fy, \u221231\u202f% at 10\u202fy, \u221242\u202f% at \u226520\u202fy (plateau)<sup><a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">4</a></sup>. Applied to current smokers only.',
+        disclaimer_cessation: 'Smoking cessation: 16\u202f% relative risk reduction at 5\u202fyears, 31\u202f% relative risk reduction at 10\u202fyears, 42\u202f% relative risk reduction at \u226520\u202fyears (plateau)<sup><a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">4</a></sup>. Applied to current smokers only.',
+        disclaimer_pcsk9: 'PCSK9 inhibitor: 27\u202f% relative risk reduction on top of statin risk reduction (VESALIUS-CV trial)<sup><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2514428" target="_blank" rel="noopener">5</a></sup>.',
         disclaimer_refs: '<strong>References</strong>',
         guide_red: '<strong>Violet dashed</strong> \u2014 projected risk if you quit smoking today (current smokers only)',
         footer_edu: 'For informational purposes only',
@@ -2149,21 +2232,22 @@
         guide_click: '<strong>Cliquez sur n\u2019importe quel point</strong> du graphique pour voir les valeurs de risque exactes et les r\xe9ductions absolues du risque \xe0 cet \xe2ge.',
         guide_lines: 'Chaque ligne repr\xe9sente un sc\xe9nario\u00a0:',
         guide_blue: '<strong>Bleu-vert</strong> \u2014 risque de base (sans intervention)',
-        guide_green: '<strong>Vert tir\xe9t\xe9</strong> \u2014 risque de base r\xe9duit par la prise de m\xe9dicament pour diminuer le cholest\xe9rol (statine)',
+        guide_green: '<strong>Vert tir\xe9t\xe9</strong> \u2014 risque de base avec traitement hypolip\xe9miant (statine \xb1 inhibiteur PCSK9)',
         guide_yellow: '<strong>Jaune tir\xe9t\xe9</strong> \u2014 risque de base r\xe9duit par la prise de m\xe9dicament pour diminuer la pression art\xe9rielle (antihypertenseur), si applicable',
-        guide_purple: '<strong>Rose pointill\xe9</strong> \u2014 risque de base r\xe9duit par la combinaison statine\u00a0+ antihypertenseur, si applicable',
+        guide_purple: '<strong>Rose pointill\xe9</strong> \u2014 r\xe9duction cumulative du risque par toutes les interventions pharmacologiques et/ou la cessation tabagique actives',
         guide_boxes: 'Les <strong>cases sous</strong> le graphique indiquent la r\xe9duction absolue du risque par rapport au niveau de base \xe0 l\u2019\xe2ge s\xe9lectionn\xe9.',
         hint: 'Cliquez sur le graphique pour explorer le risque \xe0 un \xe2ge sp\xe9cifique',
-        chart_baseline: 'Risque de base', chart_statin: 'Avec statine',
+        chart_baseline: 'Risque de base', chart_cholesterol: 'Avec r\xe9duction du cholest\xe9rol',
         chart_antiht: 'Avec antihypertenseur', chart_combined: 'Combin\xe9',
         chart_cessation: 'Avec cessation tabagique',
         chart_xaxis: '\xc2ge (ann\xe9es)', chart_yaxis: 'Risque de maladie coronarienne (%)',
         risk_header: age => `Risque de maladie coronarienne \xe0 l\u2019\xe2ge <strong>${age}</strong>`,
         vs_baseline: 'du risque de base',
-        card_baseline: 'Risque de base', card_statin: 'Avec statine',
+        card_baseline: 'Risque de base', card_cholesterol: 'Avec r\xe9duction du cholest\xe9rol',
         card_antiht: 'Avec antihypertenseur', card_combined: 'Combin\xe9',
         card_cessation: 'Avec cessation tabagique', card_click_to_show: 'Cliquer pour afficher',
-        chip_statin: 'Statine', chip_antiht: 'Antihypertenseur', chip_cessation: 'Cessation tabagique',
+        chip_statin: 'Statine', chip_statin_pcsk9: 'Statine + PCSK9', chip_antiht: 'Antihypertenseur', chip_cessation: 'Cessation tabagique', chip_pcsk9: 'Inhibiteur PCSK9',
+        card_pcsk9_addon: '+ Ajouter inhibiteur PCSK9', card_pcsk9_addon_on: '\u2713 PCSK9 inclus',
         disclaimer_toggle: '\xc0 propos de cet outil',
         disclaimer_main: '<strong>\xc0 titre informatif seulement.</strong> Cet outil est con\xe7u pour soutenir les discussions entre les patients et les professionnels de la sant\xe9 concernant la pr\xe9vention du risque cardiovasculaire \u2014 il n\u2019est pas destin\xe9 \xe0 orienter ou remplacer la prise de d\xe9cision clinique. Les effets des interventions sont des approximations \xe0 l\u2019\xe9chelle populationnelle issues de m\xe9ta-analyses d\u2019essais contr\xf4l\xe9s randomis\xe9s, et non des pr\xe9dictions causales individuelles.',
         disclaimer_imputation: '<strong>Mesures optionnelles manquantes.</strong> Lorsque des champs optionnels (tour de taille, Lp(a) et CRP) sont laiss\xe9s vides, le mod\xe8le les remplace par des valeurs moyennes issues de ses donn\xe9es d\u2019entra\xeenement. Les estimations de risque pour les personnes n\u2019ayant jamais eu ces mesures effectu\xe9es peuvent donc refl\xe9ter une moyenne populationnelle plut\xf4t que leur profil individuel.',
@@ -2171,7 +2255,8 @@
         disclaimer_int_title: '<strong>Effet des interventions</strong>',
         disclaimer_statin: 'Statine\u00a0: r\xe9duction de 50\u202f% du cholest\xe9rol LDL<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 r\xe9duction du risque de 20\u202f%/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>.',
         disclaimer_antiht: 'Antihypertenseur\u00a0: r\xe9duction du risque de 8\u202f% par 5\u202fmmHg si la pression art\xe9rielle systolique \u2265\u202f130\u202fmmHg<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00590-0/fulltext" target="_blank" rel="noopener">3</a></sup>.',
-        disclaimer_cessation: 'Cessation tabagique\u00a0: \u221216\u202f% de r\xe9duction du risque \xe0 5\u202fans, \u221231\u202f% \xe0 10\u202fans, \u221242\u202f% \xe0 \u226520\u202fans (plateau)<sup><a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">4</a></sup>. Appliqué aux fumeurs actuels seulement.',
+        disclaimer_cessation: 'Cessation tabagique\u00a0: 16\u202f% de r\xe9duction du risque relative \xe0 5\u202fans, 31\u202f% de r\xe9duction du risque relative \xe0 10\u202fans, 42\u202f% de r\xe9duction du risque relative \xe0 \u226520\u202fans (plateau)<sup><a href="https://www.bmj.com/content/350/bmj.h1551" target="_blank" rel="noopener">4</a></sup>. Appliqué aux fumeurs actuels seulement.',
+        disclaimer_pcsk9: 'Inhibiteur PCSK9\u00a0: r\xe9duction du risque de 27\u202f% en plus de la r\xe9duction du risque de la statine (essai VESALIUS-CV)<sup><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2514428" target="_blank" rel="noopener">5</a></sup>.',
         disclaimer_refs: '<strong>R\xe9f\xe9rences</strong>',
         guide_red: '<strong>Violet tir\xe9t\xe9</strong> \u2014 risque projet\xe9 si vous arr\xeatez de fumer aujourd\u2019hui (fumeurs actuels seulement)',
         footer_edu: '\xc0 titre informatif seulement',
@@ -2503,7 +2588,7 @@
     const _dsProgress = {}; // datasetIndex → 0..1 reveal progress; absent = fully revealed
     let _animating = false;
 
-    const easeInOutCubic = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     function animateDataset(dsIndex, duration) {
       const targetChart = chartInstance;
@@ -2541,10 +2626,10 @@
     function cessationRR(t) {
       // t = years since quitting
       // RR anchors (vs current smokers): <5y → 0.84, 10-19y → 0.69, ≥20y → 0.58
-      if (t <= 0)  return 1.00;
-      if (t < 5)   return 1.00 - 0.16 * (t / 5);
-      if (t < 10)  return 0.84 - 0.15 * ((t - 5) / 5);
-      if (t < 20)  return 0.69 - 0.11 * ((t - 10) / 10);
+      if (t <= 0) return 1.00;
+      if (t < 5) return 1.00 - 0.16 * (t / 5);
+      if (t < 10) return 0.84 - 0.15 * ((t - 5) / 5);
+      if (t < 20) return 0.69 - 0.11 * ((t - 10) / 10);
       return 0.58;
     }
 
@@ -2556,23 +2641,35 @@
       return invRR + (1 - invRR) * cessationRR(t);
     }
 
+    function getCholesterolRisk(data) {
+      if (alreadyOnStatin) return data.risk_baseline.map(r => r * 0.73);
+      return showPcsk9Addon ? data.risk_pcsk9 : data.risk_ldl;
+    }
+
     function computeCombinedRisk(data) {
-      const useStatin    = showStatin && !alreadyOnStatin;
-      const useAntiht    = showAntiht && !alreadyOnAntiht && lastBpApplicable;
-      const useCessation = showCessation && isCessationApplicable;
+      const useCholesterol = showCholesterol;
+      const usePcsk9Addon  = showPcsk9Addon && !alreadyOnStatin;
+      const useAntiht      = showAntiht && !alreadyOnAntiht && lastBpApplicable;
+      const useCessation   = showCessation && isCessationApplicable;
 
-      const nActive = (useStatin ? 1 : 0) + (useAntiht ? 1 : 0) + (useCessation ? 1 : 0);
+      // cholesterol and PCSK9 share the same LDL-reduction axis — count them as one for the combined threshold.
+      // Combined requires at least 2 distinct mechanism axes.
+      const nActive = (useCholesterol ? 1 : 0) + (useAntiht ? 1 : 0) + (useCessation ? 1 : 0);
       if (nActive < 2) return null;
+      if (!useCholesterol && !useAntiht) return null;
 
-      // Select pharmacological base array
       let pharmaBase;
-      if (useStatin && useAntiht)   pharmaBase = data.risk_combined;
-      else if (useStatin)           pharmaBase = data.risk_ldl;
-      else if (useAntiht)           pharmaBase = data.risk_sbp;
-      else return null; // only cessation active — not a combined curve
+      if (useCholesterol && useAntiht) {
+        if (alreadyOnStatin)     pharmaBase = data.risk_sbp.map(r => r * 0.73);
+        else if (usePcsk9Addon)  pharmaBase = data.risk_combined.map(r => r * 0.73);
+        else                     pharmaBase = data.risk_combined;
+      } else if (useCholesterol) {
+        pharmaBase = getCholesterolRisk(data);
+      } else {
+        pharmaBase = data.risk_sbp;
+      }
 
       const baseAge = data.ages[0];
-
       return pharmaBase.map((r, i) => {
         if (!useCessation) return r;
         return r * cessationMultiplier(data.ages[i] - baseAge);
@@ -2598,10 +2695,10 @@
 
       const risk_cessation = isCessationApplicable
         ? data.risk_baseline.map((r, i) =>
-            r * cessationMultiplier(data.ages[i] - baseAge))
+          r * cessationMultiplier(data.ages[i] - baseAge))
         : null;
 
-      data._risk_cessation        = risk_cessation;
+      data._risk_cessation = risk_cessation;
       data._isCessationApplicable = isCessationApplicable;
 
       dsIdx = {};
@@ -2609,54 +2706,53 @@
       const datasets = [];
 
       // 0 — baseline (always)
-      datasets.push({ label: tl.chart_baseline, data: pct(data.risk_baseline),
+      datasets.push({
+        label: tl.chart_baseline, data: pct(data.risk_baseline),
         borderColor: '#0891B2', backgroundColor: 'rgba(8,145,178,0.07)',
-        tension: 0.35, borderWidth: 2.5 });
+        tension: 0.35, borderWidth: 2.5
+      });
       dsIdx.baseline = _idx++;
 
-      // 1 — statin (always present, hidden if not applicable)
-      datasets.push({ label: tl.chart_statin, data: pct(data.risk_ldl),
+      // 1 — cholesterol lowering (statin ± PCSK9 add-on)
+      datasets.push({
+        label: tl.chart_cholesterol, data: pct(getCholesterolRisk(data)),
         borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.07)',
         tension: 0.35, borderWidth: 2, borderDash: [6, 3],
-        hidden: !showStatin || alreadyOnStatin });
-      dsIdx.statin = _idx++;
+        hidden: !showCholesterol
+      });
+      dsIdx.cholesterol = _idx++;
 
       // 2 — antiht (only when bpApplicable)
       if (bpApplicable) {
-        datasets.push({ label: tl.chart_antiht, data: pct(data.risk_sbp),
+        datasets.push({
+          label: tl.chart_antiht, data: pct(data.risk_sbp),
           borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.07)',
           tension: 0.35, borderWidth: 2, borderDash: [6, 3],
-          hidden: !showAntiht || alreadyOnAntiht });
+          hidden: !showAntiht || alreadyOnAntiht
+        });
         dsIdx.antiht = _idx++;
       }
 
       if (isCessationApplicable) {
-        // cessation alone
-        datasets.push({ label: tl.chart_cessation, data: pct(risk_cessation),
+        datasets.push({
+          label: tl.chart_cessation, data: pct(risk_cessation),
           borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,0.07)',
           tension: 0.35, borderWidth: 2, borderDash: [6, 3],
-          hidden: !showCessation });
+          hidden: !showCessation
+        });
         dsIdx.cessation = _idx++;
-
-        // combined (purple — content is dynamic, recomputed on toggle)
-        const combinedData = computeCombinedRisk(data);
-        datasets.push({ label: tl.chart_combined,
-          data: combinedData ? pct(combinedData) : pct(data.risk_baseline),
-          borderColor: '#F43F5E', backgroundColor: 'rgba(244,63,94,0.07)',
-          tension: 0.35, borderWidth: 2, borderDash: [2, 3],
-          hidden: combinedData === null });
-        dsIdx.combined = _idx++;
-
-      } else {
-        // Original non-smoker combined (statin + antiht only)
-        if (bpApplicable) {
-          datasets.push({ label: tl.chart_combined, data: pct(data.risk_combined),
-            borderColor: '#F43F5E', backgroundColor: 'rgba(244,63,94,0.07)',
-            tension: 0.35, borderWidth: 2, borderDash: [2, 3],
-            hidden: !(showStatin && showAntiht) || alreadyOnStatin || alreadyOnAntiht });
-          dsIdx.combined = _idx++;
-        }
       }
+
+      // Combined — always add; content is dynamic, recomputed on every toggle
+      const combinedData = computeCombinedRisk(data);
+      datasets.push({
+        label: tl.chart_combined,
+        data: combinedData ? pct(combinedData) : pct(data.risk_baseline),
+        borderColor: '#F43F5E', backgroundColor: 'rgba(244,63,94,0.07)',
+        tension: 0.35, borderWidth: 2, borderDash: [2, 3],
+        hidden: combinedData === null
+      });
+      dsIdx.combined = _idx++;
 
       if (chartInstance) chartInstance.destroy();
       Object.keys(_dsProgress).forEach(k => delete _dsProgress[k]);
@@ -2841,24 +2937,26 @@
       const fmtRisk = v => (v * 100).toFixed(1) + '%';
       const fmtArr = v => '↓ ' + ((base - v) * 100).toFixed(1) + '% ' + tl.vs_baseline;
 
-      const combinedData = isCessationApplicable
-        ? computeCombinedRisk(data)
-        : (bpApplicable && showStatin && showAntiht && !alreadyOnStatin && !alreadyOnAntiht
-            ? data.risk_combined : null);
+      const combinedData = computeCombinedRisk(data);
 
+      const cholChip = alreadyOnStatin ? tl.chip_pcsk9
+        : (showPcsk9Addon ? tl.chip_statin_pcsk9 : tl.chip_statin);
       const combinedSources = combinedData ? [
-        ...(!alreadyOnStatin && showStatin                                    ? [{ key: 'statin',    label: tl.chip_statin,    color: '#10B981' }] : []),
-        ...(bpApplicable && !alreadyOnAntiht && showAntiht                    ? [{ key: 'antiht',   label: tl.chip_antiht,   color: '#F59E0B' }] : []),
-        ...(data._isCessationApplicable && showCessation && data._risk_cessation ? [{ key: 'cessation', label: tl.chip_cessation, color: '#8B5CF6' }] : []),
+        ...(showCholesterol                                                        ? [{ key: 'cholesterol', label: cholChip,         color: '#10B981' }] : []),
+        ...(bpApplicable && !alreadyOnAntiht && showAntiht                        ? [{ key: 'antiht',      label: tl.chip_antiht,    color: '#F59E0B' }] : []),
+        ...(data._isCessationApplicable && showCessation && data._risk_cessation  ? [{ key: 'cessation',   label: tl.chip_cessation, color: '#8B5CF6' }] : []),
       ] : [];
 
+      const cholRisk = getCholesterolRisk(data);
+      const cholSublabel = alreadyOnStatin ? tl.chip_pcsk9
+        : (showPcsk9Addon ? tl.chip_statin_pcsk9 : tl.chip_statin);
       const cards = [
-        { key: null,        label: tl.card_baseline,  value: data.risk_baseline[idx],    color: '#0891B2', arr: null,                            active: true },
-        ...(!alreadyOnStatin
-          ? [{ key: 'statin',    label: tl.card_statin,    value: data.risk_ldl[idx],      color: '#10B981', arr: fmtArr(data.risk_ldl[idx]),      active: showStatin }]
-          : []),
+        { key: null,          label: tl.card_baseline,    value: data.risk_baseline[idx], color: '#0891B2', arr: null,                   active: true },
+        { key: 'cholesterol', label: tl.card_cholesterol, value: cholRisk[idx],           color: '#10B981', arr: fmtArr(cholRisk[idx]),   active: showCholesterol,
+          sublabel: showCholesterol ? cholSublabel : null,
+          pcsk9addon: showCholesterol && !alreadyOnStatin, pcsk9addonOn: showPcsk9Addon },
         ...(bpApplicable && !alreadyOnAntiht
-          ? [{ key: 'antiht',   label: tl.card_antiht,    value: data.risk_sbp[idx],      color: '#F59E0B', arr: fmtArr(data.risk_sbp[idx]),      active: showAntiht }]
+          ? [{ key: 'antiht', label: tl.card_antiht, value: data.risk_sbp[idx], color: '#F59E0B', arr: fmtArr(data.risk_sbp[idx]), active: showAntiht }]
           : []),
         ...(data._isCessationApplicable && data._risk_cessation
           ? [{ key: 'cessation', label: tl.card_cessation, value: data._risk_cessation[idx], color: '#8B5CF6', arr: fmtArr(data._risk_cessation[idx]), active: showCessation }]
@@ -2922,17 +3020,22 @@
         const cls = 'risk-age-card' + (c.combined ? ' combined' : '') + (isOff ? ' off' : '');
         const recipeHtml = (c.sources && c.sources.length)
           ? `<div class="card-recipe">${c.sources.map((s, i) =>
-              (i > 0 ? '<span class="recipe-plus">+</span>' : '') +
-              `<span class="recipe-item"><span class="recipe-dot" style="background:${s.color}"></span>${s.label}</span>`
-            ).join('')}</div>`
+            (i > 0 ? '<span class="recipe-plus">+</span>' : '') +
+            `<span class="recipe-item"><span class="recipe-dot" style="background:${s.color}"></span>${s.label}</span>`
+          ).join('')}</div>`
           : '';
         const labelHtml = `<div class="risk-age-label">${c.label}${recipeHtml}</div>`;
         let bodyContent;
         if (isOff) {
           bodyContent = `<div class="risk-age-invite">${tl.card_click_to_show}</div>`;
         } else {
+          const sublabelHtml = c.sublabel ? `<div class="card-sublabel">${c.sublabel}</div>` : '';
+          const addonHtml = c.pcsk9addon
+            ? `<button class="pcsk9-addon-btn${c.pcsk9addonOn ? ' active' : ''}" type="button">${c.pcsk9addonOn ? tl.card_pcsk9_addon_on : tl.card_pcsk9_addon}</button>`
+            : '';
           bodyContent = `<div class="risk-age-value" style="color:${c.color}">${fmtRisk(c.value)}</div>
-             <div class="risk-age-arr" style="color:${c.color}${c.arr ? '' : ';visibility:hidden'}">${c.arr || '\u00a0'}</div>`;
+             <div class="risk-age-arr" style="color:${c.color}${c.arr ? '' : ';visibility:hidden'}">${c.arr || '\u00a0'}</div>
+             ${sublabelHtml}${addonHtml}`;
         }
         return `
       <div class="${cls}" ${c.key ? `data-key="${c.key}"` : ''}>

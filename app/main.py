@@ -75,25 +75,32 @@ def predict(payload: InputPayload):
     # Multiplicative combinaison (independant effects)
     combined_rr = ldl_relative_risk * bp_relative_risk
 
-    risk_ldl = [max(0.0, min(1.0, p * ldl_relative_risk)) for p in risk_baseline]
-    risk_bp  = [max(0.0, min(1.0, p * bp_relative_risk))  for p in risk_baseline]
-    risk_combined = [max(0.0, min(1.0, p * combined_rr)) for p in risk_baseline]
+    # PCSK9 inhibitor: 27% RR reduction on top of statin (VESALIUS-CV trial)
+    pcsk9_rr = 0.73
+
+    risk_ldl    = [max(0.0, min(1.0, p * ldl_relative_risk))              for p in risk_baseline]
+    risk_bp     = [max(0.0, min(1.0, p * bp_relative_risk))               for p in risk_baseline]
+    risk_combined = [max(0.0, min(1.0, p * combined_rr))                  for p in risk_baseline]
+    risk_pcsk9  = [max(0.0, min(1.0, p * ldl_relative_risk * pcsk9_rr))   for p in risk_baseline]
 
     return {
-        "ages": ages,                      # Input age
+        "ages": ages,
         "risk_baseline": risk_baseline,    # Baseline risk without intervention
-        "risk_ldl": risk_ldl,              # Baseline risk × (1 - LDL*0.5*0.2)
-        "risk_sbp": risk_bp,               # Baseline risk × (1 - ((SBP-129)/5)*0.08) if SBP>=130
-        "risk_combined": risk_combined,    # Baseline risk × (ldl_rr * bp_rr) combined relative risk
+        "risk_ldl": risk_ldl,              # Baseline risk × ldl_rr (statin)
+        "risk_sbp": risk_bp,               # Baseline risk × bp_rr (antihypertensive, if SBP≥130)
+        "risk_combined": risk_combined,    # Baseline risk × ldl_rr × bp_rr
+        "risk_pcsk9": risk_pcsk9,          # Baseline risk × ldl_rr × 0.73 (statin + PCSK9 inhibitor)
         "relative_risks": {
             "ldl_rr": ldl_relative_risk,
             "bp_rr": bp_relative_risk,
-            "combined_rr": combined_rr
+            "combined_rr": combined_rr,
+            "pcsk9_rr": pcsk9_rr
         },
         "assumptions": {
             "ldl_drop_fraction": 0.5,
             "rr_per_mmol_ldl": 0.2,
             "bp_target_threshold": 129.0,
-            "rr_per_5mmhg": 0.08
+            "rr_per_5mmhg": 0.08,
+            "pcsk9_rr": pcsk9_rr
         }
     }
