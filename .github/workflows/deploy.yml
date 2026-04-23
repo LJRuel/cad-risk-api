@@ -58,20 +58,10 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Deploy to ECS Express Mode
-        uses: aws-actions/amazon-ecs-deploy-express-service@v1
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        with:
-          service-name: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          execution-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/ecsTaskExecutionRole
-          infrastructure-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/ecsInfrastructureRoleForExpressServices
-          container-port: 8080
-          environment-variables: |
-            [{"name": "OMP_THREAD_LIMIT", "value": "2"}]
-          cpu: '1024'
-          memory: '2048'
-          health-check-path: /
-          min-task-count: 1
-          max-task-count: 4
+        run: |
+          aws ecs update-express-gateway-service \
+            --service-arn arn:aws:ecs:${{ env.AWS_REGION }}:${{ env.AWS_ACCOUNT_ID }}:service/${{ env.ECS_CLUSTER }}/${{ env.ECS_SERVICE }} \
+            --primary-container "{\"image\": \"$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}\"}" \
+            --region ${{ env.AWS_REGION }}

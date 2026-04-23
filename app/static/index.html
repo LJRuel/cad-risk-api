@@ -883,6 +883,15 @@
       .chart-wrap {
         height: 380px;
       }
+
+      html {
+        overflow-x: hidden;
+      }
+
+      .content {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
     }
 
     @keyframes bounce {
@@ -1032,6 +1041,16 @@
 
       .risk-age-card .risk-age-value {
         font-size: 1.25rem;
+      }
+
+      .risk-age-card .risk-age-label {
+        font-size: 0.59rem;
+        min-height: 2.4rem;
+      }
+
+      .pcsk9-addon-btn {
+        white-space: normal;
+        line-height: 1.3;
       }
     }
 
@@ -1838,7 +1857,7 @@
         GitHub
       </a>
       &nbsp;&middot;&nbsp;
-      <span id="appVersion" style="font-family:monospace;font-size:0.72rem;background:#1e293b;color:#64748b;border:1px solid #334155;border-radius:4px;padding:1px 6px;letter-spacing:0.02em;"></span>
+      <span id="appVersion" style="font-family:monospace;font-size:0.72rem;color:#64748b;letter-spacing:0.02em;"></span>
     </footer>
     <script>
       document.getElementById('footerYear').textContent = new Date().getFullYear();
@@ -2920,13 +2939,12 @@
     }
 
     document.getElementById('chartDismiss').addEventListener('click', () => {
-      if (!chartInstance || !lastChartData) return;
-      const lastIdx = lastChartData.ages.length - 1;
-      chartInstance.selectedIdx = lastIdx;
+      if (!chartInstance) return;
       chartInstance.hoverIdx = null;
-      chartInstance.draw();
+      chartInstance.setActiveElements([]);
+      chartInstance.tooltip.setActiveElements([], { x: 0, y: 0 });
+      chartInstance.update('none');
       document.getElementById('chartDismiss').classList.add('hidden');
-      showRiskAtAge(lastIdx, lastChartData, lastBpApplicable, false);
     });
 
     // Apply saved language on load
