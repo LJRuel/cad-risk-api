@@ -1180,10 +1180,11 @@
       color: #6366F1;
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
-      white-space: nowrap;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      white-space: normal;
+      line-height: 1.3;
+      display: inline-block;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .pcsk9-addon-btn:hover {
@@ -1512,9 +1513,6 @@
       }
 
       .pcsk9-addon-btn {
-        white-space: normal;
-        overflow-wrap: break-word;
-        line-height: 1.3;
         padding-left: 0.4rem;
         padding-right: 0.4rem;
       }
