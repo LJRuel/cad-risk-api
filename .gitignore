@@ -207,9 +207,11 @@ marimo/_lsp/
 __marimo__/
 
 
+# VSCode
  VSCode / IDE
 .vscode/
 .idea/
+*.code-workspace
 
 # OS
 .DS_Store
