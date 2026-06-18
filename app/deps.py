@@ -6,8 +6,17 @@ _default = Path(__file__).resolve().parent.parent / "models"
 ARTIF_DIR = Path(os.environ.get("MODEL_DIR", _default))
 
 # Variants defined for the clinical model type.
-# Mirrors FEATURES["clinical"]["variants"] in src/config.py.
-_CLINICAL_VARIANTS = ["full", "lpa", "crp", "base"]
+# Mirrors _CLINICAL_VARIANTS in src/config.py — 16 variants across 4 optional dimensions:
+#   waist_circumference (wc), Lpa (lpa), CRP (crp), ApoB (apob).
+# ApoB path variants exclude non_HDL from the model input (ApoB substitutes for the HDL+non_HDL pair).
+_CLINICAL_VARIANTS = [
+    # Non-ApoB path (cholesterol = HDL + non_HDL, where non_HDL = total_cholesterol − HDL)
+    "wc_lpa_crp", "wc_lpa", "wc_crp", "wc",
+    "lpa_crp",    "lpa",    "crp",    "base",
+    # ApoB path (cholesterol = HDL + ApoB; non_HDL excluded)
+    "wc_lpa_crp_apob", "wc_lpa_apob", "wc_crp_apob", "wc_apob",
+    "lpa_crp_apob",    "lpa_apob",    "crp_apob",    "apob",
+]
 
 # ---------------------------------------------------------------------------
 # Graceful loader: returns None if the file does not exist
@@ -59,34 +68,56 @@ for _variant in _CLINICAL_VARIANTS:
 # Variant selection helper
 # ---------------------------------------------------------------------------
 
-def select_variant(lpa: Optional[float], crp: Optional[float]) -> str:
+def select_variant(
+    lpa: Optional[float],
+    crp: Optional[float],
+    waist_circumference: Optional[float],
+    apob: Optional[float],
+) -> str:
     """
-    Determine which clinical model variant to use based on optional feature availability.
+    Route to one of 16 clinical model variants based on optional feature availability.
 
-    Variant mapping:
-        "full"  — both Lpa and CRP are present
-        "lpa"   — only Lpa is present (CRP absent)
-        "crp"   — only CRP is present (Lpa absent)
-        "base"  — neither Lpa nor CRP is present
+    ApoB path (apob is not None): model uses {HDL, ApoB}; non_HDL excluded.
+    Non-ApoB path (apob is None): model uses {HDL, non_HDL} (derived as total_cholesterol − HDL).
+
+    Within each path, waist_circumference, Lpa, and CRP determine the sub-variant.
 
     Args:
-        lpa: Patient's Lpa value, or None if not available.
-        crp: Patient's CRP value, or None if not available.
+        lpa:                Patient's Lpa value, or None.
+        crp:                Patient's CRP value, or None.
+        waist_circumference: Patient's waist circumference, or None.
+        apob:               Patient's ApoB value, or None.
 
     Returns:
-        Variant name string.
+        Variant name string (one of the 16 entries in _CLINICAL_VARIANTS).
     """
-    has_lpa = lpa is not None
-    has_crp = crp is not None
+    has_wc   = waist_circumference is not None
+    has_lpa  = lpa  is not None
+    has_crp  = crp  is not None
+    has_apob = apob is not None
 
-    if has_lpa and has_crp:
-        return "full"
+    # Build suffix for non-ApoB sub-dimensions
+    if has_wc and has_lpa and has_crp:
+        base = "wc_lpa_crp"
+    elif has_wc and has_lpa:
+        base = "wc_lpa"
+    elif has_wc and has_crp:
+        base = "wc_crp"
+    elif has_wc:
+        base = "wc"
+    elif has_lpa and has_crp:
+        base = "lpa_crp"
     elif has_lpa:
-        return "lpa"
+        base = "lpa"
     elif has_crp:
-        return "crp"
+        base = "crp"
     else:
-        return "base"
+        base = "base"
+
+    if has_apob:
+        # ApoB path: append "_apob" unless base is already bare "base"
+        return f"{base}_apob" if base != "base" else "apob"
+    return base
 
 
 # ---------------------------------------------------------------------------

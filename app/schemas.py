@@ -6,14 +6,16 @@ class InputPayload(BaseModel):
     age_recruitment: float
     systolic_BP: float
     HDL: float
-    LDL: float
+    LDL: float                              # required for cholesterol-lowering intervention calculations
+    total_cholesterol: float                # required; used to derive non_HDL = total_cholesterol − HDL when ApoB is absent
     diabetes: int
     family_history: int
     antiht: int
     statin: int
     smoking_current: Optional[int] = None  # 0=never, 1=current, 2=former (UI only, not a model feature)
     pack_years: Optional[float] = None
-    waist_circumference: float
+    waist_circumference: Optional[float] = None
+    ApoB: Optional[float] = None           # when provided, substitutes for non_HDL in model (ApoB path uses {HDL, ApoB})
     Lpa: Optional[float] = None
     CRP: Optional[float] = None
     GestHtPreEcl: Optional[int] = None

@@ -32,7 +32,12 @@ def predict(payload: InputPayload):
     raw.pop("smoking_current", None)  # UI-only field, not a model feature
 
     # Determine which variant to use based on available optional features
-    variant = select_variant(raw.get("Lpa"), raw.get("CRP"))
+    variant = select_variant(
+        lpa=raw.get("Lpa"),
+        crp=raw.get("CRP"),
+        waist_circumference=raw.get("waist_circumference"),
+        apob=raw.get("ApoB"),
+    )
 
     # Temporal grid: entire life from max(40 years, current age) to 80 years (end of training data)
     times = times_from_age_to_80(raw["age_recruitment"])

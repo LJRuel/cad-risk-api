@@ -1579,13 +1579,9 @@
                 required>
             </div>
             <div class="field">
-              <label class="field-label">
-                <span data-i18n="label_waist">Waist circumference (cm)</span>
-                <button type="button" class="info-tip-icon waist-tip-trigger" id="waistTipBtn"
-                  aria-haspopup="dialog">i</button>
-              </label>
-              <input type="number" id="waist" min="40" max="150" step="0.1" placeholder="40 to 150"
-                data-i18n-ph="ph_waist" required>
+              <label class="field-label" data-i18n="label_total_cholesterol">Total cholesterol (mmol/L)</label>
+              <input type="number" id="total_cholesterol" min="0.1" max="15" step="0.01" placeholder="0.1 to 15"
+                data-i18n-ph="ph_total_cholesterol" required>
             </div>
           </fieldset>
 
@@ -1663,6 +1659,20 @@
               </span>
             </legend>
             <div id="optionalProgress" class="optional-progress" aria-live="polite"></div>
+            <div class="field">
+              <label class="field-label">
+                <span data-i18n="label_waist">Waist circumference (cm)</span>
+                <button type="button" class="info-tip-icon waist-tip-trigger" id="waistTipBtn"
+                  aria-haspopup="dialog">i</button>
+              </label>
+              <input type="number" id="waist" min="40" max="150" step="0.1" placeholder="40 to 150"
+                data-i18n-ph="ph_waist">
+            </div>
+            <div class="field">
+              <label class="field-label" data-i18n="label_apob">ApoB (g/L)</label>
+              <input type="number" id="apob" min="0" step="0.01" placeholder="Leave empty if unknown"
+                data-i18n-ph="ph_optional">
+            </div>
             <div class="field">
               <label class="field-label">Lp(a) (nmol/L)</label>
               <input type="number" id="lpa" min="0" step="0.1" placeholder="Leave empty if unknown"
@@ -1787,11 +1797,7 @@
                 prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are
                 population-level approximations from randomized controlled trial meta-analyses, not individual causal
                 predictions.</p>
-              <p data-i18n="disclaimer_imputation"><strong>Missing optional measurements.</strong> When optional fields
-                (waist circumference, Lp(a), CRP, and pack-years) are left blank, the model substitutes the
-                population-average value derived from its training cohort. Risk estimates for individuals who have never
-                had these measurements taken may therefore reflect a population mean rather than their personal profile.
-              </p>
+              <p data-i18n="disclaimer_imputation"><strong>Optional measurements.</strong> When optional fields (waist circumference, Lp(a), CRP, or ApoB) are left blank, the model automatically selects the appropriate variant trained without those features — no imputation is performed. When ApoB is provided, it substitutes for LDL and total cholesterol in the risk model (LDL is still used for the cholesterol-lowering intervention calculation).</p>
               <p data-i18n="disclaimer_int_title"><strong>Effect of interventions</strong></p>
               <ul>
                 <li data-i18n="disclaimer_statin">Statin: 50% LDL cholesterol reduction<sup><a
@@ -2021,20 +2027,21 @@
       document.getElementById('sbp').value = 140;
       document.getElementById('hdl').value = 1.2;
       document.getElementById('ldl').value = 3.8;
-      document.getElementById('waist').value = 96;
+      document.getElementById('total_cholesterol').value = 5.2;
 
       // Risk factors
       document.getElementById('diabetes').checked = false;
       document.getElementById('family_history').checked = true;
       document.getElementById('antiht').checked = false;
       document.getElementById('statin').checked = false;
-      document.querySelector('input[name="smoking_status"][value="former"]').checked = true;
+      document.querySelector('input[name="smoking_status"][value="current"]').checked = true;
       applySmokingStatus();
-      document.getElementById('smok_cigs_day').value = 20;
+      document.getElementById('smok_cigs_day').value = 15;
       document.getElementById('smok_age_start').value = 18;
-      document.getElementById('smok_age_stop').value = 40;
 
       // Optional
+      document.getElementById('waist').value = 96;
+      document.getElementById('apob').value = '';
       document.getElementById('lpa').value = '';
       document.getElementById('crp').value = '';
       saveFormState();
@@ -2047,7 +2054,7 @@
       document.querySelectorAll('input[name="sex"]').forEach(r => r.checked = false);
       document.getElementById('femaleFieldsWrap').classList.remove('visible');
 
-      ['age', 'sbp', 'hdl', 'ldl', 'waist', 'lpa', 'crp'].forEach(id => {
+      ['age', 'sbp', 'hdl', 'ldl', 'total_cholesterol', 'waist', 'apob', 'lpa', 'crp'].forEach(id => {
         document.getElementById(id).value = '';
       });
 
@@ -2167,7 +2174,9 @@
         label_sbp: 'Systolic blood pressure (mmHg)', ph_sbp: '60 to 250',
         label_hdl: 'HDL cholesterol (mmol/L)', ph_hdl: '0.1 to 5',
         label_ldl: 'LDL cholesterol (mmol/L)', ph_ldl: '0.1 to 15',
+        label_total_cholesterol: 'Total cholesterol (mmol/L)', ph_total_cholesterol: '0.1 to 15',
         label_waist: 'Waist circumference (cm)', ph_waist: '40 to 150',
+        label_apob: 'ApoB (g/L)',
         legend_risk: 'Risk Factors',
         label_diabetes: 'Diabetes',
         label_family: 'Family history of heart disease',
@@ -2214,7 +2223,7 @@
         card_pcsk9_addon: '+ Add PCSK9 inhibitor', card_pcsk9_addon_on: '\u2713 PCSK9 included',
         disclaimer_toggle: 'About this tool',
         disclaimer_main: '<strong>For informational purposes only.</strong> This tool is intended to support discussions between patients and healthcare professionals regarding cardiovascular risk prevention — it is not intended to drive or replace clinical decision-making. Intervention effects are population-level approximations from randomized controlled trial meta-analyses, not individual causal predictions.',
-        disclaimer_imputation: '<strong>Missing optional measurements.</strong> When optional fields (waist circumference, Lp(a), and CRP) are left blank, the model substitutes the population-average value derived from its training data. Risk estimates for individuals who have never had these measurements taken may therefore reflect a population mean rather than their personal profile.',
+        disclaimer_imputation: '<strong>Optional measurements.</strong> When optional fields (waist circumference, Lp(a), CRP, or ApoB) are left blank, the model automatically selects the appropriate variant trained without those features — no imputation is performed. When ApoB is provided, it substitutes for LDL and total cholesterol in the risk model (LDL is still used for the cholesterol-lowering intervention calculation).',
         disclaimer_summary: 'Effect of interventions &amp; References',
         disclaimer_int_title: '<strong>Effect of interventions</strong>',
         disclaimer_statin: 'Statin: 50\u202f% LDL cholesterol reduction<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 20% relative risk reduction/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>.',
@@ -2238,7 +2247,9 @@
         label_sbp: 'Tension artérielle systolique (mmHg)', ph_sbp: '60 \xe0 250',
         label_hdl: 'Cholest\xe9rol HDL (mmol/L)', ph_hdl: '0,1 \xe0 5',
         label_ldl: 'Cholest\xe9rol LDL (mmol/L)', ph_ldl: '0,1 \xe0 15',
+        label_total_cholesterol: 'Cholest\xe9rol total (mmol/L)', ph_total_cholesterol: '0,1 \xe0 15',
         label_waist: 'Tour de taille (cm)', ph_waist: '40 \xe0 150',
+        label_apob: 'ApoB (g/L)',
         legend_risk: 'Facteurs de risque',
         label_diabetes: 'Diab\xe8te',
         label_family: 'Ant\xe9c\xe9dents familiaux de maladie cardiovasculaire',
@@ -2285,7 +2296,7 @@
         card_pcsk9_addon: '+ Ajouter inhibiteur PCSK9', card_pcsk9_addon_on: '\u2713 PCSK9 inclus',
         disclaimer_toggle: '\xc0 propos de cet outil',
         disclaimer_main: '<strong>\xc0 titre informatif seulement.</strong> Cet outil est con\xe7u pour soutenir les discussions entre les patients et les professionnels de la sant\xe9 concernant la pr\xe9vention du risque cardiovasculaire \u2014 il n\u2019est pas destin\xe9 \xe0 orienter ou remplacer la prise de d\xe9cision clinique. Les effets des interventions sont des approximations \xe0 l\u2019\xe9chelle populationnelle issues de m\xe9ta-analyses d\u2019essais contr\xf4l\xe9s randomis\xe9s, et non des pr\xe9dictions causales individuelles.',
-        disclaimer_imputation: '<strong>Mesures optionnelles manquantes.</strong> Lorsque des champs optionnels (tour de taille, Lp(a) et CRP) sont laiss\xe9s vides, le mod\xe8le les remplace par des valeurs moyennes issues de ses donn\xe9es d\u2019entra\xeenement. Les estimations de risque pour les personnes n\u2019ayant jamais eu ces mesures effectu\xe9es peuvent donc refl\xe9ter une moyenne populationnelle plut\xf4t que leur profil individuel.',
+        disclaimer_imputation: '<strong>Mesures optionnelles.</strong> Lorsque des champs optionnels (tour de taille, Lp(a), CRP ou ApoB) sont laiss\xe9s vides, le mod\xe8le s\xe9lectionne automatiquement la variante entra\xeen\xe9e sans ces caract\xe9ristiques — aucune imputation n’est effectu\xe9e. Lorsque l’ApoB est fourni, il se substitue au LDL et au cholest\xe9rol total dans le mod\xe8le de risque (le LDL est toujours utilis\xe9 pour le calcul de la r\xe9duction du risque hypolip\xe9miant)',
         disclaimer_summary: 'Effet des interventions &amp; R\xe9f\xe9rences',
         disclaimer_int_title: '<strong>Effet des interventions</strong>',
         disclaimer_statin: 'Statine\u00a0: r\xe9duction de 50\u202f% du cholest\xe9rol LDL<sup><a href="https://onlinecjc.ca/article/S0828-282X(24)00358-1/fulltext" target="_blank" rel="noopener">1</a></sup> \xd7 r\xe9duction du risque de 20\u202f%/mmol\xb7L<sup><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60367-5/fulltext" target="_blank" rel="noopener">2</a></sup>.',
@@ -2345,7 +2356,9 @@
         sbp: document.getElementById('sbp').value,
         hdl: document.getElementById('hdl').value,
         ldl: document.getElementById('ldl').value,
+        total_cholesterol: document.getElementById('total_cholesterol').value,
         waist: document.getElementById('waist').value,
+        apob: document.getElementById('apob').value,
         lpa: document.getElementById('lpa').value,
         crp: document.getElementById('crp').value,
         smok_status: document.querySelector('input[name="smoking_status"]:checked')?.value ?? 'never',
@@ -2374,7 +2387,7 @@
             document.getElementById('femaleFieldsWrap').classList.toggle('visible', s.sex === '0');
           }
         }
-        ['age', 'sbp', 'hdl', 'ldl', 'waist', 'lpa', 'crp', 'smok_cigs_day', 'smok_age_start', 'smok_age_stop'].forEach(id => {
+        ['age', 'sbp', 'hdl', 'ldl', 'total_cholesterol', 'waist', 'apob', 'lpa', 'crp', 'smok_cigs_day', 'smok_age_start', 'smok_age_stop'].forEach(id => {
           const el = document.getElementById(id);
           if (el && s[id] != null) el.value = s[id];
         });
@@ -2392,7 +2405,7 @@
 
     // ── Optional field completion indicator ──
     function updateOptionalProgress() {
-      const ids = ['lpa', 'crp'];
+      const ids = ['waist', 'apob', 'lpa', 'crp'];
       const filled = ids.filter(id => document.getElementById(id).value.trim() !== '').length;
       const el = document.getElementById('optionalProgress');
       if (!el) return;
@@ -2406,7 +2419,7 @@
       const hasValues =
         document.querySelector('input[name="sex"]:checked') ||
         document.querySelector('input[name="smoking_status"]:checked')?.value !== 'never' ||
-        ['age', 'sbp', 'hdl', 'ldl', 'waist', 'lpa', 'crp', 'smok_cigs_day', 'smok_age_start', 'smok_age_stop']
+        ['age', 'sbp', 'hdl', 'ldl', 'total_cholesterol', 'waist', 'apob', 'lpa', 'crp', 'smok_cigs_day', 'smok_age_start', 'smok_age_stop']
           .some(id => document.getElementById(id).value !== '') ||
         ['diabetes', 'family_history', 'antiht', 'statin', 'GestHtPreEcl', 'menopause', 'HRT']
           .some(id => document.getElementById(id).checked);
@@ -2427,7 +2440,7 @@
       updateClearBtn();
       scheduleAutoUpdate(300);
     });
-    ['waist', 'lpa', 'crp'].forEach(id => {
+    ['waist', 'apob', 'lpa', 'crp'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
         saveFormState();
         updateOptionalProgress();
@@ -2435,7 +2448,7 @@
         scheduleAutoUpdate(700);
       });
     });
-    ['age', 'sbp', 'hdl', 'ldl', 'smok_cigs_day', 'smok_age_start', 'smok_age_stop'].forEach(id => {
+    ['age', 'sbp', 'hdl', 'ldl', 'total_cholesterol', 'smok_cigs_day', 'smok_age_start', 'smok_age_stop'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
         saveFormState();
         updateClearBtn();
@@ -2507,13 +2520,15 @@
         systolic_BP: parseFloat(document.getElementById('sbp').value),
         HDL: parseFloat(document.getElementById('hdl').value),
         LDL: parseFloat(document.getElementById('ldl').value),
+        total_cholesterol: parseFloat(document.getElementById('total_cholesterol').value),
         diabetes: document.getElementById('diabetes').checked ? 1 : 0,
         family_history: document.getElementById('family_history').checked ? 1 : 0,
         antiht: document.getElementById('antiht').checked ? 1 : 0,
         statin: document.getElementById('statin').checked ? 1 : 0,
         smoking_current: smokStatus === 'current' ? 1 : smokStatus === 'former' ? 2 : 0,
         pack_years: calcPackYears(smokStatus),
-        waist_circumference: parseFloat(document.getElementById('waist').value),
+        waist_circumference: numOrNull('waist'),
+        ApoB: numOrNull('apob'),
         Lpa: numOrNull('lpa'),
         CRP: numOrNull('crp'),
         GestHtPreEcl: isFemale ? (document.getElementById('GestHtPreEcl').checked ? 1 : 0) : null,

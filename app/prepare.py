@@ -22,6 +22,14 @@ def _apply_prep(prep: dict, cat: list, raw: dict) -> pd.DataFrame:
     Returns:
         1-row DataFrame ready for model.predict_risk().
     """
+    # Compute non_HDL = total_cholesterol - HDL before feature selection.
+    # Non-ApoB variants use non_HDL; ApoB variants exclude it (not in their preprocessor).
+    raw = dict(raw)
+    tc  = raw.get("total_cholesterol")
+    hdl = raw.get("HDL")
+    if tc is not None and hdl is not None:
+        raw["non_HDL"] = tc - hdl
+
     df = pd.DataFrame([raw])
 
     num     = prep.get("numeric_features", [])
